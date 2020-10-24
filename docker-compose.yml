@@ -6,7 +6,7 @@ services:
     image: mysql:5.7.13
     restart: always
     ports:
-      - "3306:3306"
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: passwd
       MYSQL_DATABASE: cinemaDB
@@ -14,13 +14,37 @@ services:
       MYSQL_PASSWORD: passwd
     container_name: cinemaDB
   web:
-    build: 
+    build:
       context: .
       dockerfile: DockerFiles/python/pythonDF
     command: sh scripts/django.sh
     volumes:
-      - .:/code
+      - .:/web
     ports:
-      - 8000:8000 
+      - 8000:8000
     depends_on:
       - db
+    links:
+      - db
+  vue:
+    restart: always
+    build:
+      context: .
+      dockerfile: DockerFiles/vue/vueDF
+    ports:
+      - 80:80
+    container_name: vue-ui
+    volumes:
+      - ./frontend:/frontend
+    depends_on:
+      - web
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.8
+    container_name: phpmyadmin
+    ports:
+      - 8081:80
+    depends_on:
+      - db
+    links:
+      - db
+    restart: always
