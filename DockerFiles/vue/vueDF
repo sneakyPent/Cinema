@@ -1,6 +1,7 @@
 FROM node:11.11.0-stretch
 RUN mkdir /frontend
+RUN mkdir /scripts
 WORKDIR /frontend
 COPY frontend/package.json /frontend/
-RUN npm install -g @vue/cli-service
-CMD ["npm", "run", "serve","--", "--port", "80"]
+COPY ./frontend /frontend
+COPY ./scripts /frontend

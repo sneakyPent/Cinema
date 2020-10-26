@@ -31,11 +31,12 @@ services:
     build:
       context: .
       dockerfile: DockerFiles/vue/vueDF
+    command: sh scripts/frontend.sh
     ports:
       - 80:80
     container_name: vue-ui
     volumes:
-      - ./frontend:/frontend
+      - .:/frontend
     depends_on:
       - web
   phpmyadmin:
