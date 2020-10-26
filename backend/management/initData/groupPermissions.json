@@ -1,0 +1,43 @@
+{
+	"ViewEnumerators": [
+		"view_movie",
+		"view_cinema",
+		"view_favorite",
+		"view_user"
+	],
+	"EditEnumerators": [
+		"add_movie",
+		"change_movie",
+		"add_cinema",
+		"change_cinema",
+		"add_favorite",
+		"change_favorite",
+		"add_user",
+		"change_user"
+	],
+	"CinemaOwner": [
+		"add_movie",
+		"change_movie",
+		"delete_movie",
+		"view_movie",
+		"add_cinema",
+		"change_cinema",
+		"delete_cinema",
+		"view_cinema"
+	],
+	"User": [
+		"view_movie",
+		"view_cinema",
+		"add_favorite",
+		"change_favorite",
+		"delete_favorite",
+		"view_favorite",
+		"view_user"
+	],
+	"Admin": [
+		"add_user",
+		"change_user",
+		"delete_user",
+		"view_user"
+	]
+}
