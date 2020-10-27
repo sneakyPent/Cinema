@@ -26,7 +26,7 @@ SECRET_KEY = 'z4x@w)0)_58o))$0o7!ae9o0xux9z(-jht590^n)i4+61yqh)^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'cinema/db.sqlite3'),
     }
 }
-
+CORS_ORIGIN_ALLOW_ALL = True
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
