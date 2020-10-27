@@ -7,6 +7,12 @@ from backend.models import Movie
 from backend.models import Cinema
 
 
+class UserSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = '__all__'
+
+
 class MovieSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Movie
