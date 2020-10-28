@@ -4,43 +4,12 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-// const basePath = '/auth/';
-//
-// let routes =  [
-// 	{
-// 		path: basePath + 'login',
-// 		name: 'Login',
-// 		component: require('../views/Auth/Login').default
-// 	},
-// 	{
-// 		path: basePath + 'register',
-// 		name: 'Register',
-// 		component: require('../views/Auth/Register').default
-// 	}
-// ];
-//
-//
-// export default new Router({
-// 	mode: 'history',
-// 	routes: routes
-// })
 
-// let routes = [
-// 	{path: '/', name: 'Home', component: require('../views/Home/Home').default},
-// 	{
-// 	path: '/requests',
-// 	name: 'Requests',
-// 	component: require('../views/General/Requests').default,
-// 		navbar: {
-// 			icon: 'bell',
-// 			nameAlwaysShown: false,
-// 			position: 'right',
-// 			badge: 'PendingRequests'
-// 		}
-// 	},
-// ];
+let routes = [
+	{path: '/welcome', name: 'Home', component: require('../views/Home/welcome').default},
+];
 
-let routes = require('./Auth').default;
+routes = routes.concat(require('./Auth').default);
 // routes = routes.concat(require('./Master').default);
 // routes = routes.concat(require('./User').default);
 
