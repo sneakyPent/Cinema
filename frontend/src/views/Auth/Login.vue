@@ -54,7 +54,7 @@ export default {
             this.$root.initAxiosHeaders();
             this.$root.authenticated = true;
             this.loading = false;
-            this.$router.push(this.$route.query.next ? this.$route.query.next : {name: 'Home'});
+            this.$router.push({name: 'Home', query: this.$router.query});
             // this.$root.initModels();
           })
           .catch(e => {
