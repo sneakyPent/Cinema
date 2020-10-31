@@ -4,7 +4,7 @@
             <mdb-col md="5" class="mx-auto">
                 <mdb-card>
                     <mdb-card-header class="text-center blue-gradient ">
-                        <mdb-card-title tag="h4" bold class="white-text w-100 mt-1">Είσοδος</mdb-card-title>
+                        <mdb-card-title tag="h4" bold class="white-text w-100 mt-1">Εγγραφή</mdb-card-title>
                     </mdb-card-header>
                     <mdb-card-body class="mx-4 mb-2">
                         <form novalidate @submit="checkForm">
@@ -27,7 +27,7 @@
                                                    class="mb-3"/>
                                     </mdb-col>
                                     <mdb-col>
-                                        <mdb-input v-model="formInfo.password" label="Κωδικός" type="text" required
+                                        <mdb-input v-model="formInfo.password" label="Κωδικός" type="password" required
                                                    class="mb-3"/>
                                     </mdb-col>
                                 </mdb-row>
@@ -102,7 +102,6 @@ export default {
         checkForm: function (event) {
             event.target.classList.add('was-validated');
             event.preventDefault();
-            console.log("test");
         },
         submitReg: function () {
             const formData = new FormData();
@@ -111,7 +110,7 @@ export default {
                 formData.append('Token', this.$route.query.rat);
             }
             formData.append('Type', 'Registration');
-            this.$axios.post('http://localhost:8000/api/User/', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+            this.$axios.post('http://localhost:8000/api/UserProfile/', formData, {headers: {'Content-Type': 'multipart/form-data'}})
                 // eslint-disable-next-line no-unused-vars
                 .then(res =>{
                     this.shown = true;
