@@ -10,7 +10,7 @@
                     :key="btn.id"
                     :id="btn.id"
                     type="button"
-                    @click="$emit('buttonsClick', btn)"
+                    @click="$emit('buttonsClick',[ btn, multipleSelectedRows])"
                     class="btn btn-outline-white btn-rounded btn-md px-2">
                     <span>{{ btn.label }}</span>
                     <mdb-icon class="fas mx-1" :icon="btn.icon"/>
@@ -52,7 +52,7 @@
         <div class="mx-2 mx-md-3">
             <div class="d-flex justify-content-center">
                 <div class="scrolling" style="display: inline">
-                    <table class="table table-hover tableStyle table-bordered">
+                    <table class="table table-hover tableStyle ovfno table-bordered">
                         <thead>
                         <th  :id="header.field" style="white-space: nowrap;"
                             v-for="header in headers" :key="header.field" scope="col">
@@ -177,33 +177,6 @@ export default {
                 }
             }
         },
-        // sort: function (s) {
-        // 	// if s == current sort, reverse
-        // 	console.log('sorting');
-        // 	if (s === this.currentSort) {
-        // 		this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
-        // 	}
-        // 	this.currentSort = s;
-        // },
-        // setPage: function (itemsPerPage, offset) {
-        // 	this.$emit('pagination', itemsPerPage, offset, this.orderby, this.search);
-        // },
-        // setOrdering: function (ordering) {
-        // 	if (this.orderby === ordering) {
-        // 		this.orderby = '-' + this.orderby;
-        // 	} else {
-        // 		this.orderby = ordering;
-        // 	}
-        // 	this.$refs.pagination.setPage(0);
-        // },
-        // setSearch: function () {
-        // 	// Search value is already updated
-        // 	this.$refs.pagination.setPage(0);
-        // },
-        // clearSearch: function () {
-        // 	this.search = '';
-        // 	this.$refs.pagination.setPage(0);
-        // },
     },
     watch: {
         tableColumns: function () {
@@ -241,11 +214,11 @@ export default {
 
 <style>
 .md-form label {
-    color: white !important;
+    color: darkgrey !important;
 }
 
 .form-control {
-    color: white !important;
+    color: black !important;
 }
 </style>
 
@@ -257,7 +230,9 @@ export default {
 .checkboxCentering {
     padding: 15px 0px 0px 3px;
 }
-
+.md {
+    border-radius: 25px;
+}
 .flex_entry {
     flex: 1;
 }
