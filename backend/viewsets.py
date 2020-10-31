@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework.status import *
 from django.db.models import Q, QuerySet, Prefetch
 
-from backend.permissions import CustomDjangoModelPermissions, NotAuthenticatedCreateOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
+from cinema.permissions import CustomDjangoModelPermissions, NotAuthenticatedCreateOnly
 from backend.serializers import *
 
 from django.contrib.auth.models import User
@@ -32,10 +33,43 @@ class CinemaViewSet(viewsets.ModelViewSet):
 	permission_classes = (CustomDjangoModelPermissions,)
 
 
+class UserProfileViewSet(viewsets.ModelViewSet):
+	queryset = UserProfile.objects.all()
+	serializer_class = UserProfileSerializer
+	permission_classes = (IsAuthenticated, )
+
+	def list(self, request, *args, **kwargs):
+		my_param = request.query_params
+		if 'fields' in my_param:
+			excl = ['is_staff']
+			dt = []
+			for vr in list(UserProfileSerializer.Meta.fields):
+				print(vr)
+				if vr not in excl:
+					dt.append(vr)
+			return Response({'fields': dt})
+
+		if 'nonadmin' in my_param:
+			queryset = self.filter_queryset(self.get_queryset())
+			queryset = UserProfile.objects.filter(Q(role='owner') | Q(role='user'))
+			page = self.paginate_queryset(queryset)
+			if page is not None:
+				serializer = self.get_serializer(page, many=True)
+				return self.get_paginated_response(serializer.data)
+
+			serializer = self.get_serializer(queryset, many=True)
+			return Response(serializer.data)
+		if self.request.user.is_superuser:
+			self.serializer_class = UserProfileSerializer
+		else:
+			self.serializer_class = UserProfileSerializer
+		return super().list(request, *args, **kwargs)
+
+
 class UserViewSet(viewsets.ModelViewSet):
-	serializer_class = UserSerializer
 	queryset = User.objects.all()
-	permission_classes = (CustomDjangoModelPermissions | NotAuthenticatedCreateOnly,)
+	serializer_class = UserSerializer
+	permission_classes = (AllowAny | NotAuthenticatedCreateOnly,)
 
 	def create(self, request, *args, **kwargs):
 		import json
@@ -62,27 +96,3 @@ class UserViewSet(viewsets.ModelViewSet):
 
 			return Response(HTTP_200_OK)
 		return Response(HTTP_400_BAD_REQUEST)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
