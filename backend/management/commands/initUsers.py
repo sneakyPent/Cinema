@@ -15,12 +15,11 @@ class Command(BaseCommand):
 
 		try:
 
-
 			u = User()
 			u.first_name = 'Νικόλας'
 			u.last_name = 'Ζαχαριουδάκης'
-			u.username = 'znuser'
-			u.email = 'zaharioudakis@yahoo.com'
+			u.username = 'user1'
+			u.email = 'user1@yahoo.com'
 			u.set_password('mousakas')
 			u.is_active = True
 			u.is_staff = False
@@ -36,10 +35,49 @@ class Command(BaseCommand):
 
 			# -----------------------------------------------------------
 			u = User()
+			u.first_name = 'Γιώργος'
+			u.last_name = 'Ζαχαριουδάκης'
+			u.username = 'user2'
+			u.email = 'user2@yahoo.com'
+			u.set_password('mousakas')
+			u.is_active = True
+			u.is_staff = False
+			u.is_superuser = False
+			u.save()
+			groups = [Group.objects.get(name='User')]
+			u.groups.set(groups)
+			u.save()
+
+			p = UserProfile.objects.get(user=u)
+			p.role = 'user'
+			p.save()
+
+			# -----------------------------------------------------------
+
+			u = User()
 			u.first_name = 'Βασίλης'
 			u.last_name = 'Ζαχαριουδάκης'
-			u.username = 'vzowner'
-			u.email = 'vzacharioudakis@yahoo.com'
+			u.username = 'owner1'
+			u.email = 'owner1@yahoo.com'
+			u.set_password('mousakas')
+			u.is_active = True
+			u.is_staff = False
+			u.is_superuser = False
+			u.save()
+			groups = [Group.objects.get(name='CinemaOwner')]
+			u.groups.set(groups)
+			u.save()
+
+			p = UserProfile.objects.get(user=u)
+			p.role = 'owner'
+			p.save()
+
+			# -----------------------------------------------------------
+			u = User()
+			u.first_name = 'Γιάννης'
+			u.last_name = 'Ζαχαριουδάκης'
+			u.username = 'owner2'
+			u.email = 'owner2@yahoo.com'
 			u.set_password('mousakas')
 			u.is_active = True
 			u.is_staff = False
