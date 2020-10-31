@@ -58,7 +58,6 @@ export default {
                     this.$root.authenticated = true;
                     this.loading = false;
                     this.$router.push({name: 'Home', query: this.$router.query});
-                    this.$root.initUserData();
                 })
                 .catch(e => {
                     console.log(e);
