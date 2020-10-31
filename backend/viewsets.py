@@ -36,7 +36,7 @@ class CinemaViewSet(viewsets.ModelViewSet):
 class UserProfileViewSet(viewsets.ModelViewSet):
 	queryset = UserProfile.objects.all()
 	serializer_class = UserProfileSerializer
-	permission_classes = (IsAuthenticated, )
+	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
 
 	def list(self, request, *args, **kwargs):
 		my_param = request.query_params
@@ -64,11 +64,26 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			self.serializer_class = UserProfileSerializer
 		return super().list(request, *args, **kwargs)
 
+	def update(self, request, *args, **kwargs):
+		u = User.objects.get(id=kwargs['pk'])
+		if self.request.user.is_staff:
+			userInfo = request.data
+			print(userInfo)
 
-class UserViewSet(viewsets.ModelViewSet):
-	queryset = User.objects.all()
-	serializer_class = UserSerializer
-	permission_classes = (AllowAny | NotAuthenticatedCreateOnly,)
+			p = UserProfile.objects.get(user=u)
+			p.role = userInfo['role']
+			u.is_active = userInfo['is_active']
+			p.save()
+			groups = []
+			if p.role == 'user':
+				groups = [Group.objects.get(name='User')]
+			elif p.role == 'owner':
+				groups = [Group.objects.get(name='CinemaOwner')]
+			u.groups.set(groups)
+			u.save()
+
+			return Response(HTTP_200_OK)
+		return Response(HTTP_400_BAD_REQUEST)
 
 	def create(self, request, *args, **kwargs):
 		import json
@@ -85,13 +100,26 @@ class UserViewSet(viewsets.ModelViewSet):
 			u.set_password(formData['password'])
 			u.is_active = False
 			u.save()
+			p = UserProfile.objects.get(user=u)
+			p.role = formData['role']
+			p.save()
 			groups = []
-			if formData['role'] == 'user':
+			if p.role == 'user':
 				groups = [Group.objects.get(name='User')]
-			elif formData['role'] == 'owner':
+			elif p.role == 'owner':
 				groups = [Group.objects.get(name='CinemaOwner')]
 			u.groups.set(groups)
 			u.save()
 
+			p = UserProfile.objects.get(user=u)
+			p.role = formData['role']
+			p.save()
+
 			return Response(HTTP_200_OK)
 		return Response(HTTP_400_BAD_REQUEST)
+
+
+class UserViewSet(viewsets.ModelViewSet):
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
+	permission_classes = (AllowAny | NotAuthenticatedCreateOnly,)

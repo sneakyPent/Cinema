@@ -45,7 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
-	user = serializers.ReadOnlyField(source='user.id')
+	# user = serializers.ReadOnlyField(source='user.id')
 	id = serializers.IntegerField(source='pk', read_only=True)
 	username = serializers.CharField(source='user.username', read_only=True)
 	email = serializers.CharField(source='user.email')
@@ -56,7 +56,7 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = UserProfile
 		depth = 1
-		fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'role', 'user')
+		fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'role')
 
 	def get_full_name(self, obj):
 		request = self.context['request']
