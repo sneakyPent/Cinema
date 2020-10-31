@@ -10,8 +10,7 @@ let routes = [
 ];
 
 routes = routes.concat(require('./Auth').default);
-// routes = routes.concat(require('./Master').default);
-// routes = routes.concat(require('./User').default);
+
 
 Vue.use(Router)
 
