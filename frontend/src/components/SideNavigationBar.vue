@@ -1,7 +1,8 @@
 <template>
     <mdb-side-nav-2
+        v-if="loaded"
         :value="true"
-        :data="navigation"
+        :data="navops"
         side
         slim
         expand-on-hover
@@ -60,39 +61,35 @@
 
 export default {
     name: "SideNavigationBar",
-    computed: {
-        navigation: function () {
-            let nv = [];
-            let rt = this.$root.routes.filter(route => {
-                return 'sidenav' in route;
-            });
-            for (let i = 0; i < rt.length; i++) {
-                nv.push(rt[i].sidenav)
-            }
-            return nv;
-        },
-    },
     data() {
         return {
             show: true,
+            loaded: false,
             slimCollapsed: true,
-            userData: {}
+            userData: {},
+            navops: []
         };
     },
-    methods: {
-        initData: function() {
-            const accessToken = this.$session.get('access');
-            const tokenData = this.$root.parseJwt(accessToken);
-            this.$axios.get('http://localhost:8000/api/UserProfile/' + tokenData.user_id + '/')
-                .then(res => {
-                    this.userData = res.data;
-                })
-                .catch(this.$notifyAction.error);
+    watch: {
+        '$root.private.userData.fetched': {
+            handler: function () {
+                let rt = this.$root.routes.filter(route => {
+                    return 'sidenav' in route;
+                });
+
+                this.navops = []
+                for (let i = 0; i < rt.length; i++) {
+                    this.navops.push(rt[i].sidenav)
+                }
+                this.userData = this.$root.private.userData.data;
+                this.loaded = true;
+            },
+
         },
     },
-    mounted: function() {
-        this.initData()
-    }
+    mounted() {
+        this.$root.initUserData()
+    },
 };
 </script>
 

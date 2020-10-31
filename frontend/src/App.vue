@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <SideNavigationBar v-if="$root.authenticated"/>
+        <notifications class="m-3" position="top right"/>
         <main>
             <transition name="fade" mode="out-in">
                 <router-view/>
@@ -17,9 +18,6 @@ export default {
     components: {
         SideNavigationBar
     },
-    head: function () {
-        return this.$headData.defaultHead;
-    }
 }
 </script>
 
