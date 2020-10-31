@@ -44,7 +44,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			excl = ['is_staff']
 			dt = []
 			for vr in list(UserProfileSerializer.Meta.fields):
-				print(vr)
 				if vr not in excl:
 					dt.append(vr)
 			return Response({'fields': dt})
