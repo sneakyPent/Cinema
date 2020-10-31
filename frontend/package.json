@@ -1,5 +1,6 @@
 {
-  "name": "frontend",
+  "name": "cinema",
+  "proxy": "http://localhost:8000",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +11,8 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "mdbvue": "git+https://oauth2:TeSGPDu8RY7nX8y-J9N2@git.mdbootstrap.com/mdb/vue/vu-pro.git",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
