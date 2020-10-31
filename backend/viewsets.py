@@ -68,7 +68,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 		u = User.objects.get(id=kwargs['pk'])
 		if self.request.user.is_staff:
 			userInfo = request.data
-			print(userInfo)
 
 			p = UserProfile.objects.get(user=u)
 			p.role = userInfo['role']
@@ -87,8 +86,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 	def create(self, request, *args, **kwargs):
 		import json
-		# return Response(status=HTTP_202_ACCEPTED)
-		print(json.loads(request.data['formData']))
 		if request.data['Type'] == 'Registration':
 			formData = json.loads(request.data['formData'])
 
