@@ -3,18 +3,14 @@
         <mdb-container class="text-center">
             <hr>
         </mdb-container>
-        <div class="d-flex justify-content-center ml-5">
+        <div class="d-flex justify-content-center ml-5 rcorners">
             <Table
                 v-if="fetched"
                 :buttons="tableButtons"
                 :tableTitle="'Χρήστες'"
                 checkingRow
-                doublebutton
                 :tableData="tableData"
                 :availableCols="availableCols"
-                :doublebuttonchange="buttonsChange"
-                @doubleButtonClick="doubleButtonHandler($event)"
-                @oneRowCheck="lockUnlock($event)"
                 @rowClick="selectUserFromTable($event)"
                 @buttonsClick="tableButtonsHandler($event)"
             />
@@ -41,12 +37,6 @@ export default {
     },
     data: function () {
         return {
-            // pageLimit: 25,
-            // pageOffset: 0,
-            // dataLength: 0,
-            // orderby: 'name',
-            // search: '',
-            // lastQuery: '',
             selectedUser: '',
             availableCols: [],
             tableData: {
@@ -74,82 +64,6 @@ export default {
                     forceEnable: false
                 },
             ],
-
-            testing: {
-                headers: [
-                    {
-                        label: 'ID',
-                        field: 'id',
-                        sorting: true,
-                        type: 'string',
-                        clickable: false
-
-                    },
-                    {
-                        label: 'Name',
-                        field: 'name',
-                        sorting: true,
-                        type: 'string',
-                        clickable: false
-                    },
-                    {
-                        label: 'Position',
-                        field: 'position',
-                        sorting: true,
-                        type: 'string',
-                        clickable: false
-                    },
-                    {
-                        label: 'Office',
-                        field: 'office',
-                        sorting: false,
-                        type: 'string',
-                        clickable: false
-                    },
-                    {
-                        label: 'Age',
-                        field: 'age',
-                        sorting: true,
-                        type: 'string',
-                        clickable: false
-                    },
-                    {
-                        label: 'Start date',
-                        field: 'date',
-                        sorting: true,
-                        type: 'string',
-                        clickable: false
-                    },
-                    {
-                        label: 'Salary',
-                        field: 'salary',
-                        sorting: true,
-                        type: 'string',
-                        clickable: false
-                    }
-                ],
-                data: [
-                    {
-                        id: '1',
-                        name: 'Tiger Nixon',
-                        position: 'System Architect',
-                        office: 'Edinburgh',
-                        age: '61',
-                        date: '2011/04/25',
-                        salary: '$320'
-                    },
-                    {
-                        id: '2',
-                        name: 'Garrett Winters',
-                        position: 'Accountant',
-                        office: 'Tokyo',
-                        age: '63',
-                        date: '2011/07/25',
-                        salary: '$170'
-                    },
-
-                ]
-            },
         };
     },
     mounted: function () {
@@ -160,13 +74,11 @@ export default {
         selectUserFromTable: function (user) {
             this.selectedUser = Number.parseInt(user);
         },
-        tableButtonsHandler: function (button) {
+        tableButtonsHandler: function (el) {
+            const [button, rows] = el
             switch (button.name) {
                 case 'delete':
-                    console.log('delete');
-                    break;
-                case 'add':
-                    this.collabModal = true;
+                    this.deleteUsers(rows);
                     break;
                 default:
                     console.log('default');
@@ -190,13 +102,9 @@ export default {
         },
         getAllUser: function () {
             const query = 'http://localhost:8000/api/UserProfile/?nonadmin';
-            if (this.lastQuery === query) {
-                return;
-            }
             this.$axios.get(query)
                 .then(
                     usres => {
-                        console.log(usres);
                         this.lastQuery = query;
                         this.usersList = usres.data;
                         this.fixingTableData();
@@ -211,28 +119,43 @@ export default {
             this.modal = false;
             this.selectedUser = '';
         },
-        submit: function () {
-            this.$axios.post('/api/collaboration/update/', this.form)
-                // eslint-disable-next-line no-unused-vars
-                .then(res => {
+        deleteUsers: function (users) {
+            for (let i = 0; i < users.length; i++) {
+                this.$axios.delete('http://localhost:8000/api/UserProfile/' + users[i] + '/')
+                .then( () => {
                     this.getAllUser();
-                    this.closeModal();
                     this.$notify({
+                        text: 'Επιτυχής Διαγραφή!',
+                        type: 'success'
+                    });
+                })
+                .catch(this.$notifyAction.error);
+            }
+        },
+        submit: function () {
+            const query = 'http://localhost:8000/api/UserProfile/' + this.userInfo.id + '/' ;
+            this.$axios.put(query, this.userInfo)
+                .then(() => {
+                     this.$notify({
                         text: this.$t('Changes applied!'),
                         type: 'success'
                     });
+                    this.getAllUser();
+                    this.closeModal();
+
                 })
                 .catch(this.$notifyAction.error);
         },
         decline: function () {
             this.closeModal();
             this.$notify({
-                text: this.$t('Changes dismissed!'),
+                text: 'Απόρριψη αλλαγών',
                 type: 'success'
             });
         },
 
         fillForm: function (user) {
+            this.userInfo.id = user.id;
             this.userInfo.surname = user.last_name;
             this.userInfo.name = user.first_name;
             this.userInfo.username = user.username;
@@ -268,18 +191,6 @@ export default {
             }
             this.tableData = {headers: headers, data: data};
         },
-        // setPage: function (itemsPerPage, offset, ordering, search) {
-        //     this.pageLimit = itemsPerPage;
-        //     this.pageOffset = offset;
-        //     this.search = search;
-        //
-        //     if (ordering.charAt(0) === '-') {
-        //         this.orderby = '-' + this.orderbyTranslation[ordering.split('-')[1]];
-        //     } else {
-        //         this.orderby = this.orderbyTranslation[ordering];
-        //     }
-        //     this.getAllUser();
-        // }
     },
     watch: {
         selectedUser: function () {
@@ -299,6 +210,9 @@ export default {
 
 .form-control {
     color: black !important;
+}
+.rcorners {
+    border-radius: 25px;
 }
 
 </style>

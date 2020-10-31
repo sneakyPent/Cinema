@@ -1,81 +1,81 @@
 <template>
-    <mdb-modal @close="closing" size="lg">
+    <mdb-modal @close="closing" size="mx-auto" class="modal">
         <mdb-modal-header>
             <mdb-modal-title class="w-100">
                 <span>{{ userInfo.surname + " " + userInfo.name }}</span>
                 <!--				<mdb-badge class="float-right" :color="state === 'Pending' ? 'warning' : state === 'Approved' ? 'success' : 'danger'">{{ $t(state) }}</mdb-badge>-->
             </mdb-modal-title>
         </mdb-modal-header>
-        <mdb-modal-body>
-            <!--			stepper for receivers of collaborations-->
-            <mdb-stepper buttons :steps="1" @submit="submit" :options="stepperOptions">
-                <template #1>
-                    <h3 class="font-weight-bold pl-0 my-4 black-text">
-                        <strong>Πληροφορίες Χρήστη</strong>
-                    </h3>
+        <mdb-modal-body class="black-text">
+            <form novalidate class="label">
+                <div class="black-text">
                     <mdb-row>
-                        <mdb-col md="12" lg="6">
-                            <mdb-row>
-                                <mdb-col>
-                                    <mdb-input v-model="userInfo.name" icon="user" label="Όνομα" type="text"
-                                               disabled class="mb-3 black-text"/>
-                                </mdb-col>
-                                <mdb-col>
-                                    <mdb-input v-model="userInfo.surname" label="Επίθετο" type="text" disabled
-                                               class="mb-3"/>
-                                </mdb-col>
-                            </mdb-row>
-                            <mdb-row>
-                                <mdb-col>
-                                    <mdb-input v-model="userInfo.username" icon="key" label="Όνομα χρήστη" group
-                                               type="text" disabled
-                                               class="mb-3"/>
-                                </mdb-col>
-<!--                                <mdb-col>-->
-<!--                                    <mdb-input v-model="userInfo.password" label="Κωδικός" type="text" disabled-->
-<!--                                               class="mb-3"/>-->
-<!--                                </mdb-col>-->
-                            </mdb-row>
-                            <mdb-row>
-                                <mdb-col>
-                                    <mdb-input v-model="userInfo.email" class="mb-3" label="email" icon="envelope"
-                                               group type="email"
-                                               validate error="wrong" disabled
-                                               success="right"/>
-                                </mdb-col>
-                            </mdb-row>
-                            <mdb-row>
-                                <mdb-col class="mb-2 mt-3 d-flex justify-content-left">
-                                    <mdb-form-inline>
-                                        <mdb-input required type="radio" id="role-1"
-                                                   name="groupOfMaterialRadios2" radioValue="user"
-                                                   v-model="userInfo.role"
-                                                   label="Χρήστης"/>
-                                        <mdb-input required type="radio" id="role-2"
-                                                   name="groupOfMaterialRadios2" radioValue="owner"
-                                                   v-model="userInfo.role"
-                                                   label="Ιδιοκτήττης Cinema"/>
-                                    </mdb-form-inline>
-                                </mdb-col>
-                            </mdb-row>
-                            <mdb-row>
-                                <mdb-col class="mb-2 mt-3 d-flex justify-content-left">
-                                    <mdb-form-inline>
-                                        <mdb-input required type="radio" id="active"
-                                                   name="groupOfMaterialRadios1" radioValue="True"
-                                                   v-model="userInfo.is_active"
-                                                   label="Ενεργός"/>
-                                        <mdb-input required type="radio" id="non-active"
-                                                   name="groupOfMaterialRadios1" radioValue="False"
-                                                   v-model="userInfo.is_active"
-                                                   label="Ανενεργός"/>
-                                    </mdb-form-inline>
-                                </mdb-col>
-                            </mdb-row>
+                        <mdb-col>
+                            <mdb-input v-model="userInfo.name" icon="user" label="Όνομα" type="text"
+                                       required
+                                       invalidFeedback="Please provide a valid city." class="mb-3 " style="color: black !important"/>
                         </mdb-col>
                     </mdb-row>
-                </template>
-            </mdb-stepper>
+                    <mdb-row>
+                        <mdb-col>
+                            <mdb-input v-model="userInfo.surname" icon="user" label="Επίθετο" type="text"
+                                       required
+                                       class="mb-3"/>
+                        </mdb-col>
+                    </mdb-row>
+                    <mdb-row>
+                        <mdb-col>
+                            <mdb-input v-model="userInfo.username" icon="key" label="Όνομα χρήστη" group
+                                       type="text" required
+                                       class="mb-3"/>
+                        </mdb-col>
+                    </mdb-row>
+                    <mdb-row>
+                        <mdb-col>
+                            <mdb-input v-model="userInfo.email" class="mb-3" label="email" icon="envelope"
+                                       group type="email"
+                                       validate error="wrong" required
+                                       success="right"/>
+                        </mdb-col>
+                    </mdb-row>
+                    <mdb-row>
+                        <mdb-col class="mb-2 mt-3 d-flex justify-content-left">
+                            <mdb-form-inline>
+                                <mdb-input required type="radio" id="role-1"
+                                           name="groupOfMaterialRadios2" radioValue="user"
+                                           v-model="userInfo.role"
+                                           label="Χρήστης"/>
+                                <mdb-input required type="radio" id="role-2"
+                                           name="groupOfMaterialRadios2" radioValue="owner"
+                                           v-model="userInfo.role"
+                                           label="Ιδιοκτήττης Cinema"/>
+                            </mdb-form-inline>
+                        </mdb-col>
+                    </mdb-row>
+                    <mdb-row>
+                        <mdb-col class="mb-2 mt-3 d-flex justify-content-left">
+                            <mdb-form-inline>
+                                <mdb-input required type="radio" id="active"
+                                           name="groupOfMaterialRadios1" radioValue="True"
+                                           v-model="userInfo.is_active"
+                                           label="Ενεργός" />
+                                <mdb-input required type="radio" id="non-active"
+                                           name="groupOfMaterialRadios1" radioValue="False"
+                                           v-model="userInfo.is_active"
+                                           label="Ανενεργός"/>
+                            </mdb-form-inline>
+                        </mdb-col>
+                    </mdb-row>
+                </div>
+                <mdb-row>
+                    <mdb-col class=" d-flex justify-content-center">
+                        <mdb-btn @click="decline" color="danger" rounded> Ακύρωση</mdb-btn>
+                    </mdb-col>
+                    <mdb-col class=" d-flex justify-content-center">
+                        <mdb-btn type="submit" @click="submit" color="grey" rounded> Υποβολή</mdb-btn>
+                    </mdb-col>
+                </mdb-row>
+            </form>
         </mdb-modal-body>
     </mdb-modal>
 </template>
@@ -143,8 +143,18 @@ export default {
 ;
 </script>
 
-<style scoped>
-.form-control {
-    color: black;
+<style>
+.md-form label {
+    color: red !important;
 }
+
+.modal-content{
+    border-radius: 25px !important;
+}
+
+
+</style>
+
+<style scoped>
+
 </style>
