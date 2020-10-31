@@ -1,7 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router';
+import VueSession from 'vue-session'
+import './plugins/axios';
+import Notifications from 'vue-notification';
 
+
+Vue.use(VueSession)
+Vue.use(Notifications);
 
 Vue.config.productionTip = false
 
@@ -12,10 +18,120 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
 for (const component in mdbvue) {
-	Vue.component(component, mdbvue[component]);
+    Vue.component(component, mdbvue[component]);
 }
+const privateData = {
+    userData: {
+        fetched: false,
+        data: {}
+    },
+};
 
-new Vue({
+const vm = new Vue({
+    el: '#app',
     router: router,
     render: h => h(App),
-}).$mount('#app')
+    data: function () {
+        return {
+            private: privateData,
+            authenticated: this.$session.exists(),
+            routes: this.$router.options.routes,
+            requestsAwaiting: 0,
+        };
+    },
+    created: function () {
+        if (this.$root.authenticated) {
+            this.initAxiosHeaders();
+        }
+    },
+    computed: {
+        userData: function () {
+            if (!this.private.userData.fetched) this.initUserData();
+            return this.private.userData.data;
+        },
+    },
+    methods: {
+        initUserData: function (callback) {
+            const accessToken = this.$session.get('access');
+            if (!accessToken) {
+                this.$router.push({name: 'Login'});
+                return;
+            }
+            const tokenData = this.$root.parseJwt(accessToken);
+            this.$axios.get('http://localhost:8000/api/UserProfile/' + tokenData.user_id + '/')
+                .then(res => {
+                    this.private.userData.fetched = true;
+                    this.private.userData.data = res.data;
+                    let routes = [];
+                    if (this.private.userData.data.role === 'admin') {
+                        routes = routes.concat(require('./router/Admin').default);
+                    }
+                    else if (this.private.userData.data.role === 'user') {
+                        routes = routes.concat(require('./router/User').default);
+                    }
+                    else if (this.private.userData.data.role === 'owner')  {
+                        routes = routes.concat(require('./router/Owner').default);
+                    }
+                    this.$router.addRoutes(routes);
+                    this.$root.routes = this.$root.routes.concat(routes);
+                    if (callback) callback();
+                })
+                .catch();
+        },
+        initAxiosHeaders: function () {
+            const accessToken = this.$session.get('access');
+            if (accessToken) {
+                this.$axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken;
+            }
+        },
+        parseJwt: function (token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+                atob(base64)
+                    .split('')
+                    .map(function (c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    })
+                    .join('')
+            );
+
+            return JSON.parse(jsonPayload);
+        },
+    },
+});
+
+
+Vue.prototype.$notifyAction = {
+    error: err => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        vm.$notify({
+            text: 'Κάτι πήγε στραβά..',
+            type: 'error'
+        });
+    },
+    errorPermanent: err => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        vm.$notify({
+            text: 'Κάτι πήγε στραβά..',
+            type: 'error',
+            duration: -1
+        });
+    },
+    saveSuccess: () => {
+        vm.$notify({
+            text: 'Κάτι πήγε στραβά..',
+            type: 'success'
+        });
+    },
+    deleteSuccess: () => {
+        vm.$notify({
+            text: 'Κάτι πήγε στραβά..',
+            type: 'success'
+        });
+    }
+};
+
+vm.$mount('#app');
