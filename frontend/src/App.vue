@@ -1,8 +1,8 @@
 <template>
-    <div id="app">
+    <div id="app" class=" image">
         <SideNavigationBar v-if="$root.authenticated"/>
         <notifications class="m-3" position="top right"/>
-        <main>
+        <main >
             <transition name="fade" mode="out-in">
                 <router-view/>
             </transition>
@@ -68,6 +68,11 @@ export default {
 </style>
 
 <style>
+.image {
+    background-image: url('media/movieCollection.png');
+    min-height: 110vh;
+    min-width: 100vw;
+}
 :root {
     --w-myColor: #faa;
     --w-myColorTrans: rgba(255, 100, 100, 0.75);
