@@ -1,60 +1,72 @@
 <template>
     <div class="my-0 mp-0 d-md-inline-flex card p-3 pt-4 card-cascade narrower">
         <!--Card image-->
-        <div
-            class="my-1 overflow display_flex view view-cascade gradient-card-header blue-gradient narrower py-2 mx-3 mb-3 d-flex flex-column flex-md-row justify-content-around align-items-center flex-wrap text-light">
-            <div class=" flex_entry d-flex justify-content-around flex-wrap order-3 order-md-1 flex-grow-1">
-                <button
-                    v-for="btn in singleButtons"
-                    :disabled="multipleSelectedRows.length === 0 && !btn.forceEnable"
-                    :key="btn.id"
-                    :id="btn.id"
-                    type="button"
-                    @click="$emit('buttonsClick',[ btn, multipleSelectedRows])"
-                    class="btn btn-outline-white btn-rounded btn-md px-2">
-                    <span>{{ btn.label }}</span>
-                    <mdb-icon class="fas mx-1" :icon="btn.icon"/>
-                </button>
-                <div v-if="doublebutton">
-                    <dblButton
-                        v-for="btn in doubleButtons"
-                        :button="btn"
-                        :key="btn.id"
-                        :disabled="multipleSelectedRows.length !== 1 && !btn.forceEnable"
-                        :primaryToSecondary="doublebuttonchange"
-                        @click="doubleButtonClick($event)"/>
-                </div>
-            </div>
-            <div class="flex_entry order-1 order-md-2 flex-grow-1">
-				<span>
-					<!--{{tableTitle}} -->
-					<mdb-icon class="mx-2" icon="users"/>
-					<span><strong>{{ tableTitle }}</strong></span>
-				</span>
-            </div>
-            <div class="flex_entry testing d-flex justify-content-around flex-wrap order-2 order-md-3 flex-grow-1">
-                <mdb-select
-                    caretStyle="color: white;"
-                    style="white-space: nowrap;color: white;"
-                    iconClass="d-flex justify-content-end"
-                    color="primary"
-                    multiple
-                    selectAll
-                    :visibleOptions="6"
-                    :selectAllPlaceholder="'Επιλογή όλων'"
-                    @getValue="getSelectFields"
-                    :options="availableCols"
-                    :label="'Πεδία'"
-                />
-            </div>
-        </div>
+        <mdb-card
+            class="
+            gradient-card-header blue-gradient justify-content-around align-items-center text-light d-flex narrower display_flex
+             view view-cascade my-1 overflow py-2 mx-3 mb-3 flex-column" style=" width: 1000px" >
+            <mdb-row class="mt-1">
+                <mdb-col>
+                    <div class="flex_entry order-1 order-md-2 flex-grow-1">
+                        <mdb-card-title tag="h4" bold class="white-text w-100 mt-1" >
+                            <mdb-icon class="mx-2" :icon=tableIcon />
+                            <span><strong style="font-family:Comic Sans MS;" >{{ tableTitle }}</strong></span>
+                        </mdb-card-title>
+                    </div>
+                </mdb-col>
+            </mdb-row>
+            <mdb-row class="justify-content-between" style=" width: 800px">
+                <mdb-col col="4">
+                    <div class=" flex_entry d-flex justify-content-around order-3 order-md-1 flex-grow-1 mt-4 ">
+                        <button
+                            v-for="btn in singleButtons"
+                            :disabled="multipleSelectedRows.length === 0 && !btn.forceEnable"
+                            :key="btn.id"
+                            :id="btn.id"
+                            type="button"
+                            @click="$emit('buttonsClick',[ btn, multipleSelectedRows])"
+                            class="btn btn-outline-white btn-rounded btn-md px-2">
+                            <span>{{ btn.label }}</span>
+                            <mdb-icon class="fas mx-1" :icon="btn.icon"/>
+                        </button>
+                        <div v-if="doublebutton">
+                            <dblButton
+                                v-for="btn in doubleButtons"
+                                :button="btn"
+                                :key="btn.id"
+                                :disabled="multipleSelectedRows.length !== 1 && !btn.forceEnable"
+                                :primaryToSecondary="doublebuttonchange"
+                                @click="doubleButtonClick($event)"/>
+                        </div>
+                    </div>
+                </mdb-col >
+                <mdb-col col="4" >
+                    <div
+                        class="flex_entry testing d-flex justify-content-around flex-wrap order-2 order-md-3 flex-grow-1 mb-0">
+                        <mdb-select
+                            caretStyle="color: white;"
+                            style="white-space: nowrap;color: white;"
+                            iconClass="d-flex justify-content-end"
+                            color="primary"
+                            multiple
+                            selectAll
+                            :visibleOptions="6"
+                            :selectAllPlaceholder="'Επιλογή όλων'"
+                            @getValue="getSelectFields"
+                            :options="availableCols"
+                            :label="'Πεδία'"
+                        />
+                    </div>
+                </mdb-col>
+            </mdb-row>
+        </mdb-card>
         <!--/Card image-->
         <div class="mx-2 mx-md-3">
             <div class="d-flex justify-content-center">
                 <div class="scrolling" style="display: inline">
-                    <table class="table table-hover tableStyle ovfno table-bordered">
+                    <table class="table table-hover tableStyle ovfno table-bordered mx-auto " style="width: 1000px">
                         <thead>
-                        <th  :id="header.field" style="white-space: nowrap;"
+                        <th :id="header.field" style="white-space: nowrap;"
                             v-for="header in headers" :key="header.field" scope="col">
                             <mdb-icon class='unclickable' mx-1 v-if="customizeColumns" icon="arrows-alt"/>
                             <span class='unclickable'> <strong> {{ header.label }}</strong> </span>
@@ -105,6 +117,7 @@ import dblButton from '../../components/Inputs/doubleButton';
 export default {
     props: {
         tableTitle: String,
+        tableIcon: String,
         tableData: {},
         availableCols: Array,
         checkingRow: Boolean,
@@ -230,9 +243,11 @@ export default {
 .checkboxCentering {
     padding: 15px 0px 0px 3px;
 }
+
 .md {
     border-radius: 25px;
 }
+
 .flex_entry {
     flex: 1;
 }
