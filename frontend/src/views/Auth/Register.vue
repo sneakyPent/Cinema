@@ -111,8 +111,7 @@ export default {
             }
             formData.append('Type', 'Registration');
             this.$axios.post('http://localhost:8000/api/UserProfile/', formData, {headers: {'Content-Type': 'multipart/form-data'}})
-                // eslint-disable-next-line no-unused-vars
-                .then(res =>{
+                .then(() =>{
                     this.shown = true;
                 })
                 .catch(this.$notifyAction.error);
