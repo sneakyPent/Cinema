@@ -1,23 +1,25 @@
 <template>
     <div class="ml-5 mr-4">
         <mdb-container class="text-center">
-            <hr>
+            <div class="d-flex justify-content-center ml-5 rcorners">
+                <Table
+                    class="mt-5"
+                    v-if="fetched"
+                    :buttons="tableButtons"
+                    :tableTitle="'Χρήστες'"
+                    :tableIcon="'users'"
+                    checkingRow
+                    :tableData="tableData"
+                    :availableCols="availableCols"
+                    clickRow
+                    @rowClick="selectUserFromTable($event)"
+                    @buttonsClick="tableButtonsHandler($event)"
+                />
+            </div>
+            <user-profile-modal v-if="modal" :closing="closeModal" :userInfo="userInfo" state="Approved"
+                                :submit="submit"
+                                :decline="decline"/>
         </mdb-container>
-        <div class="d-flex justify-content-center ml-5 rcorners">
-            <Table
-                v-if="fetched"
-                :buttons="tableButtons"
-                :tableTitle="'Χρήστες'"
-                :tableIcon="'users'"
-                checkingRow
-                :tableData="tableData"
-                :availableCols="availableCols"
-                @rowClick="selectUserFromTable($event)"
-                @buttonsClick="tableButtonsHandler($event)"
-            />
-        </div>
-        <user-profile-modal v-if="modal" :closing="closeModal" :userInfo="userInfo" state="Approved" :submit="submit"
-                            :decline="decline"/>
     </div>
 </template>
 
@@ -123,15 +125,15 @@ export default {
         deleteUsers: function (users) {
             for (let i = 0; i < users.length; i++) {
                 this.$axios.delete('http://localhost:8000/api/UserProfile/' + users[i] + '/')
-                .then( () => {
-                    this.getAllUser();
-                    this.$notifyAction.success('Επιτυχής διαγραφή χρήστη!');
-                })
-                .catch(this.$notifyAction.error);
+                    .then(() => {
+                        this.getAllUser();
+                        this.$notifyAction.success('Επιτυχής διαγραφή χρήστη!');
+                    })
+                    .catch(this.$notifyAction.error);
             }
         },
         submit: function () {
-            const query = 'http://localhost:8000/api/UserProfile/' + this.userInfo.id + '/' ;
+            const query = 'http://localhost:8000/api/UserProfile/' + this.userInfo.id + '/';
             this.$axios.put(query, this.userInfo)
                 .then(() => {
                     this.$notifyAction.success('Επιτυχής αλλαγή στοιχείων χρήστη!');
@@ -204,6 +206,7 @@ export default {
 .form-control {
     color: black !important;
 }
+
 .rcorners {
     border-radius: 25px;
 }
