@@ -125,10 +125,7 @@ export default {
                 this.$axios.delete('http://localhost:8000/api/UserProfile/' + users[i] + '/')
                 .then( () => {
                     this.getAllUser();
-                    this.$notify({
-                        text: 'Επιτυχής Διαγραφή!',
-                        type: 'success'
-                    });
+                    this.$notifyAction.success('Επιτυχής διαγραφή χρήστη!');
                 })
                 .catch(this.$notifyAction.error);
             }
@@ -137,10 +134,7 @@ export default {
             const query = 'http://localhost:8000/api/UserProfile/' + this.userInfo.id + '/' ;
             this.$axios.put(query, this.userInfo)
                 .then(() => {
-                     this.$notify({
-                        text: this.$t('Changes applied!'),
-                        type: 'success'
-                    });
+                    this.$notifyAction.success('Επιτυχής αλλαγή στοιχείων χρήστη!');
                     this.getAllUser();
                     this.closeModal();
 
@@ -149,10 +143,7 @@ export default {
         },
         decline: function () {
             this.closeModal();
-            this.$notify({
-                text: 'Απόρριψη αλλαγών',
-                type: 'success'
-            });
+            this.$notifyAction.success('Απόρριψη αλλαγών');
         },
 
         fillForm: function (user) {
