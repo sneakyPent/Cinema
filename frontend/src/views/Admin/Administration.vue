@@ -8,6 +8,7 @@
                 v-if="fetched"
                 :buttons="tableButtons"
                 :tableTitle="'Χρήστες'"
+                :tableIcon="'users'"
                 checkingRow
                 :tableData="tableData"
                 :availableCols="availableCols"
@@ -181,13 +182,14 @@ export default {
             }
             // headers.push({label: 'id', field: 'id', sorting: true, type: 'string', clickable: false});
             for (let i = 0; i < val.length; i++) {
-                headers.push({
-                    label: val[i].text.toString(),
-                    field: val[i].value.toString().toLowerCase(),
-                    sorting: true,
-                    type: 'string',
-                    clickable: false
-                });
+                if (!(val[i].value.toLowerCase() === 'id'))
+                    headers.push({
+                        label: val[i].text.toString(),
+                        field: val[i].value.toString().toLowerCase(),
+                        sorting: true,
+                        type: 'string',
+                        clickable: false
+                    });
             }
             this.tableData = {headers: headers, data: data};
         },
