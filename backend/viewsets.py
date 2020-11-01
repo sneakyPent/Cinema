@@ -28,7 +28,10 @@ class MovieViewSet(viewsets.ModelViewSet):
 		)
 		queryset = self.queryset
 		user = self.request.user
-		if not self.request.user.is_superuser:
+		up = UserProfile.objects.get(id=user.id)
+		if self.request.user.is_superuser or up.role == 'user':
+			queryset = self.queryset
+		elif up.role == 'owner':
 			queryset = Movie.objects.filter(cinema__owner=user)
 		if isinstance(queryset, QuerySet):
 			# Ensure queryset is re-evaluated on each request.
@@ -37,8 +40,13 @@ class MovieViewSet(viewsets.ModelViewSet):
 
 	def list(self, request, *args, **kwargs):
 		my_param = request.query_params
-		if 'fields' in my_param:
+		up = UserProfile.objects.get(id=self.request.user.id)
+		excl = []
+		if self.request.user.is_superuser or up.role == 'user':
+			excl = []
+		elif up.role == 'owner':
 			excl = ['cinema']
+		if 'fields' in my_param:
 			dt = []
 			for vr in list(MovieSerializer.Meta.fields):
 				if vr not in excl:
@@ -85,13 +93,59 @@ class MovieViewSet(viewsets.ModelViewSet):
 class FavoriteViewSet(viewsets.ModelViewSet):
 	queryset = Favorite.objects.all()
 	serializer_class = FavoriteSerializer
-	permission_classes = (CustomDjangoModelPermissions,)
+	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly,)
+
+	def get_queryset(self):
+		assert self.queryset is not None, (
+				"'%s' should either include a `queryset` attribute, "
+				"or override the `get_queryset()` method."
+				% self.__class__.__name__
+		)
+		queryset = self.queryset
+		user = self.request.user
+		up = UserProfile.objects.get(id=user.id)
+
+		if self.request.user.is_superuser:
+			queryset = self.queryset
+		elif up.role == 'user':
+			queryset = Favorite.objects.filter(user=user.id)
+		if isinstance(queryset, QuerySet):
+			# Ensure queryset is re-evaluated on each request.
+			queryset = queryset.all()
+		return queryset
+
+	def create(self, request, *args, **kwargs):
+		print(request.data)
+		m = Movie.objects.get(id=request.data['id'])
+		u = self.request.user
+		f = Favorite()
+		f.user = u
+		f.movie = m
+		f.save()
+		return Response(HTTP_200_OK)
+
+	def update(self, request, *args, **kwargs):
+		m = Movie.objects.get(id=kwargs['pk'])
+		c = Cinema.objects.get(owner_id=self.request.user.id)
+		if c:
+			movieInfo = request.data
+			m.title = movieInfo['title']
+			m.startDate = movieInfo['startDate']
+			m.endDate = movieInfo['endDate']
+			m.category = movieInfo['category']
+			c = Cinema.objects.get(owner_id=self.request.user.id)
+			m.cinema = c
+			m.save()
+			return Response(HTTP_200_OK)
+		return Response(HTTP_400_BAD_REQUEST)
+
+
 
 
 class CinemaViewSet(viewsets.ModelViewSet):
 	queryset = Cinema.objects.all()
 	serializer_class = CinemaSerializer
-	permission_classes = (CustomDjangoModelPermissions,)
+	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly,)
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
