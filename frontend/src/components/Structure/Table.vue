@@ -17,7 +17,8 @@
             </mdb-row>
             <mdb-row class="justify-content-between" style=" width: 800px">
                 <mdb-col col="4">
-                    <div class=" flex_entry d-flex justify-content-around order-3 order-md-1 flex-grow-1 mt-4 ">
+                    <div v-if="buttons !== undefined || doublebutton"
+                         class=" flex_entry d-flex justify-content-around order-3 order-md-1 flex-grow-1 mt-4 ">
                         <button
                             v-for="btn in singleButtons"
                             :disabled="multipleSelectedRows.length === 0 && !btn.forceEnable"
@@ -44,12 +45,12 @@
                     <div
                         class="flex_entry testing d-flex justify-content-around flex-wrap order-2 order-md-3 flex-grow-1 mb-0">
                         <mdb-select
+                            v-if="availableCols !== undefined "
                             caretStyle="color: white;"
                             style="white-space: nowrap;color: white;"
                             iconClass="d-flex justify-content-end"
                             color="primary"
                             multiple
-                            selectAll
                             :visibleOptions="6"
                             :selectAllPlaceholder="'Επιλογή όλων'"
                             @getValue="getSelectFields"
@@ -70,7 +71,6 @@
                             v-for="header in headers" :key="header.field" scope="col">
                             <mdb-icon class='unclickable' mx-1 v-if="customizeColumns" icon="arrows-alt"/>
                             <span class='unclickable'> <strong> {{ header.label }}</strong> </span>
-                            <!--								<mdb-icon class="right unclickable" v-if="header.sorting" icon="sort"/>-->
                         </th>
 
                         </thead>
@@ -121,6 +121,8 @@ export default {
         tableData: {},
         availableCols: Array,
         checkingRow: Boolean,
+        rowButtons: {}, //rowButtons emit is their field name if you same button diferent class create group
+        clickRow: Boolean,
         buttons: Array,
         doublebutton: Boolean,
         doublebuttonchange: Boolean
@@ -236,6 +238,18 @@ export default {
 </style>
 
 <style scoped>
+
+.table_icon {
+    padding-top: 0px;
+    /*border-top-width: 0px;*/
+    padding-bottom: 0px;
+    /*border-bottom-width: 0px;/*/
+    /*border-left-width: 0px;*/
+    /*border-right-width: 0px;*/
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
 .display_flex {
     display: flex;
 }
