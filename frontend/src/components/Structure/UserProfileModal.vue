@@ -1,8 +1,10 @@
 <template>
     <mdb-modal @close="closing" size="mx-auto" class="modal">
-        <mdb-modal-header>
-            <mdb-modal-title class="w-100">
-                <span>{{ userInfo.surname + " " + userInfo.name }}</span>
+        <mdb-modal-header class="w-100 align-items-center">
+            <mdb-modal-title class="w-100 align-items-center">
+                <mdb-row class="justify-content-center ml-3">
+                    {{ userInfo.surname + " " + userInfo.name }}
+                </mdb-row>
                 <!--				<mdb-badge class="float-right" :color="state === 'Pending' ? 'warning' : state === 'Approved' ? 'success' : 'danger'">{{ $t(state) }}</mdb-badge>-->
             </mdb-modal-title>
         </mdb-modal-header>
@@ -12,21 +14,21 @@
                     <mdb-row>
                         <mdb-col>
                             <mdb-input v-model="userInfo.name" icon="user" label="Όνομα" type="text"
-                                       required
-                                       invalidFeedback="Please provide a valid city." class="mb-3 " style="color: black !important"/>
+                                       required disabled
+                                       invalidFeedback="Please provide a valid city." class="mb-3 "/>
                         </mdb-col>
                     </mdb-row>
                     <mdb-row>
                         <mdb-col>
                             <mdb-input v-model="userInfo.surname" icon="user" label="Επίθετο" type="text"
-                                       required
+                                       required disabled
                                        class="mb-3"/>
                         </mdb-col>
                     </mdb-row>
                     <mdb-row>
                         <mdb-col>
                             <mdb-input v-model="userInfo.username" icon="key" label="Όνομα χρήστη" group
-                                       type="text" required
+                                       type="text" required disabled
                                        class="mb-3"/>
                         </mdb-col>
                     </mdb-row>
@@ -34,7 +36,9 @@
                         <mdb-col>
                             <mdb-input v-model="userInfo.email" class="mb-3" label="email" icon="envelope"
                                        group type="email"
-                                       validate error="wrong" required
+                                       validate error="wrong"
+                                       required
+                                       disabled
                                        success="right"/>
                         </mdb-col>
                     </mdb-row>
@@ -58,7 +62,7 @@
                                 <mdb-input required type="radio" id="active"
                                            name="groupOfMaterialRadios1" radioValue="True"
                                            v-model="userInfo.is_active"
-                                           label="Ενεργός" />
+                                           label="Ενεργός"/>
                                 <mdb-input required type="radio" id="non-active"
                                            name="groupOfMaterialRadios1" radioValue="False"
                                            v-model="userInfo.is_active"
@@ -145,10 +149,10 @@ export default {
 
 <style>
 .md-form label {
-    color: red !important;
+    color: grey !important;
 }
 
-.modal-content{
+.modal-content {
     border-radius: 25px !important;
 }
 
