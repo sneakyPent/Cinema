@@ -95,6 +95,26 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 	serializer_class = FavoriteSerializer
 	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly,)
 
+	def list(self, request, *args, **kwargs):
+		my_param = request.query_params
+		up = UserProfile.objects.get(id=self.request.user.id)
+		if self.request.user.is_superuser or up.role == 'user':
+			if 'titleList' in my_param:
+				f_titles = Favorite.objects.filter(user=self.request.user).values_list('movie__title')
+				dt = []
+				for vr in f_titles:
+					dt.append(vr[0])
+				return Response({'title': dt})
+		else:
+
+			return Response(HTTP_400_BAD_REQUEST, status=status.HTTP_400_BAD_REQUEST)
+
+		if self.request.user.is_superuser:
+			self.serializer_class = FavoriteSerializer
+		else:
+			self.serializer_class = FavoriteSerializer
+		return super().list(request, *args, **kwargs)
+
 	def get_queryset(self):
 		assert self.queryset is not None, (
 				"'%s' should either include a `queryset` attribute, "
