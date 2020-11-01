@@ -1,6 +1,6 @@
 import os
 
-from rest_framework import filters
+from rest_framework import filters, status
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
@@ -71,8 +71,8 @@ class MovieViewSet(viewsets.ModelViewSet):
 			c = Cinema.objects.get(owner_id=self.request.user.id)
 			m.cinema = c
 			m.save()
-			return Response(HTTP_200_OK)
-		return Response(HTTP_400_BAD_REQUEST)
+			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
 
 	def update(self, request, *args, **kwargs):
 		m = Movie.objects.get(id=kwargs['pk'])
@@ -86,8 +86,8 @@ class MovieViewSet(viewsets.ModelViewSet):
 			c = Cinema.objects.get(owner_id=self.request.user.id)
 			m.cinema = c
 			m.save()
-			return Response(HTTP_200_OK)
-		return Response(HTTP_400_BAD_REQUEST)
+			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
 
 
 class FavoriteViewSet(viewsets.ModelViewSet):
@@ -136,10 +136,8 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 			c = Cinema.objects.get(owner_id=self.request.user.id)
 			m.cinema = c
 			m.save()
-			return Response(HTTP_200_OK)
-		return Response(HTTP_400_BAD_REQUEST)
-
-
+			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
 
 
 class CinemaViewSet(viewsets.ModelViewSet):
@@ -151,7 +149,7 @@ class CinemaViewSet(viewsets.ModelViewSet):
 class UserProfileViewSet(viewsets.ModelViewSet):
 	queryset = UserProfile.objects.all()
 	serializer_class = UserProfileSerializer
-	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
+	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly,)
 
 	def list(self, request, *args, **kwargs):
 		my_param = request.query_params
@@ -196,8 +194,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			u.groups.set(groups)
 			u.save()
 
-			return Response(HTTP_200_OK)
-		return Response(HTTP_400_BAD_REQUEST)
+			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
 
 	def create(self, request, *args, **kwargs):
 		import json
@@ -227,8 +225,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			p.role = formData['role']
 			p.save()
 
-			return Response(HTTP_200_OK)
-		return Response(HTTP_400_BAD_REQUEST)
+			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
 
 
 class UserViewSet(viewsets.ModelViewSet):
