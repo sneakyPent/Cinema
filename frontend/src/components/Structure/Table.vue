@@ -89,6 +89,51 @@
                                 <span class='unclickable' v-if="header.type === 'string'"> {{
                                         item[header.field]
                                     }}</span>
+                                <mdb-btn
+                                    rounded
+                                    color="white"
+                                    size="sm"
+                                    v-if="header.type === 'btn'"
+                                    @click="$emit(header.field,[ item.id])"
+                                >
+                                    <i :class="rowButtons[item.type].class"></i>
+                                </mdb-btn>
+                                <mdb-input
+                                    class="center"
+                                    v-if="header.type === 'checkbox'"
+                                    type="checkbox"
+                                    :id="'c'+item.id"
+                                    name="check"
+                                    @change="getMultipleSelectedRows({selected: $event, id: item.id})"
+                                />
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tbody v-if="!clickRow">
+                        <tr
+
+                            style="white-space: nowrap;"
+                            v-for="item in tableData.data"
+                            :key="item.id"
+                            :id="item.id"
+                        >
+                            <td v-bind:class="{ 'unclickable': true, 'checkboxCentering': header.type === 'checkbox',
+                                                table_icon: header.type === 'btn'}"
+                                v-for="header in headers"
+                                :key="header.field"
+                            >
+                                <span class='unclickable' v-if="header.type === 'string'"> {{
+                                        item[header.field]
+                                    }}</span>
+                                <mdb-btn
+                                    rounded
+                                    color="white"
+                                    size="sm"
+                                    v-if="header.type === 'btn'"
+                                    @click="$emit(header.field,[ item.id])"
+                                >
+                                    <i :class="rowButtons[item.type].class"></i>
+                                </mdb-btn>
                                 <mdb-input
                                     class="center"
                                     v-if="header.type === 'checkbox'"
