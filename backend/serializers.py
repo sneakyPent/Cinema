@@ -10,9 +10,19 @@ from backend.models import UserProfile
 
 
 class MovieSerializer(serializers.ModelSerializer):
+	cinema = serializers.CharField(source='cinema.name', read_only=True)
+
 	class Meta:
 		model = Movie
-		fields = '__all__'
+		depth = 1
+		fields = (
+			'id',
+			'title',
+			'startDate',
+			'endDate',
+			'category',
+			'cinema',
+		)
 
 
 class CinemaSerializer(serializers.ModelSerializer):
