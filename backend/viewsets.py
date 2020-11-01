@@ -115,14 +115,17 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 		return queryset
 
 	def create(self, request, *args, **kwargs):
-		print(request.data)
-		m = Movie.objects.get(id=request.data['id'])
-		u = self.request.user
-		f = Favorite()
-		f.user = u
-		f.movie = m
-		f.save()
-		return Response(HTTP_200_OK)
+		rq_m = Movie.objects.get(id=request.data['id'])
+		rq_u = self.request.user
+		f = Favorite.objects.filter(Q(user=rq_u) & Q(movie=rq_m)).filter()
+		if not f:
+			f = Favorite()
+			f.user = rq_u
+			f.movie = rq_m
+			f.save()
+			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+		else:
+			return Response(HTTP_406_NOT_ACCEPTABLE, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 	def update(self, request, *args, **kwargs):
 		m = Movie.objects.get(id=kwargs['pk'])
