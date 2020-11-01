@@ -32,9 +32,25 @@ class CinemaSerializer(serializers.ModelSerializer):
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
+	user = serializers.IntegerField(source='user.id')
+	title = serializers.CharField(source='movie.title', read_only=True)
+	startDate = serializers.CharField(source='movie.startDate', read_only=True)
+	endDate = serializers.CharField(source='movie.endDate', read_only=True)
+	category = serializers.CharField(source='movie.category', read_only=True)
+	cinema = serializers.CharField(source='movie.cinema.name', read_only=True)
+
 	class Meta:
 		model = Favorite
-		fields = '__all__'
+		depth = 1
+		fields = (
+			'id',
+			'user',
+			'title',
+			'startDate',
+			'endDate',
+			'category',
+			'cinema',
+		)
 
 
 class UserSerializer(serializers.ModelSerializer):
