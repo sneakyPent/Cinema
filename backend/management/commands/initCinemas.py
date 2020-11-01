@@ -17,15 +17,15 @@ class Command(BaseCommand):
 		try:
 			c = Cinema()
 			u = User.objects.get(username='owner1')
-			c.Owner = u
-			c.Name = 'Cinema_1'
+			c.owner = u
+			c.name = 'Cinema_1'
 			c.save()
 			# -----------------------------------------------------------
 
 			c = Cinema()
 			u = User.objects.get(username='owner2')
-			c.Owner = u
-			c.Name = 'Cinema_2'
+			c.owner = u
+			c.name = 'Cinema_2'
 			c.save()
 			# -----------------------------------------------------------
 

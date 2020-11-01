@@ -95,8 +95,8 @@ class Command(BaseCommand):
 			u = User()
 			u.first_name = 'Aντώνης'
 			u.last_name = 'Ζαχαριουδάκης'
-			u.username = 'anadmin'
-			u.email = 'anmail@yahoo.com'
+			u.username = 'admin'
+			u.email = 'admin@yahoo.com'
 			u.set_password('mousakas')
 			u.is_active = True
 			u.is_staff = True

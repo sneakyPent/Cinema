@@ -17,25 +17,25 @@ class Command(BaseCommand):
 		try:
 			f = Favorite()
 			u = User.objects.get(username='user1')
-			m = Movie.objects.get(Title='Bad Boys 1')
-			f.Movie = m
-			f.User = u
+			m = Movie.objects.get(title='Bad Boys 1')
+			f.movie = m
+			f.user = u
 			f.save()
 
 			# -----------------------------------------------------------
 			f = Favorite()
 			u = User.objects.get(username='user1')
-			m = Movie.objects.get(Title='Bad Boys 2')
-			f.Movie = m
-			f.User = u
+			m = Movie.objects.get(title='Bad Boys 2')
+			f.movie = m
+			f.user = u
 			f.save()
 
 			# -----------------------------------------------------------
 			f = Favorite()
 			u = User.objects.get(username='user2')
-			m = Movie.objects.get(Title='Borat 1')
-			f.Movie = m
-			f.User = u
+			m = Movie.objects.get(title='Borat 1')
+			f.movie = m
+			f.user = u
 			f.save()
 
 			# -----------------------------------------------------------

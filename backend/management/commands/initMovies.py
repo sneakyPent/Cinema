@@ -18,52 +18,52 @@ class Command(BaseCommand):
 		print('- Init Movies: ', end='')
 
 		try:
-			c = Cinema.objects.get(Name='Cinema_1')
+			c = Cinema.objects.get(name='Cinema_1')
 			m = Movie()
-			m.Title = 'Bad Boys 1'
-			m.StartDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.EndDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.Cinema = c
-			m.Category = 'Action'
+			m.title = 'Bad Boys 1'
+			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.cinema = c
+			m.category = 'Action'
 			m.save()
 			# -----------------------------------------------------------
-			c = Cinema.objects.get(Name='Cinema_1')
+			c = Cinema.objects.get(name='Cinema_1')
 			m = Movie()
-			m.Title = 'Bad Boys 2'
-			m.StartDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.EndDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.Cinema = c
-			m.Category = 'Action'
-			m.save()
-			# -----------------------------------------------------------
-
-			c = Cinema.objects.get(Name='Cinema_1')
-			m = Movie()
-			m.Title = 'Bad Boys 3'
-			m.StartDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.EndDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.Cinema = c
-			m.Category = 'Action'
+			m.title = 'Bad Boys 2'
+			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.cinema = c
+			m.category = 'Action'
 			m.save()
 			# -----------------------------------------------------------
 
-			c = Cinema.objects.get(Name='Cinema_2')
+			c = Cinema.objects.get(name='Cinema_1')
 			m = Movie()
-			m.Title = 'Borat 1'
-			m.StartDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.EndDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.Cinema = c
-			m.Category = 'Comedy'
+			m.title = 'Bad Boys 3'
+			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.cinema = c
+			m.category = 'Action'
 			m.save()
 			# -----------------------------------------------------------
 
-			c = Cinema.objects.get(Name='Cinema_2')
+			c = Cinema.objects.get(name='Cinema_2')
 			m = Movie()
-			m.Title = 'Borat 2'
-			m.StartDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.EndDate = datetime.strptime('20/10/2020', '%d/%m/%Y')
-			m.Cinema = c
-			m.Category = 'Comedy'
+			m.title = 'Borat 1'
+			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.cinema = c
+			m.category = 'Comedy'
+			m.save()
+			# -----------------------------------------------------------
+
+			c = Cinema.objects.get(name='Cinema_2')
+			m = Movie()
+			m.title = 'Borat 2'
+			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.cinema = c
+			m.category = 'Comedy'
 			m.save()
 			# -----------------------------------------------------------
 
