@@ -27,6 +27,20 @@ export default [
 
 	},
 	{
+		path: '/favorites',
+		name: 'Favorites',
+		component: require('../views/User/Favorites').default,
+		meta: {
+			requiresSession: true
+		},
+		sidenav: {
+			name: 'Αγαπημένα',
+			to: '/favorites',
+			icon: 'star',
+		}
+
+	},
+	{
 		path: '/Logout',
 		name: 'Logout',
 		component: require('../views/Auth/Logout').default,
