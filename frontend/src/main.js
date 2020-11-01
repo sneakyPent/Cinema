@@ -130,37 +130,31 @@ Vue.prototype.$datepickerOptions = function () {
 		format: 'YYYY-MM-DD',
 	};
 };
-
-Vue.prototype.$notifyAction = {
-    error: err => {
-        // eslint-disable-next-line no-console
-        console.log(err);
+const notificationDuration = 600
+Vue.prototype.$notifyAction =  {
+     error: message => {
         vm.$notify({
-            text: 'Κάτι πήγε στραβά..',
+            title: 'Σφάλμα',
+            text: message,
+            duration: notificationDuration,
             type: 'error'
         });
     },
-    errorPermanent: err => {
-        // eslint-disable-next-line no-console
-        console.log(err);
+    success: message => {
         vm.$notify({
-            text: 'Κάτι πήγε στραβά..',
-            type: 'error',
-            duration: -1
-        });
-    },
-    saveSuccess: () => {
-        vm.$notify({
-            text: 'Κάτι πήγε στραβά..',
+            text: message,
+            duration: notificationDuration,
             type: 'success'
         });
     },
-    deleteSuccess: () => {
+    warning: message => {
         vm.$notify({
-            text: 'Κάτι πήγε στραβά..',
-            type: 'success'
+            title: 'Ενημέρωση',
+            text: message,
+            duration: notificationDuration,
+            type: 'warning'
         });
     }
-};
 
+}
 vm.$mount('#app');
