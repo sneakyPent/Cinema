@@ -102,6 +102,35 @@ const vm = new Vue({
 });
 
 
+Vue.prototype.$datepickerOptions = function () {
+	return {
+		week: [
+			'Δε',
+			'Τρ',
+			'Τετ',
+			'Πεμ',
+			'Παρ',
+			'Σαβ',
+			'Κυρ',
+		],
+		month: [
+			'Ιανουάριος',
+			'Φεβρουάριος',
+			'Μάρτιος',
+			'Απρίλιος',
+			'Μάιος',
+			'Ιούνιος',
+			'Ιούλιο',
+			'Αύγουστος',
+			'Σεπτέμβριος',
+			'Οκώβριος',
+			'Νοέμβριος',
+			'Δεκέμβριος',
+		],
+		format: 'YYYY-MM-DD',
+	};
+};
+
 Vue.prototype.$notifyAction = {
     error: err => {
         // eslint-disable-next-line no-console
