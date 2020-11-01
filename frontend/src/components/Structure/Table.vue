@@ -74,7 +74,7 @@
                         </th>
 
                         </thead>
-                        <tbody>
+                        <tbody v-if="clickRow">
                         <tr
                             style="white-space: nowrap;"
                             v-on:click="getSelectedRow($event)"
