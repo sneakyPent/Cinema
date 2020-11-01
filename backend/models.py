@@ -11,21 +11,21 @@ from django.dispatch import receiver
 
 
 class Movie(models.Model):
-	Title = models.CharField(max_length=100)
-	StartDate = models.DateField()
-	EndDate = models.DateField()
-	Cinema = models.ForeignKey(to='Cinema', on_delete=models.CASCADE, related_name='Cinema', blank=True, null=True)
-	Category = models.CharField(max_length=100)
+	title = models.CharField(max_length=100)
+	startDate = models.DateField()
+	endDate = models.DateField()
+	cinema = models.ForeignKey(to='Cinema', on_delete=models.CASCADE, related_name='Cinema', blank=True, null=True)
+	category = models.CharField(max_length=100)
 
 
 class Cinema(models.Model):
-	Owner = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='Owner', blank=True, null=True)
-	Name = models.CharField(max_length=100)
+	owner = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='Owner', blank=True, null=True)
+	name = models.CharField(max_length=100)
 
 
 class Favorite(models.Model):
-	User = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='User', blank=True, null=True)
-	Movie = models.ForeignKey(to='Movie', on_delete=models.CASCADE, related_name='Movie', blank=True, null=True)
+	user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='User', blank=True, null=True)
+	movie = models.ForeignKey(to='Movie', on_delete=models.CASCADE, related_name='Movie', blank=True, null=True)
 
 
 class UserProfile(models.Model):
