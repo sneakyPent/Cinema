@@ -18,7 +18,68 @@ from django.contrib.auth.models import User
 class MovieViewSet(viewsets.ModelViewSet):
 	queryset = Movie.objects.all()
 	serializer_class = MovieSerializer
-	permission_classes = (CustomDjangoModelPermissions,)
+	permission_classes = (IsAuthenticated ,)
+
+	def get_queryset(self):
+		assert self.queryset is not None, (
+				"'%s' should either include a `queryset` attribute, "
+				"or override the `get_queryset()` method."
+				% self.__class__.__name__
+		)
+		queryset = self.queryset
+		user = self.request.user
+		if not self.request.user.is_superuser:
+			queryset = Movie.objects.filter(cinema__owner=user)
+		if isinstance(queryset, QuerySet):
+			# Ensure queryset is re-evaluated on each request.
+			queryset = queryset.all()
+		return queryset
+
+	def list(self, request, *args, **kwargs):
+		my_param = request.query_params
+		if 'fields' in my_param:
+			excl = ['cinema']
+			dt = []
+			for vr in list(MovieSerializer.Meta.fields):
+				if vr not in excl:
+					dt.append(vr)
+			return Response({'fields': dt})
+
+		if self.request.user.is_superuser:
+			self.serializer_class = MovieSerializer
+		else:
+			self.serializer_class = MovieSerializer
+		return super().list(request, *args, **kwargs)
+
+	def create(self, request, *args, **kwargs):
+		c = Cinema.objects.get(owner_id=self.request.user.id)
+		if c:
+			movieInfo = request.data
+			m = Movie()
+			m.title = movieInfo['title']
+			m.startDate = movieInfo['startDate']
+			m.endDate = movieInfo['endDate']
+			m.category = movieInfo['category']
+			c = Cinema.objects.get(owner_id=self.request.user.id)
+			m.cinema = c
+			m.save()
+			return Response(HTTP_200_OK)
+		return Response(HTTP_400_BAD_REQUEST)
+
+	def update(self, request, *args, **kwargs):
+		m = Movie.objects.get(id=kwargs['pk'])
+		c = Cinema.objects.get(owner_id=self.request.user.id)
+		if c:
+			movieInfo = request.data
+			m.title = movieInfo['title']
+			m.startDate = movieInfo['startDate']
+			m.endDate = movieInfo['endDate']
+			m.category = movieInfo['category']
+			c = Cinema.objects.get(owner_id=self.request.user.id)
+			m.cinema = c
+			m.save()
+			return Response(HTTP_200_OK)
+		return Response(HTTP_400_BAD_REQUEST)
 
 
 class FavoriteViewSet(viewsets.ModelViewSet):
