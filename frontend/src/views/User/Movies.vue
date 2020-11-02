@@ -8,6 +8,7 @@
                     :tableTitle="'Τανίες'"
                     :tableIcon="'film'"
                     :tableData="tableDat"
+                    :filters="filters"
                     :rowButtons="tableRowButtons"
                     @favs="addToFavorite($event)"
                     @rowClick="selectUserFromTable($event)"
@@ -36,6 +37,33 @@ export default {
         return {
             availableCols: [],
             headers: [],
+            filters: [
+                {
+                    id:1,
+                    name: 'Τίτλος',
+                    placeholder: 'Τίτλος',
+                    value: ''
+                },
+                {
+                    id:2,
+                    name: 'Κινηματογράφος',
+                    placeholder: 'Κινηματογράφος',
+                    value: ''
+                },
+                {
+                    id:3,
+                    name: 'Κατηγορία',
+                    placeholder: 'Κατηγορία',
+                    value: ''
+                },
+                {
+                    id:4,
+                    name: 'Ημερομηνία Προβολής',
+                    placeholder: 'Ημ. Προβολής',
+                    value: ''
+                },
+
+            ],
             tableRowButtons: {
                 nonFavorite: {
                     group: 'favs',
