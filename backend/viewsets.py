@@ -269,4 +269,4 @@ class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
-	permission_classes = (AllowAny | NotAuthenticatedCreateOnly, )
+	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
