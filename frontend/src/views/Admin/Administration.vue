@@ -124,7 +124,7 @@ export default {
         },
         deleteUsers: function (users) {
             for (let i = 0; i < users.length; i++) {
-                this.$axios.delete('http://localhost:8000/api/UserProfile/' + users[i] + '/')
+                this.$axios.delete('http://localhost:8000/api/User/' + users[i] + '/')
                     .then(() => {
                         this.getAllUser();
                         this.$notifyAction.success('Επιτυχής διαγραφή χρήστη!');
