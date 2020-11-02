@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </mdb-col>
-                <mdb-col md="1" v-if="!dynamicallySearch">
+                <mdb-col md="1" v-if="!dynamicallySearch && filters !== undefined " >
                     <mdb-btn
                         class="rounded-circle px-2"
                         color="white"
