@@ -1,6 +1,6 @@
 import os
 
-from rest_framework import filters, status
+from rest_framework import filters, status, generics
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
@@ -15,10 +15,12 @@ from backend.serializers import *
 from django.contrib.auth.models import User
 
 
-class MovieViewSet(viewsets.ModelViewSet):
+class MovieViewSet(viewsets.ModelViewSet ):
 	queryset = Movie.objects.all()
 	serializer_class = MovieSerializer
-	permission_classes = (IsAuthenticated ,)
+	permission_classes = (IsAuthenticated, )
+	filter_backends = [filters.SearchFilter]
+	search_fields = ['title', 'category', 'cinema__name']
 
 	def get_queryset(self):
 		assert self.queryset is not None, (
@@ -26,13 +28,18 @@ class MovieViewSet(viewsets.ModelViewSet):
 				"or override the `get_queryset()` method."
 				% self.__class__.__name__
 		)
-		queryset = self.queryset
 		user = self.request.user
 		up = UserProfile.objects.get(id=user.id)
-		if self.request.user.is_superuser or up.role == 'user':
+		startDate = self.request.query_params.get('startDate', None)
+		if startDate is not None:
+			print(startDate)
+			queryset = self.queryset
+		elif self.request.user.is_superuser or up.role == 'user':
 			queryset = self.queryset
 		elif up.role == 'owner':
 			queryset = Movie.objects.filter(cinema__owner=user)
+		else:
+			queryset = self.queryset
 		if isinstance(queryset, QuerySet):
 			# Ensure queryset is re-evaluated on each request.
 			queryset = queryset.all()
@@ -93,7 +100,9 @@ class MovieViewSet(viewsets.ModelViewSet):
 class FavoriteViewSet(viewsets.ModelViewSet):
 	queryset = Favorite.objects.all()
 	serializer_class = FavoriteSerializer
-	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly,)
+	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
+	filter_backends = [filters.SearchFilter]
+	search_fields = [filters.SearchFilter]
 
 	def list(self, request, *args, **kwargs):
 		my_param = request.query_params
@@ -121,7 +130,6 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 				"or override the `get_queryset()` method."
 				% self.__class__.__name__
 		)
-		queryset = self.queryset
 		user = self.request.user
 		up = UserProfile.objects.get(id=user.id)
 
@@ -129,6 +137,8 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 			queryset = self.queryset
 		elif up.role == 'user':
 			queryset = Favorite.objects.filter(user=user.id)
+		else:
+			queryset = self.queryset
 		if isinstance(queryset, QuerySet):
 			# Ensure queryset is re-evaluated on each request.
 			queryset = queryset.all()
@@ -166,13 +176,17 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 class CinemaViewSet(viewsets.ModelViewSet):
 	queryset = Cinema.objects.all()
 	serializer_class = CinemaSerializer
-	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly,)
+	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
+	filter_backends = [filters.SearchFilter]
+	search_fields = [filters.SearchFilter]
 
 
-class UserProfileViewSet(viewsets.ModelViewSet):
+class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 	queryset = UserProfile.objects.all()
 	serializer_class = UserProfileSerializer
-	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly,)
+	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
+	filter_backends = [filters.SearchFilter]
+	search_fields = [filters.SearchFilter]
 
 	def list(self, request, *args, **kwargs):
 		my_param = request.query_params
@@ -255,4 +269,4 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
-	permission_classes = (AllowAny | NotAuthenticatedCreateOnly,)
+	permission_classes = (AllowAny | NotAuthenticatedCreateOnly, )
