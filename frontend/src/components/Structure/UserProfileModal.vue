@@ -10,25 +10,25 @@
         </mdb-modal-header>
         <mdb-modal-body class="black-text">
             <form novalidate class="label">
-                <div class="black-text">
+                <div class="black-text text-left">
                     <mdb-row>
                         <mdb-col>
                             <mdb-input v-model="userInfo.name" icon="user" label="Όνομα" type="text"
-                                       required disabled
+                                       required disabled size="lg"
                                        invalidFeedback="Please provide a valid city." class="mb-3 "/>
                         </mdb-col>
                     </mdb-row>
                     <mdb-row>
                         <mdb-col>
                             <mdb-input v-model="userInfo.surname" icon="user" label="Επίθετο" type="text"
-                                       required disabled
+                                       required disabled size="lg"
                                        class="mb-3"/>
                         </mdb-col>
                     </mdb-row>
                     <mdb-row>
                         <mdb-col>
                             <mdb-input v-model="userInfo.username" icon="key" label="Όνομα χρήστη" group
-                                       type="text" required disabled
+                                       type="text" required disabled size="lg"
                                        class="mb-3"/>
                         </mdb-col>
                     </mdb-row>
@@ -38,6 +38,7 @@
                                        group type="email"
                                        validate error="wrong"
                                        required
+                                       size="lg"
                                        disabled
                                        success="right"/>
                         </mdb-col>
