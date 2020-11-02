@@ -10,6 +10,7 @@
                     :tableData="tableDat"
                     :filters="filters"
                     :rowButtons="tableRowButtons"
+                    @search="searchMovies()"
                     @favs="addToFavorite($event)"
                     @rowClick="selectUserFromTable($event)"
                     @buttonsClick="tableButtonsHandler($event)"
@@ -203,6 +204,29 @@ export default {
             }
             this.headers = headers;
         },
+        searchMovies: function () {
+            let str = ''
+            for (let fil of this.filters) {
+                if (!(fil.value === ''))
+                    if (str === '') {
+                        str = str.concat(fil.value.replace(/ /g,"+"))
+                    }
+                    else {
+                        str = str.concat(',' + fil.value.replace(/ /g,"+"))
+                    }
+            }
+            const query = 'http://localhost:8000/api/Movie/?search='+ str;
+            this.$axios.get(query)
+                .then((res) => {
+                    this.moviesList = res.data;
+                })
+                .catch((response) => {
+                        this.$notifyAction.error(response)
+                    }
+                );
+
+
+        }
 
     },
     computed: {
