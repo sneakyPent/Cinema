@@ -10,6 +10,7 @@
                 :tableTitle="'Τανίες'"
                 :tableIcon="'film'"
                 checkingRow
+                clickRow
                 :tableData="tableData"
                 :availableCols="availableCols"
                 @rowClick="selectUserFromTable($event)"
