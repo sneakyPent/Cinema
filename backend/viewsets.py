@@ -254,6 +254,10 @@ class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 			if p.role == 'user':
 				groups = [Group.objects.get(name='User')]
 			elif p.role == 'owner':
+				c = Cinema()
+				c.owner = u
+				c.name = formData['cinemaName']
+				c.save()
 				groups = [Group.objects.get(name='CinemaOwner')]
 			u.groups.set(groups)
 			u.save()
@@ -270,3 +274,5 @@ class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
 	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
+	filter_backends = [filters.SearchFilter]
+	search_fields = [filters.SearchFilter]

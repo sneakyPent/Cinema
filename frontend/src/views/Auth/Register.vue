@@ -53,6 +53,16 @@
                                         </mdb-form-inline>
                                     </mdb-col>
                                 </mdb-row>
+                                 <mdb-row v-if="formInfo.role === 'owner'" >
+                                    <mdb-col class="mb-2 mt-3 d-flex justify-content-center">
+                                        <mdb-input v-model="formInfo.cinemaName"
+                                                   label="Όνομα κινηματογράφου"
+                                                   type="text"
+                                                   required
+                                                   icon="building"
+                                                   class="mb-3"/>
+                                    </mdb-col>
+                                </mdb-row>
                             </div>
                             <mdb-row>
                                 <mdb-col class=" d-flex justify-content-center">
