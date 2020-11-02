@@ -82,7 +82,6 @@ export default {
         },
         tableButtonsHandler: function (el) {
             const [button, rows] = el
-            console.log(button)
             switch (button.name) {
                 case 'delete':
                     this.deleteMovie(rows);
@@ -183,12 +182,10 @@ export default {
         submit: function () {
             switch (this.submitAction) {
                 case 'update':
-                     console.log('update')
                     this.updateMovie()
                     break;
                 case 'add':
                     this.postMove()
-                    console.log('add')
                     this.submitAction = 'update'
                     break;
                 default:
