@@ -18,14 +18,14 @@ class Command(BaseCommand):
 			c = Cinema()
 			u = User.objects.get(username='owner1')
 			c.owner = u
-			c.name = 'Cinema_1'
+			c.name = 'Talos'
 			c.save()
 			# -----------------------------------------------------------
 
 			c = Cinema()
 			u = User.objects.get(username='owner2')
 			c.owner = u
-			c.name = 'Cinema_2'
+			c.name = 'Astoria'
 			c.save()
 			# -----------------------------------------------------------
 
