@@ -4,15 +4,64 @@
         <mdb-card
             class="
             gradient-card-header blue-gradient justify-content-around align-items-center text-light d-flex narrower display_flex
-             view view-cascade my-1 overflow py-2 mx-3 mb-3 flex-column" style=" width: 1000px" >
+             view view-cascade my-1 overflow py-2 mx-3 mb-3 flex-column" style=" width: auto">
             <mdb-row class="mt-1">
                 <mdb-col>
                     <div class="flex_entry order-1 order-md-2 flex-grow-1">
-                        <mdb-card-title tag="h4" bold class="white-text w-100 mt-1" >
-                            <mdb-icon class="mx-2" :icon=tableIcon />
-                            <span><strong style="font-family:Comic Sans MS;" >{{ tableTitle }}</strong></span>
+                        <mdb-card-title tag="h4" bold class="white-text w-100 mt-1">
+                            <mdb-icon class="mx-2" :icon=tableIcon
+                            />
+                            <span><strong style="font-family:Comic Sans MS;">{{ tableTitle }}</strong></span>
                         </mdb-card-title>
                     </div>
+                </mdb-col>
+            </mdb-row>
+            <mdb-row class="mt-1">
+                <mdb-col   v-if="dynamicallySearch">
+                    <div v-if="filters !== undefined"
+                         class="flex_entry d-flex flex-wrap  order-3 order-md-1 flex-grow-1 mt-2 mb-2">
+                        <div v-for="filter in filters"
+                             :key="filter.id"
+                             :id="filter.id"
+                             class="ml-2 mb-1"
+                        >
+                            <input
+                                type="text"
+                                class="form-control justify-content-around rcorners"
+                                style="text-align: center"
+                                :placeholder="filter.placeholder"
+                                v-model="filter.value"
+                            >
+                        </div>
+                    </div>
+                </mdb-col>
+                <mdb-col md="11" v-else>
+                    <div v-if="filters !== undefined"
+                         class="flex_entry d-flex flex-wrap  order-3 order-md-1 flex-grow-1 mt-2 mb-2">
+                        <div v-for="filter in filters"
+                             :key="filter.id"
+                             :id="filter.id"
+                             class="ml-2 mb-1"
+                        >
+                            <input
+                                type="text"
+                                class="form-control justify-content-around rcorners"
+                                style="text-align: center"
+                                :placeholder="filter.placeholder"
+                                v-model="filter.value"
+                            >
+                        </div>
+                    </div>
+                </mdb-col>
+                <mdb-col md="1" v-if="!dynamicallySearch">
+                    <mdb-btn
+                        class="rounded-circle px-2"
+                        color="white"
+                        size="sm"
+                        @click="$emit('search')"
+                    >
+                        <i class="fa fa-search fa-lg"></i>
+                    </mdb-btn>
                 </mdb-col>
             </mdb-row>
             <mdb-row class="justify-content-between" style=" width: 800px">
@@ -40,8 +89,8 @@
                                 @click="doubleButtonClick($event)"/>
                         </div>
                     </div>
-                </mdb-col >
-                <mdb-col col="4" >
+                </mdb-col>
+                <mdb-col col="4">
                     <div
                         class="flex_entry testing d-flex justify-content-around flex-wrap order-2 order-md-3 flex-grow-1 mb-0">
                         <mdb-select
@@ -64,8 +113,9 @@
         <!--/Card image-->
         <div class="mx-2 mx-md-3">
             <div class="d-flex justify-content-center">
-                <div class="scrolling" style="display: inline">
-                    <table class="table table-hover tableStyle ovfno table-bordered mx-auto " style="width: 1000px">
+                <div class="scrolling" style="display: inline ">
+                    <table class="table table-hover tableStyle ovfno table-bordered mx-auto "
+                           style="width: 950px;  overflow-x: hidden">
                         <thead>
                         <th :id="header.field" style="white-space: nowrap;"
                             v-for="header in headers" :key="header.field" scope="col">
@@ -90,7 +140,7 @@
                                         item[header.field]
                                     }}</span>
                                 <mdb-btn
-                                    rounded
+                                    class="rounded-circle px-2"
                                     color="white"
                                     size="sm"
                                     v-if="header.type === 'btn'"
@@ -109,7 +159,7 @@
                             </td>
                         </tr>
                         </tbody>
-                        <tbody v-if="!clickRow">
+                        <tbody v-else>
                         <tr
 
                             style="white-space: nowrap;"
@@ -126,7 +176,7 @@
                                         item[header.field]
                                     }}</span>
                                 <mdb-btn
-                                    rounded
+                                    class="rounded-circle px-2"
                                     color="white"
                                     size="sm"
                                     v-if="header.type === 'btn'"
@@ -164,6 +214,8 @@ export default {
         tableTitle: String,
         tableIcon: String,
         tableData: {},
+        filters: Array,
+        dynamicallySearch: Boolean,
         availableCols: Array,
         checkingRow: Boolean,
         rowButtons: {}, //rowButtons emit is their field name if you same button diferent class create group
@@ -191,6 +243,7 @@ export default {
     mounted: function () {
         this.headers = this.tableData.headers;
         this.addCheckboxes();
+        this.filterSize();
 
     },
     methods: {
@@ -237,6 +290,12 @@ export default {
                 }
             }
         },
+        filterSize: function () {
+            let input = document.querySelectorAll('input');
+            for (let i = 0; i < input.length; i++) {
+                input[i].setAttribute('size', input[i].getAttribute('placeholder').length);
+            }
+        },
     },
     watch: {
         tableColumns: function () {
@@ -273,6 +332,10 @@ export default {
 </script>
 
 <style>
+.rcorners {
+    border-radius: 25px;
+}
+
 .md-form label {
     color: darkgrey !important;
 }
