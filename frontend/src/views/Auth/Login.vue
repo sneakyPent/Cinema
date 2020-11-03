@@ -3,24 +3,36 @@
         <section class="form-elegant mt-5">
             <mdb-col sm="3" md="3" lg="3" class="mx-auto">
                 <mdb-card>
-                    <mdb-card-body class="mx-4">
-                        <form @submit.prevent="login">
-                            <div class="text-center">
-                                <h3 class="dark-grey-text mb-5"><strong>Είσοδος</strong></h3>
-                            </div>
-                            <mdb-input v-model="credentials.username" label="Username" type="text" required
-                                       class="mb-5"/>
-                            <mdb-input v-model="credentials.password" label="Password" type="password"
-                                       containerClass="mb-0"/>
+                    <mdb-card-header class="text-center blue-gradient ">
+                        <mdb-card-title tag="h4" bold class="white-text w-100 mt-1">Είσοδος</mdb-card-title>
+                    </mdb-card-header>
+                    <mdb-card-body class="greyBack">
+                        <form @submit.prevent="login"
+                                       >
+                            <mdb-input v-model="credentials.username"
+                                       label="Όνομα χρήστη"
+                                       type="text"
+                                       required
+                                       class="mb-5 white-text"
+                            />
+                            <mdb-input v-model="credentials.password"
+                                       label="Κωδικός"
+                                       :type="passwordType"
+                                       required
+                                       containerClass="mb-5 white-text"
+                            >
+                                <i class="fas" :class="[passwordIcon]" @click="hidePassword = !hidePassword"></i>
+                            </mdb-input>
                             <div class="text-center mb-3">
                                 <mdb-btn type="submit" gradient="blue" rounded class="btn-block z-depth-1a">Είσοδος
                                 </mdb-btn>
                             </div>
                         </form>
                     </mdb-card-body>
-                    <mdb-modal-footer class="mx-5 pt-3 mb-1">
-                        <p class="font-small grey-text d-flex justify-content-end">Δεν είστε μέλος;
-                            <router-link :to="{name: 'Register', query: {next: $route.query.next}}">Εγγραφή
+                    <mdb-modal-footer class="greyBack">
+                        <p class="font-small grey-text d-flex justify-content-end white-text">Δεν είστε μέλος;
+                            <router-link class=" cyan-text" :to="{name: 'Register', query: {next: $route.query.next}}">
+                                Εγγραφή
                             </router-link>
                         </p>
                     </mdb-modal-footer>
@@ -43,6 +55,7 @@ export default {
             credentials: {},
             valid: true,
             loading: false,
+            hidePassword: true
         };
     },
     methods: {
@@ -73,12 +86,28 @@ export default {
                 this.$router.push({name: 'Home', query: this.$router.query});
             }
         }
+    },
+    computed: {
+        passwordType() {
+            return this.hidePassword ? 'password' : 'text'
+        },
+        passwordIcon() {
+            return this.hidePassword ? 'fa-eye' : 'fa-eye-slash'
+        }
     }
 }
 </script>
 
 
 <style>
+
+.form-control {
+    color: white !important;
+}
+
+.greyBack {
+    background-color: dimgrey;
+}
 
 .image {
     background-image: url('../../media/movieCollection.png');
