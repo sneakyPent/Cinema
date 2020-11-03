@@ -217,15 +217,24 @@ export default {
         },
         searchMovies: function () {
             let str = ''
+            let fstr = ''
+            let strdate = '&startDate='
             for (let fil of this.filters) {
-                if (!(fil.value === ''))
-                    if (str === '') {
-                        str = str.concat(fil.value.replace(/ /g, "+"))
-                    } else {
-                        str = str.concat(',' + fil.value.replace(/ /g, "+"))
-                    }
+                if (fil.type === 'date')
+                    strdate = strdate.concat(fil.value)
+                else if (fil.type === 'text') {
+                    if (!(fil.value === ''))
+                        if (str === '') {
+                            str = str.concat(fil.value.replace(/ /g, "+"))
+                        } else {
+                            str = str.concat(',' + fil.value.replace(/ /g, "+"))
+                        }
+
+                }
+                fstr = str.concat(strdate)
+                console.log(fstr)
             }
-            const query = 'http://localhost:8000/api/Movie/?search=' + str;
+            const query = 'http://localhost:8000/api/Movie/?search=' + fstr;
             this.$axios.get(query)
                 .then((res) => {
                     this.moviesList = res.data;
