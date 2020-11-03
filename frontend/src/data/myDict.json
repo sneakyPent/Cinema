@@ -1,0 +1,17 @@
+{
+	"title": "Τίτλος",
+	"startDate": "Ημ. Έναρξης",
+	"endDate": "Ημ. Λήξης",
+	"category": "Κατηγορία",
+	"cinema": "Κινηματογράφος",
+	"username": "Όνομα χρήστη",
+	"first_name": "Όνομα",
+	"last_name": "Επίθετο",
+	"email": "Email",
+	"is_active": "Πρόσβαση",
+	"role": "Ρόλος",
+	"True": "Ναι",
+	"False": "Όχι",
+	"user": "Χρήστης",
+	"owner": "Ιδιοκτήτης"
+}
