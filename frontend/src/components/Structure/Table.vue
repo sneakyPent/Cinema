@@ -46,6 +46,7 @@
                             >
                                 <input
                                     v-if="filter.type === 'text'"
+                                    @keyup.enter="$emit('search')"
                                     :id="filter.name"
                                     :ref="filter.name"
                                     type="text"
@@ -226,10 +227,6 @@
                     </table>
                 </div>
             </div>
-            <!--			&lt;!&ndash;		                	PAGINATION                   &ndash;&gt;-->
-            <!--			<div class=" my-2 my-md-2 w-100 pt-3 d-flex justify-content-end">-->
-            <!--				<Pagination ref="pagination" :items="tableDataLength" @pagination="setPage"/>-->
-            <!--			</div>-->
         </div>
     </div>
 </template>
@@ -277,10 +274,11 @@ export default {
     },
     methods: {
         setFields: function () {
-            for (const col of this.availableCols) {
-                if (col.value !== 'id')
-                    this.fields.push(col)
-            }
+            if (this.availableCols !== undefined)
+                for (const col of this.availableCols) {
+                    if (col.value !== 'id')
+                        this.fields.push(col)
+                }
         },
         doubleButtonClick: function (ev) {
             this.$emit('doubleButtonClick', ev);
@@ -365,6 +363,13 @@ export default {
             return this.buttons.filter(
                 btn => btn.double
             );
+        }
+    },
+    directives: {
+        focus: {
+            inserted(el) {
+                el.focus()
+            }
         }
     }
 };
