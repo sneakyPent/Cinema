@@ -94,7 +94,7 @@ export default {
                         this.availableCols.push({
                             selected: false,
                             value: res.data.fields[i],
-                            text: res.data.fields[i]
+                            text: this.$tr(res.data.fields[i])
                         });
 
                     }
@@ -169,7 +169,7 @@ export default {
             for (let i = 0; i < uList.length; i++) {
                 const tmpdict = {};
                 for (let j = 0; j < val.length; j++) {
-                    tmpdict[val[j].value.toLowerCase()] = uList[i][val[j].value.toLowerCase()];
+                    tmpdict[val[j].value.toLowerCase()] = this.$tr(uList[i][val[j].value.toLowerCase()]);
                 }
                 data.push(tmpdict);
             }
@@ -177,7 +177,7 @@ export default {
             for (let i = 0; i < val.length; i++) {
                 if (!(val[i].value.toLowerCase() === 'id'))
                     headers.push({
-                        label: val[i].text.toString(),
+                        label: this.$tr(val[i].text.toString()),
                         field: val[i].value.toString().toLowerCase(),
                         sorting: true,
                         type: 'string',
