@@ -5,12 +5,13 @@
                 <Table
                     class="mt-5"
                     v-if="fetched"
-                    :tableTitle="'Τανίες'"
+                    :tableTitle="'Ταινίες'"
                     :tableIcon="'film'"
                     :tableData="tableDat"
                     :filters="filters"
                     :rowButtons="tableRowButtons"
                     @search="searchMovies()"
+                    @clear="clearFilters()"
                     @favs="addToFavorite($event)"
                     @rowClick="selectUserFromTable($event)"
                     @buttonsClick="tableButtonsHandler($event)"
@@ -40,27 +41,31 @@ export default {
             headers: [],
             filters: [
                 {
-                    id:1,
+                    id: 1,
                     name: 'Τίτλος',
                     placeholder: 'Τίτλος',
+                    type: 'text',
                     value: ''
                 },
                 {
-                    id:2,
+                    id: 2,
                     name: 'Κινηματογράφος',
                     placeholder: 'Κινηματογράφος',
+                    type: 'text',
                     value: ''
                 },
                 {
-                    id:3,
+                    id: 3,
                     name: 'Κατηγορία',
                     placeholder: 'Κατηγορία',
+                    type: 'text',
                     value: ''
                 },
                 {
-                    id:4,
+                    id: 4,
                     name: 'Ημερομηνία Προβολής',
                     placeholder: 'Ημ. Προβολής',
+                    type: 'date',
                     value: ''
                 },
 
@@ -204,18 +209,23 @@ export default {
             }
             this.headers = headers;
         },
+        clearFilters: function () {
+            for (const filter of this.filters) {
+                filter.value = '';
+                this.getMovies();
+            }
+        },
         searchMovies: function () {
             let str = ''
             for (let fil of this.filters) {
                 if (!(fil.value === ''))
                     if (str === '') {
-                        str = str.concat(fil.value.replace(/ /g,"+"))
-                    }
-                    else {
-                        str = str.concat(',' + fil.value.replace(/ /g,"+"))
+                        str = str.concat(fil.value.replace(/ /g, "+"))
+                    } else {
+                        str = str.concat(',' + fil.value.replace(/ /g, "+"))
                     }
             }
-            const query = 'http://localhost:8000/api/Movie/?search='+ str;
+            const query = 'http://localhost:8000/api/Movie/?search=' + str;
             this.$axios.get(query)
                 .then((res) => {
                     this.moviesList = res.data;
@@ -240,7 +250,7 @@ export default {
                 for (let j = 0; j < val.length; j++) {
                     tmpdict[val[j].value.toLowerCase()] = mList[i][val[j].value];
                 }
-                if (this.favoriteList.title.indexOf(mList[i].title) > -1)
+                if (this.favoriteList !== undefined && this.favoriteList.title.indexOf(mList[i].title) > -1)
                     tmpdict.type = 'favorite';
                 else
                     tmpdict.type = 'nonFavorite'
