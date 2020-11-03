@@ -15,6 +15,7 @@ import * as mdbvue from 'mdbvue';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbvue/lib/css/mdb.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import translations from './data/myDict.json';
 
 
 for (const component in mdbvue) {
@@ -130,6 +131,14 @@ Vue.prototype.$datepickerOptions = function () {
 		format: 'YYYY-MM-DD',
 	};
 };
+Vue.prototype.$tr = function ( message ) {
+    if (translations[message] !== undefined)
+        return translations[message]
+    else
+        return message
+}
+
+
 const notificationDuration = 600
 Vue.prototype.$notifyAction =  {
      error: message => {
