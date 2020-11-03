@@ -2,32 +2,44 @@
     <div id="register" class="centered-block container-fluid form-elegant image ">
         <section class="form-elegant mt-5">
             <mdb-col md="5" class="mx-auto">
-                <mdb-card>
+                <mdb-card class="greyBack">
                     <mdb-card-header class="text-center blue-gradient ">
                         <mdb-card-title tag="h4" bold class="white-text w-100 mt-1">Εγγραφή</mdb-card-title>
                     </mdb-card-header>
-                    <mdb-card-body class="mx-4 mb-2">
+                    <mdb-card-body class="greyBack">
                         <form novalidate @submit="checkForm">
-                            <div class="grey-text">
+                            <div class="white-text">
                                 <mdb-row>
                                     <mdb-col>
-                                        <mdb-input v-model="formInfo.name" icon="user" label="Όνομα" type="text"
+                                        <mdb-input v-model="formInfo.name"
+                                                   icon="user"
+                                                   label="Όνομα"
+                                                   type="text"
                                                    required
-                                                   invalidFeedback="Please provide a valid city." class="mb-3"/>
+                                                   class="mb-3"/>
                                     </mdb-col>
                                     <mdb-col>
-                                        <mdb-input v-model="formInfo.surname" label="Επίθετο" type="text" required
+                                        <mdb-input v-model="formInfo.surname"
+                                                   label="Επίθετο"
+                                                   type="text"
+                                                   required
                                                    class="mb-3"/>
                                     </mdb-col>
                                 </mdb-row>
                                 <mdb-row>
                                     <mdb-col>
-                                        <mdb-input v-model="formInfo.username" icon="key" label="Όνομα χρήστη" group
+                                        <mdb-input v-model="formInfo.username"
+                                                   icon="key"
+                                                   label="Όνομα χρήστη"
+                                                   group
                                                    type="text" required
                                                    class="mb-3"/>
                                     </mdb-col>
                                     <mdb-col>
-                                        <mdb-input v-model="formInfo.password" label="Κωδικός" type="password" required
+                                        <mdb-input v-model="formInfo.password"
+                                                   label="Κωδικός"
+                                                   type="password"
+                                                   required
                                                    class="mb-3"/>
                                     </mdb-col>
                                 </mdb-row>
@@ -35,7 +47,8 @@
                                     <mdb-col>
                                         <mdb-input v-model="formInfo.email" class="mb-3" label="email" icon="envelope"
                                                    group type="email"
-                                                   validate error="wrong" required
+                                                   validate error="wrong"
+                                                   required
                                                    success="right"/>
                                     </mdb-col>
                                 </mdb-row>
@@ -132,11 +145,18 @@ export default {
 </script>
 
 <style>
+.md-form label {
+    color: white !important;
+}
 
 .image {
     background-image: url('../../media/movieCollection.png');
     min-height: 100vh;
     min-width: 100vw;
+}
+
+.greyBack{
+    background-color: dimgrey;
 }
 
 .transparent {
