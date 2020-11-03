@@ -1,5 +1,5 @@
 <template>
-    <mdb-modal @close="closing" size="mx-auto" class="modal">
+    <mdb-modal id="movieModal" @close="closing" size="mx-auto" class="modal">
         <mdb-modal-header class="w-100 align-items-center">
             <mdb-modal-title class="w-100 align-items-center">
                 <mdb-row class="justify-content-center ml-3">
@@ -10,7 +10,7 @@
         </mdb-modal-header>
         <mdb-modal-body class="black-text">
             <form novalidate class="label">
-                <div class="black-text">
+                <div class="black-text" id="form_rows">
                     <mdb-row>
                         <mdb-col>
                             <mdb-input v-model="movieInfo.title" icon="film" label="Τίτλος" type="text"
@@ -98,14 +98,22 @@ export default {
 </script>
 
 <style>
+
 .md-form label {
-    color: grey !important;
+    color: black !important;
 }
 
-.modal-content {
+#form_rows .row .col .form-control {
+    color: black !important;
+}
+
+#movieModal .modal-content {
     border-radius: 25px !important;
 }
 
+.mdb-vue-date .datepickbox .form-control {
+    color: black !important;
+   }
 
 </style>
 
