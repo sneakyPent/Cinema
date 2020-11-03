@@ -1,126 +1,154 @@
 <template>
-    <div class="my-0 mp-0 d-md-inline-flex card p-3 pt-4 card-cascade narrower">
+    <div class="my-0 mp-0 d-md-inline-flex card p-3 pt-4 card-cascade narrower greyBack ">
         <!--Card image-->
         <mdb-card
-            class="
+            class="greyBack
             gradient-card-header blue-gradient justify-content-around align-items-center text-light d-flex narrower display_flex
-             view view-cascade my-1 overflow py-2 mx-3 mb-3 flex-column" style=" width: auto">
-            <mdb-row class="mt-1">
-                <mdb-col>
-                    <div class="flex_entry order-1 order-md-2 flex-grow-1">
-                        <mdb-card-title tag="h4" bold class="white-text w-100 mt-1">
-                            <mdb-icon class="mx-2" :icon=tableIcon
-                            />
-                            <span><strong style="font-family:Comic Sans MS;">{{ tableTitle }}</strong></span>
-                        </mdb-card-title>
-                    </div>
-                </mdb-col>
-            </mdb-row>
-            <mdb-row class="mt-1">
-                <mdb-col   v-if="dynamicallySearch">
-                    <div v-if="filters !== undefined"
-                         class="flex_entry d-flex flex-wrap  order-3 order-md-1 flex-grow-1 mt-2 mb-2">
-                        <div v-for="filter in filters"
-                             :key="filter.id"
-                             :id="filter.id"
-                             class="ml-2 mb-1"
-                        >
-                            <input
-                                type="text"
-                                class="form-control justify-content-around rcorners"
-                                style="text-align: center"
-                                :placeholder="filter.placeholder"
-                                v-model="filter.value"
-                            >
+             view view-cascade my-1 overflow py-2 mx-3 mb-3 flex-column" style=" width: 1000px">
+            <mdb-card-body style=" width: auto">
+                <mdb-row class="mt-1">
+                    <mdb-col>
+                        <div class="flex_entry order-1 order-md-2 flex-grow-1">
+                            <mdb-card-title tag="h4" bold class="white-text w-100 mt-1">
+                                <mdb-icon class="mx-2" :icon=tableIcon
+                                />
+                                <span><strong style="font-family:Comic Sans MS;">{{ tableTitle }}</strong></span>
+                            </mdb-card-title>
                         </div>
-                    </div>
-                </mdb-col>
-                <mdb-col md="11" v-else>
-                    <div v-if="filters !== undefined"
-                         class="flex_entry d-flex flex-wrap  order-3 order-md-1 flex-grow-1 mt-2 mb-2">
-                        <div v-for="filter in filters"
-                             :key="filter.id"
-                             :id="filter.id"
-                             class="ml-2 mb-1"
-                        >
-                            <input
-                                type="text"
-                                class="form-control justify-content-around rcorners"
-                                style="text-align: center"
-                                :placeholder="filter.placeholder"
-                                v-model="filter.value"
+                    </mdb-col>
+                </mdb-row>
+                <mdb-row class="mt-2">
+                    <mdb-col v-if="dynamicallySearch">
+                        <div v-if="filters !== undefined"
+                             class="flex_entry d-flex flex-wrap  order-3 order-md-1 flex-grow-1 mt-2 mb-2">
+                            <div v-for="filter in filters"
+                                 :key="filter.id"
+                                 :id="filter.id"
+                                 class="ml-2 mb-1"
                             >
+                                <input
+                                    type="text"
+                                    class="form-control justify-content-around rcorners"
+                                    style="text-align: center"
+                                    :placeholder="filter.placeholder"
+                                    v-model="filter.value"
+                                >
+                            </div>
                         </div>
-                    </div>
-                </mdb-col>
-                <mdb-col md="1" v-if="!dynamicallySearch && filters !== undefined " >
-                    <mdb-btn
-                        class="rounded-circle px-2"
-                        color="white"
-                        size="sm"
-                        @click="$emit('search')"
-                    >
-                        <i class="fa fa-search fa-lg"></i>
-                    </mdb-btn>
-                </mdb-col>
-            </mdb-row>
-            <mdb-row class="justify-content-between" style=" width: 800px">
-                <mdb-col col="4">
-                    <div v-if="buttons !== undefined || doublebutton"
-                         class=" flex_entry d-flex justify-content-around order-3 order-md-1 flex-grow-1 mt-4 ">
-                        <button
-                            v-for="btn in singleButtons"
-                            :disabled="multipleSelectedRows.length === 0 && !btn.forceEnable"
-                            :key="btn.id"
-                            :id="btn.id"
-                            type="button"
-                            @click="$emit('buttonsClick',[ btn, multipleSelectedRows])"
-                            class="btn btn-outline-white btn-rounded btn-md px-2">
-                            <span>{{ btn.label }}</span>
-                            <mdb-icon class="fas mx-1" :icon="btn.icon"/>
-                        </button>
-                        <div v-if="doublebutton">
-                            <dblButton
-                                v-for="btn in doubleButtons"
-                                :button="btn"
+                    </mdb-col>
+                    <mdb-col md="10" class="justify-content-center" v-else>
+                        <div v-if="filters !== undefined"
+                             class="flex_entry d-flex flex-wrap  order-3 order-md-1 flex-grow-1 mt-2 mb-2">
+                            <div v-for="filter in filters"
+                                 :key="filter.id"
+                                 :id="filter.id"
+                                 class="ml-2 mb-1 d-flex justify-content-end"
+                            >
+                                <input
+                                    v-if="filter.type === 'text'"
+                                    :id="filter.name"
+                                    :ref="filter.name"
+                                    type="text"
+                                    class="form-control justify-content-around rcorners"
+                                    style="text-align: center"
+                                    :placeholder="filter.placeholder"
+                                    v-model="filter.value"
+                                >
+                                <mdb-date-picker
+                                    :id="filter.type"
+                                    :ref="filter.name"
+                                    v-if="filter.type === 'date'"
+                                    class="datePickerAllign form-control justify-content-around rcorners"
+                                    style="text-align: center"
+                                    :placeholder="filter.placeholder"
+                                    v-model="filter.value"
+                                    autoHide
+                                    disabledPast
+                                    :option="$datepickerOptions()"
+                                />
+                            </div>
+                        </div>
+                    </mdb-col>
+                    <mdb-col md="2" v-if="!dynamicallySearch && filters !== undefined ">
+                        <mdb-row>
+                            <mdb-btn
+                                class="rounded-circle px-2 align-middle"
+                                color="white"
+                                size="sm"
+                                @click="$emit('search')"
+                            >
+                                <i class="fa fa-search fa-lg"></i>
+                            </mdb-btn>
+                            <mdb-btn
+                                class="rounded-circle px-2 align-middle "
+                                color="white"
+                                size="sm"
+                                @click="$emit('clear')"
+                            >
+                                <i class="fa fa-times fa-lg"></i>
+                            </mdb-btn>
+                        </mdb-row>
+                    </mdb-col>
+                </mdb-row>
+                <mdb-row class="justify-content-between" style=" width:950px">
+                    <mdb-col col="4" >
+                        <div v-if="buttons !== undefined || doublebutton"
+                             class=" flex_entry d-flex justify-content-around order-3 order-md-1 flex-grow-1">
+                            <button
+                                v-for="btn in singleButtons"
+                                :disabled="multipleSelectedRows.length === 0 && !btn.forceEnable"
                                 :key="btn.id"
-                                :disabled="multipleSelectedRows.length !== 1 && !btn.forceEnable"
-                                :primaryToSecondary="doublebuttonchange"
-                                @click="doubleButtonClick($event)"/>
+                                :id="btn.id"
+                                type="button"
+                                @click="$emit('buttonsClick',[ btn, multipleSelectedRows])"
+                                class="btn btn-outline-white btn-rounded btn-md px-2">
+                                <span>{{ btn.label }}</span>
+                                <mdb-icon class="fas mx-1" :icon="btn.icon"/>
+                            </button>
+                            <div v-if="doublebutton">
+                                <dblButton
+                                    v-for="btn in doubleButtons"
+                                    :button="btn"
+                                    :key="btn.id"
+                                    :disabled="multipleSelectedRows.length !== 1 && !btn.forceEnable"
+                                    :primaryToSecondary="doublebuttonchange"
+                                    @click="doubleButtonClick($event)"/>
+                            </div>
                         </div>
-                    </div>
-                </mdb-col>
-                <mdb-col col="4">
-                    <div
-                        class="flex_entry testing d-flex justify-content-around flex-wrap order-2 order-md-3 flex-grow-1 mb-0">
-                        <mdb-select
-                            v-if="availableCols !== undefined "
-                            caretStyle="color: white;"
-                            style="white-space: nowrap;color: white;"
-                            iconClass="d-flex justify-content-end"
-                            color="primary"
-                            multiple
-                            :visibleOptions="6"
-                            :selectAllPlaceholder="'Επιλογή όλων'"
-                            @getValue="getSelectFields"
-                            :options="availableCols"
-                            :label="'Πεδία'"
-                        />
-                    </div>
-                </mdb-col>
-            </mdb-row>
+                    </mdb-col>
+                    <mdb-col col="4">
+                        <div
+                            class="flex_entry testing d-flex justify-content-around flex-wrap order-2 order-md-3 flex-grow-1 mb-0">
+                            <mdb-select
+                                id="fields"
+                                v-if="availableCols !== undefined "
+                                caretStyle="color: white;"
+                                style="white-space: nowrap;color: white;"
+                                iconClass="d-flex justify-content-end"
+                                color="primary"
+                                multiple
+                                :visibleOptions="6"
+                                :selectAllPlaceholder="'Επιλογή όλων'"
+                                @getValue="getSelectFields"
+                                :options="fields"
+                                :label="'Πεδία'"
+                            />
+                        </div>
+                    </mdb-col>
+                </mdb-row>
+            </mdb-card-body>
         </mdb-card>
         <!--/Card image-->
         <div class="mx-2 mx-md-3">
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center" style="background-color: white">
                 <div class="scrolling" style="display: inline ">
                     <table class="table table-hover tableStyle ovfno table-bordered mx-auto "
-                           style="width: 950px;  overflow-x: hidden">
+                           style="width: 998px;  overflow-x: hidden">
                         <thead>
                         <th :id="header.field" style="white-space: nowrap;"
                             v-for="header in headers" :key="header.field" scope="col">
                             <mdb-icon class='unclickable' mx-1 v-if="customizeColumns" icon="arrows-alt"/>
-                            <span class='unclickable'> <strong> {{ header.label }}</strong> </span>
+                            <span class='unclickable'> <strong> <b> {{ header.label }}</b>  </strong> </span>
                         </th>
 
                         </thead>
@@ -230,6 +258,7 @@ export default {
     data: function () {
         return {
             customizeColumns: false,
+            fields: [],
             tableColumns: [],
             headers: [],
             selectedRow: -1,
@@ -244,9 +273,15 @@ export default {
         this.headers = this.tableData.headers;
         this.addCheckboxes();
         this.filterSize();
-
+        this.setFields();
     },
     methods: {
+        setFields: function () {
+            for (const col of this.availableCols) {
+                if (col.value !== 'id')
+                    this.fields.push(col)
+            }
+        },
         doubleButtonClick: function (ev) {
             this.$emit('doubleButtonClick', ev);
         },
@@ -291,9 +326,13 @@ export default {
             }
         },
         filterSize: function () {
-            let input = document.querySelectorAll('input');
-            for (let i = 0; i < input.length; i++) {
-                input[i].setAttribute('size', input[i].getAttribute('placeholder').length);
+            if (this.filters !== undefined) {
+                // let input = document.querySelectorAll('input');
+                let input = document.querySelectorAll('input');
+                for (let i = 0; i < input.length; i++) {
+                    input[i].setAttribute('size', input[i].getAttribute('placeholder').length);
+                    input[i].setAttribute('style', "text-align:center !important;");
+                }
             }
         },
     },
@@ -332,20 +371,51 @@ export default {
 </script>
 
 <style>
-.rcorners {
-    border-radius: 25px;
+.greyBack {
+    background-color: dimgrey;
 }
 
-.md-form label {
-    color: darkgrey !important;
+#fields .md-form {
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
-.form-control {
+#fields .md-form label {
+    color: white !important;
+}
+
+#date.mdb-vue-date .datepickbox .md-form {
+    margin-bottom: 0px !important;
+    margin-top: 8px !important;
+}
+
+#date.mdb-vue-date .datepickbox .form-control {
     color: black !important;
+    border-bottom-width: 0px !important;
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+
 }
 </style>
 
 <style scoped>
+
+.mdb-vue-date .datepickbox .md-form {
+    margin-bottom: 0px !important;
+    margin-top: 8px !important;
+    padding-left: 20px;
+}
+
+.datePickerAllign {
+    display: inline-block;
+    vertical-align: top;
+    border-bottom-width: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    border-top-width: 0px;
+
+}
 
 .table_icon {
     padding-top: 0px;
@@ -410,7 +480,7 @@ th {
 
 .center {
     margin: auto;
-    width: 65%;
+    width: 40%;
     padding: 0px;
 }
 </style>
