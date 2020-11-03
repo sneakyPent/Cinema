@@ -15,12 +15,12 @@ from backend.serializers import *
 from django.contrib.auth.models import User
 
 
-class MovieViewSet(viewsets.ModelViewSet ):
+class MovieViewSet(viewsets.ModelViewSet):
 	queryset = Movie.objects.all()
 	serializer_class = MovieSerializer
 	permission_classes = (IsAuthenticated, )
 	filter_backends = [filters.SearchFilter]
-	search_fields = ['title', 'category', 'cinema__name']
+	search_fields = ['title', 'category', 'cinema__name', 'startDate']
 
 	def get_queryset(self):
 		assert self.queryset is not None, (
@@ -32,8 +32,7 @@ class MovieViewSet(viewsets.ModelViewSet ):
 		up = UserProfile.objects.get(id=user.id)
 		startDate = self.request.query_params.get('startDate', None)
 		if startDate is not None:
-			print(startDate)
-			queryset = self.queryset
+			queryset = Movie.objects.filter(Q(startDate__lte=startDate) & Q(endDate__gte=startDate))
 		elif self.request.user.is_superuser or up.role == 'user':
 			queryset = self.queryset
 		elif up.role == 'owner':
