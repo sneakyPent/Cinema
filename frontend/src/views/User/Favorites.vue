@@ -137,7 +137,7 @@ export default {
             for (let i = 0; i < val.length; i++) {
                 if (!(val[i].value.toLowerCase() === 'id'))
                     headers.push({
-                        label: val[i].text.toString(),
+                        label: this.$tr(val[i].text.toString()),
                         field: val[i].value.toString().toLowerCase(),
                         sorting: true,
                         type: 'string',
