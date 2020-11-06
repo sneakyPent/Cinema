@@ -145,10 +145,8 @@ export default {
             this.$axios.post(query, this.movieInfo)
                 .then(() => {
                     this.closeModal()
-                    this.$notify({
-                        text: this.$t('Η ταινία σας προστέθηκε επιτυχώς!'),
-                        type: 'success'
-                    });
+                    this.getMovies();
+                    this.$notifyAction.success('Η ταινία σας προστέθηκε επιτυχώς!');
                 })
                 .catch(this.$notifyAction.error);
         },
@@ -157,10 +155,7 @@ export default {
                 this.$axios.delete('http://localhost:8000/api/Movie/' + movies[i] + '/')
                     .then(() => {
                         this.getMovies();
-                        this.$notify({
-                            text: 'Επιτυχής Διαγραφή!',
-                            type: 'success'
-                        });
+                        this.$notifyAction.success('Επιτυχής Διαγραφή!')
                     })
                     .catch(this.$notifyAction.error);
             }
@@ -169,11 +164,8 @@ export default {
             const query = 'http://localhost:8000/api/Movie/' + this.movieInfo.id + '/';
             this.$axios.put(query, this.movieInfo)
                 .then(() => {
-                    this.$notify({
-                        text: this.$t('Changes applied!'),
-                        type: 'success'
-                    });
-                    this.getAllUser();
+                    this.$notifyAction.success('Επιτυχής Ενημέρωση ταινίας!')
+                    this.getMovies();
                     this.closeModal();
 
                 })
@@ -195,10 +187,7 @@ export default {
         },
         decline: function () {
             this.closeModal();
-            this.$notify({
-                text: 'Απόρριψη αλλαγών',
-                type: 'success'
-            });
+            this.$notifyAction.success('Απόρριψη αλλαγών')
         },
 
         fillForm: function (movie) {
