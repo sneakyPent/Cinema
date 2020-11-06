@@ -19,11 +19,12 @@ class Command(BaseCommand):
 		Cinema_2 = 'Astoria'
 
 		try:
+
 			c = Cinema.objects.get(name=Cinema_1)
 			m = Movie()
 			m.title = 'Bad Boys 1'
 			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
-			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('6/12/2020', '%d/%m/%Y')
 			m.cinema = c
 			m.category = 'Action'
 			m.save()
@@ -31,8 +32,8 @@ class Command(BaseCommand):
 			c = Cinema.objects.get(name=Cinema_1)
 			m = Movie()
 			m.title = 'Bad Boys 2'
-			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
-			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.startDate = datetime.strptime('7/11/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('7/12/2020', '%d/%m/%Y')
 			m.cinema = c
 			m.category = 'Action'
 			m.save()
@@ -41,8 +42,8 @@ class Command(BaseCommand):
 			c = Cinema.objects.get(name=Cinema_1)
 			m = Movie()
 			m.title = 'Bad Boys 3'
-			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
-			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.startDate = datetime.strptime('8/11/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('8/12/2020', '%d/%m/%Y')
 			m.cinema = c
 			m.category = 'Action'
 			m.save()
@@ -51,8 +52,8 @@ class Command(BaseCommand):
 			c = Cinema.objects.get(name=Cinema_2)
 			m = Movie()
 			m.title = 'Borat 1'
-			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
-			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.startDate = datetime.strptime('9/11/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('9/12/2020', '%d/%m/%Y')
 			m.cinema = c
 			m.category = 'Comedy'
 			m.save()
@@ -61,8 +62,8 @@ class Command(BaseCommand):
 			c = Cinema.objects.get(name=Cinema_2)
 			m = Movie()
 			m.title = 'Borat 2'
-			m.startDate = datetime.strptime('6/11/2020', '%d/%m/%Y')
-			m.endDate = datetime.strptime('20/12/2020', '%d/%m/%Y')
+			m.startDate = datetime.strptime('10/11/2020', '%d/%m/%Y')
+			m.endDate = datetime.strptime('10/12/2020', '%d/%m/%Y')
 			m.cinema = c
 			m.category = 'Comedy'
 			m.save()
