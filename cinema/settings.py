@@ -97,7 +97,16 @@ DATABASES = {
 		'NAME': os.path.join(BASE_DIR, 'cinema/db.sqlite3'),
 	}
 }
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+# ACCESS_CONTROL_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+	'http://localhost',
+)
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
