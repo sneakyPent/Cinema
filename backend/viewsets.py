@@ -198,7 +198,6 @@ class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 			return Response({'fields': dt})
 
 		if 'nonadmin' in my_param:
-			queryset = self.filter_queryset(self.get_queryset())
 			queryset = UserProfile.objects.filter(Q(role='owner') | Q(role='user'))
 			page = self.paginate_queryset(queryset)
 			if page is not None:
@@ -225,8 +224,22 @@ class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 			groups = []
 			if p.role == 'user':
 				groups = [Group.objects.get(name='User')]
+				if Cinema.objects.filter(owner=u).count() == 1:
+					cn = Cinema.objects.get(owner_id=u.id)
+					cn.delete()
 			elif p.role == 'owner':
 				groups = [Group.objects.get(name='CinemaOwner')]
+				if Cinema.objects.filter(owner=u).count() == 1:
+					cn = Cinema.objects.get(owner=u)
+					cn.name = userInfo['cinema']
+					cn.save()
+				elif Cinema.objects.filter(owner=u).count() == 0:
+					cn = Cinema()
+					cn.name = userInfo['cinema']
+					cn.owner = u
+					cn.save()
+				else:
+					return  Response(HTTP_404_NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
 			u.groups.set(groups)
 			u.save()
 

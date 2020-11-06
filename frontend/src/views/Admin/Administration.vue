@@ -156,6 +156,7 @@ export default {
             this.userInfo.email = user.email;
             this.userInfo.role = user.role;
             this.userInfo.is_active = user.is_active;
+            this.userInfo.cinema = user.cinema;
 
         },
         fixingTableData: function () {

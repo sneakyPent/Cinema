@@ -70,7 +70,7 @@ class UserSerializer(serializers.ModelSerializer):
 		)
 
 
-class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
 	# user = serializers.ReadOnlyField(source='user.id')
 	id = serializers.IntegerField(source='pk', read_only=True)
 	username = serializers.CharField(source='user.username', read_only=True)
@@ -78,11 +78,20 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
 	first_name = serializers.CharField(source='user.first_name')
 	last_name = serializers.CharField(source='user.last_name')
 	is_active = serializers.CharField(source='user.is_active')
+	cinema = serializers.SerializerMethodField('find_cinema', allow_null=True)
+
+	def find_cinema(self, user):
+		up = UserProfile.objects.get(id=user.id)
+		if up.role == 'owner':
+			cn = list(Cinema.objects.filter(owner_id=user.id)).pop()
+			return cn.name
+		else:
+			return '-'
 
 	class Meta:
 		model = UserProfile
 		depth = 1
-		fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'role')
+		fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'role', 'cinema')
 
 	def get_full_name(self, obj):
 		request = self.context['request']
