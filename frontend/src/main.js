@@ -1,13 +1,14 @@
 import Vue from 'vue'
+import './plugins/axios';
 import App from './App.vue'
 import router from './router';
-import VueSession from 'vue-session'
-import './plugins/axios';
 import Notifications from 'vue-notification';
+import VueHead from 'vue-head';
+import VueSession from 'vue-session';
 
-
-Vue.use(VueSession)
 Vue.use(Notifications);
+Vue.use(VueHead);
+Vue.use(VueSession, {persist: true});
 
 Vue.config.productionTip = false
 
