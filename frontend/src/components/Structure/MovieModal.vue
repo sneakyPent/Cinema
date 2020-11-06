@@ -62,7 +62,7 @@
                         <mdb-btn @click="decline" color="danger" rounded> Ακύρωση</mdb-btn>
                     </mdb-col>
                     <mdb-col class=" d-flex justify-content-center">
-                        <mdb-btn type="submit" @click="submit" color="grey" rounded> Υποβολή</mdb-btn>
+                        <mdb-btn @click="submit" color="grey" rounded> Υποβολή</mdb-btn>
                     </mdb-col>
                 </mdb-row>
             </form>
