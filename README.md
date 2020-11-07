@@ -21,7 +21,7 @@
 'frontend/src/router'
 
 ### ./views/Auth/Register.vue
-Στο κάτω μέρος του Login card βρίσκεται ένας σύνδεσμος ('Εγγραφή) για να οδηγηθεί ο χρήστης στην σελίδα της νέας εγγραφής.
+Στο κάτω μέρος του Login card βρίσκεται ένας σύνδεσμος ('Εγγραφή') για να οδηγηθεί ο χρήστης στην σελίδα της νέας εγγραφής.
 Κατά την επιβεβαίωση ή ακύρωση της εγγραφής ο χρήστης οδηγείται και πάλι στο Login page.
 
 ### ./views/Home/welcome.vue
@@ -62,7 +62,7 @@ docker-compose up --build
 ## USEFUL LINKS
 | URL      | INFO      
 | :------------- |:-------------
-| http://localhost                  | Application      
+| http://localhost/                  | Application      
 | http://localhost:8000/admin/      | Admin page (u:master p:mousakas)      
 | http://localhost:8000/api/        | api (Needs login to admin page as a first step)      
     
