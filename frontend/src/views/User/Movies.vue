@@ -221,7 +221,10 @@ export default {
             let strdate = ''
             for (let fil of this.filters) {
                 if (fil.type === 'date') {
-                    if (strdate === '' && fil.value !== '' && fil.value !== undefined) {
+                    if (fil.value === undefined){
+                        strdate = ''
+                    }
+                    else if (strdate === '' && fil.value !== '') {
                         strdate = '&startDate='
                         strdate = strdate.concat(fil.value)
                     } else
