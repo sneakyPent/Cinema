@@ -45,8 +45,3 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
-
-Vue.use(require('vue-analytics').default, {
-	id: 'UA-154936697-1',
-	router
-});
