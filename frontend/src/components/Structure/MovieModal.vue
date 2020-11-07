@@ -5,7 +5,6 @@
                 <mdb-row class="justify-content-center ml-3">
                     {{ modalTitle}}
                 </mdb-row>
-                <!--				<mdb-badge class="float-right" :color="state === 'Pending' ? 'warning' : state === 'Approved' ? 'success' : 'danger'">{{ $t(state) }}</mdb-badge>-->
             </mdb-modal-title>
         </mdb-modal-header>
         <mdb-modal-body class="black-text">
@@ -25,13 +24,6 @@
                                        class="mb-3"/>
                         </mdb-col>
                     </mdb-row>
-<!--                    <mdb-row>-->
-<!--                        <mdb-col>-->
-<!--                            <mdb-input v-model="movieInfo.cinema" icon="building" label="Κινηματογράφος" type="text"-->
-<!--                                       required :disabled=true-->
-<!--                                       class="mb-3"/>-->
-<!--                        </mdb-col>-->
-<!--                    </mdb-row>-->
                     <mdb-row>
                         <mdb-date-picker
                             class="ml-3"
