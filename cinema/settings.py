@@ -91,10 +91,22 @@ WSGI_APPLICATION = 'cinema.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
+# DATABASES = {
+# 	'default': {
+# 		'ENGINE': 'django.db.backends.sqlite3',
+# 		'NAME': os.path.join(BASE_DIR, 'cinema/db.sqlite3'),
+# 	}
+# }
+
 DATABASES = {
 	'default': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(BASE_DIR, 'cinema/db.sqlite3'),
+		'ENGINE': 'djongo',
+		'ENFORCE_SCHEMA': True,
+		'NAME': 'myCinema_DB',
+		'HOST': 'mongodb://mongo-data:27018',
+		'PORT': 27018,
+		'USER': 'root',
+		'PASSWORD': 'mongoadmin',
 	}
 }
 # CORS_ORIGIN_ALLOW_ALL = True
@@ -106,17 +118,6 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
 	'http://localhost',
 )
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'cinemaDB',
-#         'USER': 'root',
-#         'PASSWORD': 'passwd',
-#         'HOST': 'db',
-#         'PORT': '3306',
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
