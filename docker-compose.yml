@@ -1,51 +1,144 @@
 version: "3.8"
-   
+
+
+
 services:
-  #Mysql
-#  db:
-#    image: mysql:5.7.13
-#    restart: always
-#    ports:
-#      - 3306:3306
-#    environment:
-#      MYSQL_ROOT_PASSWORD: passwd
-#      MYSQL_DATABASE: cinemaDB
-#      MYSQL_USER: root
-#      MYSQL_PASSWORD: passwd
-#    container_name: cinemaDB
-  web:
-    build:
-      context: .
-      dockerfile: DockerFiles/python/pythonDF
-    command: sh scripts/django.sh
-    volumes:
-      - .:/web
-    ports:
-      - 8000:8000
-#    depends_on:
-#      - db
-#    links:
-#      - db
-  vue:
-    restart: always
-    build:
-      context: .
-      dockerfile: DockerFiles/vue/vueDF
-    command: sh scripts/frontend.sh
-    ports:
-      - 80:80
-    container_name: vue-ui
-    volumes:
-      - .:/frontend
-    depends_on:
-      - web
-#  phpmyadmin:
-#    image: phpmyadmin/phpmyadmin:4.8
-#    container_name: phpmyadmin
-#    ports:
-#      - 8081:80
-#    depends_on:
-#      - db
-#    links:
-#      - db
-#    restart: always
+    db:
+        image: rwgrim/docker-noop
+        depends_on:
+#            - keyrock_db
+#            - mongo-orion
+            - mongo-data
+
+#    fiware_services:
+#        image: rwgrim/docker-noop
+#        depends_on:
+#            - keyrockIDM
+#            - orion_CB
+#                - pep-proxy-wilma
+
+    myApp:
+        image: rwgrim/docker-noop
+        depends_on:
+            - application
+            - vue
+            - mongo-express
+
+
+    # --------------------------------------- DATABASES ---------------------------------------
+    mongo-orion:
+        container_name: orion-database
+        image: mongo:3.6
+        ports:
+            - "27017:27017"
+        command: --nojournal
+        volumes:
+            - .:/dataBases/mongoOrion
+
+    mongo-data:
+        image: mongo:3.6
+        container_name: data-database
+        restart: always
+        ports:
+            - "27018:27017"
+        command: --nojournal --port 27018
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: mongoadmin
+            MONGO_INITDB_DATABASE: myCinema_DB
+        volumes:
+            - .:/dataBases/mongoData
+
+#    keyrock_db:
+#        container_name: keyrock-database
+#        image: mysql/mysql-server:5.7.21
+#        ports:
+#            - '3306:3306'
+#        environment:
+#            - MYSQL_ROOT_PASSWORD=idm
+#            - MYSQL_ROOT_HOST=%
+#        volumes:
+#            - .:/dataBases/keyrock
+
+    # ------------------------------------ FIWARE APPLICATIONS --------------------------------
+
+#    orion_CB:
+#        container_name: fiware-orion
+#        image: fiware/orion
+#        ports:
+#            - "1026:1026"
+#        command: -dbhost mongo-orion
+#        links:
+#            - mongo-orion
+#        volumes:
+#            - .:/fiware/orionCB
+#
+#    keyrockIDM:
+#        container_name: fiware-keyrock
+#        image: fiware/idm
+#        ports:
+#            - '3005:3005'
+#            - '443:443'
+#        environment:
+#            - IDM_DB_HOST=keyrock_db
+#            - IDM_PORT=3005
+#            - IDM_HOST=http://localhost:3005
+#        links:
+#            - keyrock_db
+#        volumes:
+#            - .:/fiware/keyrockIDM
+#
+#
+#    pep-proxy-wilma:
+#        container_name: fiware-pep-proxy-wilma
+#        image: fiware/pep-proxy
+#        volumes:
+#            - .:/fiware/pepProxyWilma
+#        environment:
+#            - PEP_PROXY_PORT=3005
+#            - PEP_PROXY_IDM_HOST=http://localhost:3005
+#            - PEP_PROXY_USERNAME=admin@test.com
+#            - PEP_PASSWORD=1234
+#        ports:
+#            - "1027:1027"
+
+    # ------------------------------------ MY APPLICATIONS ------------------------------------
+
+    mongo-express:
+        image: mongo-express
+        restart: always
+        ports:
+            - 8081:8081
+        environment:
+            ME_CONFIG_MONGODB_ADMINUSERNAME: root
+            ME_CONFIG_MONGODB_ADMINPASSWORD: mongoadmin
+            ME_CONFIG_MONGODB_SERVER: mongo-data
+            ME_CONFIG_MONGODB_PORT: 27018
+
+
+    application:
+        container_name: application
+        build:
+            context: .
+            dockerfile: DockerFiles/python/pythonDF
+        command: sh scripts/django.sh
+        volumes:
+            - .:/web
+        ports:
+            - 8000:8000
+        links:
+            - mongo-data
+
+    vue:
+        restart: always
+        build:
+            context: .
+            dockerfile: DockerFiles/vue/vueDF
+        command: sh scripts/frontend.sh
+        ports:
+            - 80:80
+        container_name: vue-ui
+        volumes:
+            - .:/frontend
+        depends_on:
+            - application
