@@ -25,9 +25,9 @@ class Command(BaseCommand):
 			u.is_staff = False
 			u.is_superuser = False
 			u.save()
-			groups = [Group.objects.get(name='User')]
-			u.groups.set(groups)
-			u.save()
+			# groups = [Group.objects.get(name='User')]
+			# u.groups.set(groups)
+			# u.save()
 
 			p = UserProfile.objects.get(user=u)
 			p.role = 'user'
@@ -44,9 +44,9 @@ class Command(BaseCommand):
 			u.is_staff = False
 			u.is_superuser = False
 			u.save()
-			groups = [Group.objects.get(name='User')]
-			u.groups.set(groups)
-			u.save()
+			# groups = [Group.objects.get(name='User')]
+			# u.groups.set(groups)
+			# u.save()
 
 			p = UserProfile.objects.get(user=u)
 			p.role = 'user'
@@ -64,9 +64,9 @@ class Command(BaseCommand):
 			u.is_staff = False
 			u.is_superuser = False
 			u.save()
-			groups = [Group.objects.get(name='CinemaOwner')]
-			u.groups.set(groups)
-			u.save()
+			# groups = [Group.objects.get(name='CinemaOwner')]
+			# u.groups.set(groups)
+			# u.save()
 
 			p = UserProfile.objects.get(user=u)
 			p.role = 'owner'
@@ -83,9 +83,9 @@ class Command(BaseCommand):
 			u.is_staff = False
 			u.is_superuser = False
 			u.save()
-			groups = [Group.objects.get(name='CinemaOwner')]
-			u.groups.set(groups)
-			u.save()
+			# groups = [Group.objects.get(name='CinemaOwner')]
+			# u.groups.set(groups)
+			# u.save()
 
 			p = UserProfile.objects.get(user=u)
 			p.role = 'owner'
@@ -102,9 +102,9 @@ class Command(BaseCommand):
 			u.is_staff = True
 			u.is_superuser = False
 			u.save()
-			groups = [Group.objects.get(name='Admin')]
-			u.groups.set(groups)
-			u.save()
+			# groups = [Group.objects.get(name='Admin')]
+			# u.groups.set(groups)
+			# u.save()
 
 			p = UserProfile.objects.get(user=u)
 			p.role = 'admin'
@@ -121,10 +121,10 @@ class Command(BaseCommand):
 			u.is_staff=True
 			u.is_superuser=True
 			u.save()
-			groups = [Group.objects.get(name='ViewEnumerators'), Group.objects.get(name='EditEnumerators'),
-						Group.objects.get(name='CinemaOwner'), Group.objects.get(name='User'),
-						Group.objects.get(name='Admin'), ]
-			u.groups.set(groups)
+			# groups = [Group.objects.get(name='ViewEnumerators'), Group.objects.get(name='EditEnumerators'),
+			# 			Group.objects.get(name='CinemaOwner'), Group.objects.get(name='User'),
+			# 			Group.objects.get(name='Admin'), ]
+			# u.groups.set(groups)
 			u.save()
 			print(f'{bcolors.BOLD}{bcolors.OKGREEN}OK{bcolors.ENDC}')
 		except Exception as e:

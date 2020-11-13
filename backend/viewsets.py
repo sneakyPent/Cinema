@@ -221,14 +221,14 @@ class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 			p.role = userInfo['role']
 			u.is_active = userInfo['is_active']
 			p.save()
-			groups = []
+			# groups = []
 			if p.role == 'user':
-				groups = [Group.objects.get(name='User')]
+				# groups = [Group.objects.get(name='User')]
 				if Cinema.objects.filter(owner=u).count() == 1:
 					cn = Cinema.objects.get(owner_id=u.id)
 					cn.delete()
 			elif p.role == 'owner':
-				groups = [Group.objects.get(name='CinemaOwner')]
+				# groups = [Group.objects.get(name='CinemaOwner')]
 				if Cinema.objects.filter(owner=u).count() == 1:
 					cn = Cinema.objects.get(owner=u)
 					cn.name = userInfo['cinema']
@@ -240,8 +240,8 @@ class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 					cn.save()
 				else:
 					return  Response(HTTP_404_NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
-			u.groups.set(groups)
-			u.save()
+			# u.groups.set(groups)
+			# u.save()
 
 			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
@@ -262,17 +262,18 @@ class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 			p = UserProfile.objects.get(user=u)
 			p.role = formData['role']
 			p.save()
-			groups = []
-			if p.role == 'user':
-				groups = [Group.objects.get(name='User')]
-			elif p.role == 'owner':
+			# groups = []
+			# if p.role == 'user':
+				# groups = [Group.objects.get(name='User')]
+			# elif p.role == 'owner':
+			if p.role == 'owner':
 				c = Cinema()
 				c.owner = u
 				c.name = formData['cinemaName']
 				c.save()
-				groups = [Group.objects.get(name='CinemaOwner')]
-			u.groups.set(groups)
-			u.save()
+				# groups = [Group.objects.get(name='CinemaOwner')]
+			# u.groups.set(groups)
+			# u.save()
 
 			p = UserProfile.objects.get(user=u)
 			p.role = formData['role']
