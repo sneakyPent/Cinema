@@ -103,10 +103,14 @@ DATABASES = {
 		'ENGINE': 'djongo',
 		'ENFORCE_SCHEMA': True,
 		'NAME': 'myCinema_DB',
-		'HOST': 'mongodb://mongo-data:27018',
+		'HOST': 'mongodb://cinema:cinema@mongo-data:27018/admin',
+		# 'HOST': 'mongodb://mongo-data:27018',
 		'PORT': 27018,
 		'USER': 'root',
 		'PASSWORD': 'mongoadmin',
+		'authSource': 'admin',
+		'authMechanism': 'SCRAM-SHA-1',
+		'CONN_MAX_AGE': None,
 	}
 }
 # CORS_ORIGIN_ALLOW_ALL = True
