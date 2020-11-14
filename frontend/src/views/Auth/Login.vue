@@ -62,7 +62,7 @@ export default {
         login: function () {
             if (this.loading) return;
             this.loading = true;
-            this.$axios.post('http://localhost:8000/api/auth/token/', this.credentials)
+            this.$axios.post('/api/auth/token/', this.credentials)
                 .then(res => {
                     this.$session.start();
                     this.$session.set('access', res.data.access);

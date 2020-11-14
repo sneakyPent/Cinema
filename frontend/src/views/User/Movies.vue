@@ -113,7 +113,7 @@ export default {
             let delMovie = this.favoriteMovies.filter(mv => {
                 return mv.title === movie.title
             }).pop()
-            this.$axios.delete('http://localhost:8000/api/Favorite/' + delMovie.id + '/')
+            this.$axios.delete('/api/Favorite/' + delMovie.id + '/')
                 .then(() => {
                     this.$notifyAction.success('Η ταινία διεγράφει απο τα αγαπημένα επιτυχώς!');
                     this.updateLists();
@@ -121,7 +121,7 @@ export default {
                 .catch(this.$notifyAction.error);
         },
         addFavorite: function (movies) {
-            const query = 'http://localhost:8000/api/Favorite/';
+            const query = '/api/Favorite/';
             this.$axios.post(query, {id: movies})
                 .then(() => {
                     this.$notifyAction.success('Η ταινία σας προστέθηκε στα αγαπημένα επιτυχώς!');
@@ -135,7 +135,7 @@ export default {
 
         },
         getAvailableCols: function () {
-            this.$axios.get('http://localhost:8000/api/Movie/?fields')
+            this.$axios.get('/api/Movie/?fields')
                 .then(res => {
                     for (let i = 0; i < res.data.fields.length; i++) {
                         this.availableCols.push({
@@ -151,7 +151,7 @@ export default {
                 .catch(this.$notifyAction.error);
         },
         getFavorites: function () {
-            const query = 'http://localhost:8000/api/Favorite/';
+            const query = '/api/Favorite/';
             this.$axios.get(query)
                 .then((res) => {
                     this.favoriteMovies = res.data
@@ -162,7 +162,7 @@ export default {
                 );
         },
         getMovies: function () {
-            const query = 'http://localhost:8000/api/Movie';
+            const query = '/api/Movie';
             this.$axios.get(query)
                 .then(
                     usres => {
@@ -171,7 +171,7 @@ export default {
                 .catch(this.$notifyAction.error);
         },
         getMix: function () {
-            const query = 'http://localhost:8000/api/Favorite/?titleList';
+            const query = '/api/Favorite/?titleList';
             this.$axios.get(query)
                 .then((res) => {
                     this.favoriteList = res.data
@@ -242,7 +242,7 @@ export default {
             }
             if (fstr === 'undefined')
                 fstr = ''
-            const query = 'http://localhost:8000/api/Movie/?search=' + fstr;
+            const query = '/api/Movie/?search=' + fstr;
             this.$axios.get(query)
                 .then((res) => {
                     this.moviesList = res.data;

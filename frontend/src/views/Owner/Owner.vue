@@ -95,7 +95,7 @@ export default {
             }
         },
         getAvailableCols: function () {
-            this.$axios.get('http://localhost:8000/api/Movie/?fields')
+            this.$axios.get('/api/Movie/?fields')
                 .then(res => {
                     for (let i = 0; i < res.data.fields.length; i++) {
                         this.availableCols.push({
@@ -111,7 +111,7 @@ export default {
                 .catch(this.$notifyAction.error);
         },
         getMovies: function () {
-            const query = 'http://localhost:8000/api/Movie';
+            const query = '/api/Movie';
             this.$axios.get(query)
                 .then(
                     usres => {
@@ -141,7 +141,7 @@ export default {
             this.openModal(movie);
         },
         postMove: function () {
-            const query = 'http://localhost:8000/api/Movie/';
+            const query = '/api/Movie/';
             this.$axios.post(query, this.movieInfo)
                 .then(() => {
                     this.closeModal()
@@ -152,7 +152,7 @@ export default {
         },
         deleteMovie: function (movies) {
             for (let i = 0; i < movies.length; i++) {
-                this.$axios.delete('http://localhost:8000/api/Movie/' + movies[i] + '/')
+                this.$axios.delete('/api/Movie/' + movies[i] + '/')
                     .then(() => {
                         this.getMovies();
                         this.$notifyAction.success('Επιτυχής Διαγραφή!')
@@ -161,7 +161,7 @@ export default {
             }
         },
         updateMovie: function () {
-            const query = 'http://localhost:8000/api/Movie/' + this.movieInfo.id + '/';
+            const query = '/api/Movie/' + this.movieInfo.id + '/';
             this.$axios.put(query, this.movieInfo)
                 .then(() => {
                     this.$notifyAction.success('Επιτυχής Ενημέρωση ταινίας!')

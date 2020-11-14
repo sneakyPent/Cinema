@@ -133,7 +133,7 @@ export default {
                 formData.append('Token', this.$route.query.rat);
             }
             formData.append('Type', 'Registration');
-            this.$axios.post('http://localhost:8000/api/UserProfile/', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+            this.$axios.post('/api/UserProfile/', formData, {headers: {'Content-Type': 'multipart/form-data'}})
                 .then(() =>{
                     this.shown = true;
                 })

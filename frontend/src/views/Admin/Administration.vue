@@ -88,7 +88,7 @@ export default {
             }
         },
         getAvailableCols: function () {
-            this.$axios.get('http://localhost:8000/api/UserProfile/?fields')
+            this.$axios.get('/api/UserProfile/?fields')
                 .then(res => {
                     for (let i = 0; i < res.data.fields.length; i++) {
                         this.availableCols.push({
@@ -104,7 +104,7 @@ export default {
                 .catch(this.$notifyAction.error);
         },
         getAllUser: function () {
-            const query = 'http://localhost:8000/api/UserProfile/?nonadmin';
+            const query = '/api/UserProfile/?nonadmin';
             this.$axios.get(query)
                 .then(
                     usres => {
@@ -124,7 +124,7 @@ export default {
         },
         deleteUsers: function (users) {
             for (let i = 0; i < users.length; i++) {
-                this.$axios.delete('http://localhost:8000/api/User/' + users[i] + '/')
+                this.$axios.delete('/api/User/' + users[i] + '/')
                     .then(() => {
                         this.getAllUser();
                         this.$notifyAction.success('Επιτυχής διαγραφή χρήστη!');
@@ -133,7 +133,7 @@ export default {
             }
         },
         submit: function () {
-            const query = 'http://localhost:8000/api/UserProfile/' + this.userInfo.id + '/';
+            const query = '/api/UserProfile/' + this.userInfo.id + '/';
             this.$axios.put(query, this.userInfo)
                 .then(() => {
                     this.$notifyAction.success('Επιτυχής αλλαγή στοιχείων χρήστη!');
