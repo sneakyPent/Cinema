@@ -121,6 +121,22 @@ services:
             ME_CONFIG_MONGODB_PORT: 27017
 
 
+    keyrockIDM:
+        container_name: FIWARE-KEYROCK
+        image: fiware/idm
+        expose:
+            - 3005
+        ports:
+            - '3005:3005'
+            - '3443:3443'
+        environment:
+            - IDM_DB_HOST=keyrock_db
+            - IDM_PORT=3005
+            - IDM_HOST=http://localhost:3005
+        links:
+            - keyrock_db
+        volumes:
+            - .:/fiware/keyrockIDM
 
 
 
