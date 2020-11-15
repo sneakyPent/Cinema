@@ -11,3 +11,4 @@ logs
 *.sqlite3
 /backend/migrations/0001_initial.py
 /data-db/
+/dbDatas/
