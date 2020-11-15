@@ -7,15 +7,11 @@ module.exports = {
         proxy: {
             '/api': {
                 target: BACKEND_HOST,
-                // changeOrigin: true,
-                // pathRewrite: {
-                //     '^': ''
-                // }
             },
-            '/media': {
-                target: BACKEND_HOST
+            '/oauth2': {
+                target: KEYROCK_HOST
             },
-            '/admin/': {
+            '/admin': {
                 target: BACKEND_HOST
             },
             '/v1': {
