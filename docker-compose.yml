@@ -10,6 +10,14 @@ services:
             - mongo-orion
             - mongo-data
 
+    db-gui:
+        image: rwgrim/docker-noop
+        depends_on:
+            - phpmyadmin
+            - mongo-express-data
+            - mongo-express-orion
+
+
 #    fiware_services:
 #        image: rwgrim/docker-noop
 #        depends_on:
@@ -73,52 +81,24 @@ services:
         volumes:
             - ./dbDatas/keyrock_db:/var/lib/mysql
 
-    # ------------------------------------ FIWARE APPLICATIONS --------------------------------
+    # ------------------------------------ DATABASES UIs --------------------------------
 
-#    orion_CB:
-#        container_name: fiware-orion
-#        image: fiware/orion
-#        ports:
-#            - "1026:1026"
-#        command: -dbhost mongo-orion
-#        links:
-#            - mongo-orion
-#        volumes:
-#            - .:/fiware/orionCB
-#
-#    keyrockIDM:
-#        container_name: fiware-keyrock
-#        image: fiware/idm
-#        ports:
-#            - '3005:3005'
-#            - '443:443'
-#        environment:
-#            - IDM_DB_HOST=keyrock_db
-#            - IDM_PORT=3005
-#            - IDM_HOST=http://localhost:3005
-#        links:
-#            - keyrock_db
-#        volumes:
-#            - .:/fiware/keyrockIDM
-#
-#
-#    pep-proxy-wilma:
-#        container_name: fiware-pep-proxy-wilma
-#        image: fiware/pep-proxy
-#        volumes:
-#            - .:/fiware/pepProxyWilma
-#        environment:
-#            - PEP_PROXY_PORT=3005
-#            - PEP_PROXY_IDM_HOST=http://localhost:3005
-#            - PEP_PROXY_USERNAME=admin@test.com
-#            - PEP_PASSWORD=1234
-#        ports:
-#            - "1027:1027"
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:4.8
+        container_name: PHPMYADMIN
+        ports:
+            - "8083:80"
+        environment:
+            - PMA_HOST=keyrock_db
+        depends_on:
+            - keyrock_db
+        links:
+            - keyrock_db:mysql
+        restart: always
 
-    # ------------------------------------ MY APPLICATIONS ------------------------------------
-
-    mongo-express:
+    mongo-express-data:
         image: mongo-express
+        container_name: MN-DATA-EXPRESS
         restart: always
         ports:
             - 8081:8081
@@ -127,6 +107,22 @@ services:
             ME_CONFIG_MONGODB_ADMINPASSWORD: mongoadmin
             ME_CONFIG_MONGODB_SERVER: mongo-data
             ME_CONFIG_MONGODB_PORT: 27018
+
+    mongo-express-orion:
+        image: mongo-express
+        container_name: MN-ORION-EXPRESS
+        restart: always
+        ports:
+            - 8082:8081
+        environment:
+            ME_CONFIG_MONGODB_ADMINUSERNAME: root
+            ME_CONFIG_MONGODB_ADMINPASSWORD: mongoadmin
+            ME_CONFIG_MONGODB_SERVER: mongo-orion
+            ME_CONFIG_MONGODB_PORT: 27017
+
+
+
+
 
 
     application:
