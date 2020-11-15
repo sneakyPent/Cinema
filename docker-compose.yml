@@ -18,19 +18,21 @@ services:
             - mongo-express-orion
 
 
-#    fiware_services:
-#        image: rwgrim/docker-noop
-#        depends_on:
-#            - keyrockIDM
-#            - orion_CB
-#                - pep-proxy-wilma
+    fiware_services:
+        image: rwgrim/docker-noop
+        depends_on:
+            - keyrockIDM
+            - orion_CB
+            - orion-pep-proxy-wilma
+            - data-pep-proxy-wilma
 
     myApp:
         image: rwgrim/docker-noop
         depends_on:
-            - application
             - vue
-            - mongo-express
+#           - application
+
+
 
 
     # --------------------------------------- DATABASES ---------------------------------------
@@ -120,6 +122,21 @@ services:
             ME_CONFIG_MONGODB_SERVER: mongo-orion
             ME_CONFIG_MONGODB_PORT: 27017
 
+ # ------------------------------------ FIWARE APPLICATIONS --------------------------------
+
+    orion_CB:
+        container_name: FIWARE-ORION
+        image: fiware/orion
+        ports:
+            - "1026:1026"
+        command: -dbhost mongo-orion
+        environment:
+            - ORION_MONGO_HOST=mongo-orion
+            - ORION_PORT=1026
+            - ORION_MONGO_USER=root
+            - ORION_MONGO_PASSWORD=mongoadmin
+        links:
+            - mongo-orion
 
     keyrockIDM:
         container_name: FIWARE-KEYROCK
@@ -138,6 +155,31 @@ services:
         volumes:
             - .:/fiware/keyrockIDM
 
+
+    orion-pep-proxy-wilma:
+        container_name: PEP-PROXY-ORION
+        image: fiware/pep-proxy
+        depends_on:
+            -   keyrockIDM
+        ports:
+            -   "1027:1027"
+        expose:
+            -   "1027"
+        environment:
+            - PEP_PROXY_APP_HOST=orion_CB
+            - PEP_PROXY_APP_PORT=1026
+            - PEP_PROXY_PORT=1027
+            - PEP_PROXY_IDM_HOST=keyrockIDM
+            - PEP_PROXY_AUTH_ENABLED=false
+            - PEP_PROXY_IDM_SSL_ENABLED=false
+            - PEP_PROXY_IDM_PORT=3005
+            - PEP_PROXY_APP_ID=9793f1b6-6593-4019-9510-654eb03f9f12
+            - PEP_PROXY_USERNAME=pep_proxy_eb4a817d-2f4a-4900-926b-94b295240c2a
+            - PEP_PASSWORD=pep_proxy_d5ad9aa2-91b7-45b6-bc76-2592287ebb8e
+            - PEP_PROXY_PDP=idm
+            - PEP_PROXY_MAGIC_KEY=ORION
+
+    # ------------------------------------ MY APPLICATION ------------------------------------
 
 
 
