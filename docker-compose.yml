@@ -6,8 +6,8 @@ services:
     db:
         image: rwgrim/docker-noop
         depends_on:
-#            - keyrock_db
-#            - mongo-orion
+            - keyrock_db
+            - mongo-orion
             - mongo-data
 
 #    fiware_services:
@@ -27,17 +27,25 @@ services:
 
     # --------------------------------------- DATABASES ---------------------------------------
     mongo-orion:
-        container_name: orion-database
+        container_name: DB-ORION
         image: mongo:3.6
+        restart: always
         ports:
             - "27017:27017"
-        command: --nojournal
+        command: mongod --nojournal --port 27017 --smallfiles --oplogSize 128
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: mongoadmin
+            MONGO_INITDB_DATABASE: orion_DB
+            MONGODB_USER: orion
+            MONGODB_DATABASE: orion_DB
+            MONGODB_PASS: orion
         volumes:
-            - .:/dataBases/mongoOrion
+            - ./dbDatas/mongo-orion-dt:/data/db
 
     mongo-data:
+        container_name: DB-DATA
         image: mongo:3.6
-        container_name: data-database
         restart: always
         ports:
             - "27018:27017"
@@ -49,19 +57,21 @@ services:
             MONGODB_USER: cinema
             MONGODB_DATABASE: myCinema_DB
             MONGODB_PASS: cinema
-        volumes:
-            - .:/dataBases/mongoData
+        volumes: 
+            - ./dbDatas/mongo-data:/data/db
 
-#    keyrock_db:
-#        container_name: keyrock-database
-#        image: mysql/mysql-server:5.7.21
-#        ports:
-#            - '3306:3306'
-#        environment:
-#            - MYSQL_ROOT_PASSWORD=idm
-#            - MYSQL_ROOT_HOST=%
-#        volumes:
-#            - .:/dataBases/keyrock
+    keyrock_db:
+        container_name: DB-KEYROCK
+        image: mysql/mysql-server:5.7.21
+        expose:
+            - 3306
+        ports:
+            - '3306:3306'
+        environment:
+            - MYSQL_ROOT_PASSWORD=idm
+            - MYSQL_ROOT_HOST=%
+        volumes:
+            - ./dbDatas/keyrock_db:/var/lib/mysql
 
     # ------------------------------------ FIWARE APPLICATIONS --------------------------------
 
