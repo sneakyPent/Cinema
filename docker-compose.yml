@@ -142,7 +142,7 @@ services:
 
 
     application:
-        container_name: application
+        container_name: APPLICATION
         build:
             context: .
             dockerfile: DockerFiles/python/pythonDF
@@ -153,17 +153,17 @@ services:
             - 8000:8000
         links:
             - mongo-data
+        depends_on:
+            - vue
 
     vue:
         restart: always
+        container_name: VUE
         build:
             context: .
             dockerfile: DockerFiles/vue/vueDF
         command: sh scripts/frontend.sh
         ports:
             - 80:80
-        container_name: vue-ui
         volumes:
             - .:/frontend
-        depends_on:
-            - application
