@@ -150,11 +150,6 @@ services:
             - IDM_DB_HOST=keyrock_db
             - IDM_PORT=3005
             - IDM_HOST=http://localhost:3005
-            - IDM_EIDAS_ENABLED=true
-            - IDM_USAGE_CONTROL_ENABLED=true
-            - IDM_ADMIN_USER=admin
-            - IDM_ADMIN_EMAIL=admin@test.com
-            - IDM_ADMIN_PASS=mousakas
         links:
             - keyrock_db
         volumes:
@@ -178,9 +173,9 @@ services:
             - PEP_PROXY_AUTH_ENABLED=false
             - PEP_PROXY_IDM_SSL_ENABLED=false
             - PEP_PROXY_IDM_PORT=3005
-            - PEP_PROXY_APP_ID=7f2a83fb-6ce2-4624-be71-ad8a1a95d98b
-            - PEP_PROXY_USERNAME=pep_proxy_b2f99457-27e3-4c63-b1dd-230846fb7533
-            - PEP_PASSWORD=pep_proxy_cdd7ce7d-4415-4352-a3d1-02ad91a8f56c
+            - PEP_PROXY_APP_ID=53ec8097-957b-4911-8a12-b235e85f4fb6
+            - PEP_PROXY_USERNAME=pep_proxy_6c321dee-831a-40e4-abd2-36d60c11ff6a
+            - PEP_PASSWORD=pep_proxy_efea11d7-431b-4887-bea3-0fd1a84ba624
             - PEP_PROXY_PDP=idm
             - PEP_PROXY_MAGIC_KEY=1234
 
@@ -201,9 +196,9 @@ services:
             - PEP_PROXY_AUTH_ENABLED=false
             - PEP_PROXY_IDM_SSL_ENABLED=false
             - PEP_PROXY_IDM_PORT=3005
-            - PEP_PROXY_APP_ID=9793f1b6-6593-4019-9510-654eb03f9f12
-            - PEP_PROXY_USERNAME=pep_proxy_eb4a817d-2f4a-4900-926b-94b295240c2a
-            - PEP_PASSWORD=pep_proxy_291ed8d1-f9c1-40b0-b243-f6f678bd5361
+            - PEP_PROXY_APP_ID=53ec8097-957b-4911-8a12-b235e85f4fb6
+            - PEP_PROXY_USERNAME=pep_proxy_6c321dee-831a-40e4-abd2-36d60c11ff6a
+            - PEP_PASSWORD=pep_proxy_efea11d7-431b-4887-bea3-0fd1a84ba624
             - PEP_PROXY_PDP=idm
             - PEP_PROXY_MAGIC_KEY=ORION
 
