@@ -155,6 +155,29 @@ services:
         volumes:
             - .:/fiware/keyrockIDM
 
+   data-pep-proxy-wilma:
+        container_name: PEP-PROXY-DATA
+        image: fiware/pep-proxy
+        depends_on:
+            - keyrockIDM
+        ports:
+            - "1028:1028"
+        expose:
+            - "1028"
+        environment:
+            - PEP_PROXY_APP_HOST=application
+            - PEP_PROXY_APP_PORT=8000
+            - PEP_PROXY_PORT=1028
+            - PEP_PROXY_IDM_HOST=keyrockIDM
+            - PEP_PROXY_HTTPS_ENABLED=false
+            - PEP_PROXY_AUTH_ENABLED=false
+            - PEP_PROXY_IDM_SSL_ENABLED=false
+            - PEP_PROXY_IDM_PORT=3005
+            - PEP_PROXY_APP_ID=7f2a83fb-6ce2-4624-be71-ad8a1a95d98b
+            - PEP_PROXY_USERNAME=pep_proxy_b2f99457-27e3-4c63-b1dd-230846fb7533
+            - PEP_PASSWORD=pep_proxy_cdd7ce7d-4415-4352-a3d1-02ad91a8f56c
+            - PEP_PROXY_PDP=idm
+            - PEP_PROXY_MAGIC_KEY=1234
 
     orion-pep-proxy-wilma:
         container_name: PEP-PROXY-ORION
