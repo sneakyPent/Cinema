@@ -30,7 +30,7 @@ services:
         image: rwgrim/docker-noop
         depends_on:
             - vue
-#           - application
+            - application
 
 
 
