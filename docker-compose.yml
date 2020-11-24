@@ -175,7 +175,7 @@ services:
             - PEP_PROXY_IDM_PORT=3005
             - PEP_PROXY_APP_ID=9793f1b6-6593-4019-9510-654eb03f9f12
             - PEP_PROXY_USERNAME=pep_proxy_eb4a817d-2f4a-4900-926b-94b295240c2a
-            - PEP_PASSWORD=pep_proxy_d5ad9aa2-91b7-45b6-bc76-2592287ebb8e
+            - PEP_PASSWORD=pep_proxy_291ed8d1-f9c1-40b0-b243-f6f678bd5361
             - PEP_PROXY_PDP=idm
             - PEP_PROXY_MAGIC_KEY=ORION
 
@@ -189,10 +189,12 @@ services:
             context: .
             dockerfile: DockerFiles/python/pythonDF
         command: sh scripts/django.sh
+        expose:
+            - "8000"
         volumes:
             - .:/web
         ports:
-            - 8000:8000
+            - "8000:8000"
         links:
             - mongo-data
         depends_on:
