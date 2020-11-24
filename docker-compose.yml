@@ -150,6 +150,11 @@ services:
             - IDM_DB_HOST=keyrock_db
             - IDM_PORT=3005
             - IDM_HOST=http://localhost:3005
+            - IDM_EIDAS_ENABLED=true
+            - IDM_USAGE_CONTROL_ENABLED=true
+            - IDM_ADMIN_USER=admin
+            - IDM_ADMIN_EMAIL=admin@test.com
+            - IDM_ADMIN_PASS=mousakas
         links:
             - keyrock_db
         volumes:
