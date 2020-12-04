@@ -17,7 +17,7 @@
                 />
             </div>
             <user-profile-modal v-if="modal" :closing="closeModal" :userInfo="userInfo" state="Approved"
-                                :submit="submit"
+                                @submitForm="submit($event[0])"
                                 :decline="decline"/>
         </mdb-container>
     </div>
@@ -56,7 +56,6 @@ export default {
                 email: '',
                 role: '',
                 is_active: false
-
             },
             tableButtons: [
                 {
@@ -88,7 +87,7 @@ export default {
             }
         },
         getAvailableCols: function () {
-            this.$axios.get('/api/UserProfile/?fields')
+            this.$axios.get('/api/Request/?fields')
                 .then(res => {
                     for (let i = 0; i < res.data.fields.length; i++) {
                         this.availableCols.push({
@@ -104,7 +103,7 @@ export default {
                 .catch(this.$notifyAction.error);
         },
         getAllUser: function () {
-            const query = '/api/UserProfile/?nonadmin';
+            const query = '/api/Request/';
             this.$axios.get(query)
                 .then(
                     usres => {
@@ -124,7 +123,7 @@ export default {
         },
         deleteUsers: function (users) {
             for (let i = 0; i < users.length; i++) {
-                this.$axios.delete('/api/User/' + users[i] + '/')
+                this.$axios.delete('/api/Request/' + users[i] + '/')
                     .then(() => {
                         this.getAllUser();
                         this.$notifyAction.success('Επιτυχής διαγραφή χρήστη!');
@@ -132,32 +131,46 @@ export default {
                     .catch(this.$notifyAction.error);
             }
         },
-        submit: function () {
-            const query = '/api/UserProfile/' + this.userInfo.id + '/';
-            this.$axios.put(query, this.userInfo)
+        submit: function (uInfo) {
+			this.userInfo.surname=uInfo.surname
+			this.userInfo.name=uInfo.name
+			this.userInfo.username=uInfo.username
+			this.userInfo.email=uInfo.email
+			this.userInfo.role=uInfo.role
+			this.userInfo.is_active=uInfo.is_active
+			this.userInfo.cinema=uInfo.cinema
+			const formData = new FormData();
+            formData.append('formData', JSON.stringify(uInfo));
+            if ('rat' in this.$route.query) {
+                formData.append('Token', this.$route.query.rat);
+            }
+            formData.append('Type', 'update');
+            const query = '/api/Request/' + this.userInfo.id + '/';
+            this.$axios.put(query, formData, {headers: {'Content-Type': 'multipart/form-data'}})
                 .then(() => {
                     this.$notifyAction.success('Επιτυχής αλλαγή στοιχείων χρήστη!');
                     this.getAllUser();
                     this.closeModal();
 
                 })
-                .catch(this.$notifyAction.error);
+                .catch(() => {
+						this.$notifyAction.warning('Ανεπιτυχής αλλαγή δεδομένων χρήστη!');
+						this.getAllUser();
+						this.closeModal();
+					}
+				);
         },
         decline: function () {
             this.closeModal();
             this.$notifyAction.success('Απόρριψη αλλαγών');
         },
-
         fillForm: function (user) {
             this.userInfo.id = user.id;
-            this.userInfo.surname = user.last_name;
-            this.userInfo.name = user.first_name;
-            this.userInfo.username = user.username;
+            this.userInfo.name = user.userName;
             this.userInfo.email = user.email;
             this.userInfo.role = user.role;
             this.userInfo.is_active = user.is_active;
             this.userInfo.cinema = user.cinema;
-
         },
         fixingTableData: function () {
             // fix the format for the table tableData prop
@@ -170,16 +183,15 @@ export default {
             for (let i = 0; i < uList.length; i++) {
                 const tmpdict = {};
                 for (let j = 0; j < val.length; j++) {
-                    tmpdict[val[j].value.toLowerCase()] = this.$tr(uList[i][val[j].value.toLowerCase()]);
+                    tmpdict[val[j].value] = this.$tr(uList[i][val[j].value]);
                 }
                 data.push(tmpdict);
             }
-            // headers.push({label: 'id', field: 'id', sorting: true, type: 'string', clickable: false});
             for (let i = 0; i < val.length; i++) {
                 if (!(val[i].value.toLowerCase() === 'id'))
                     headers.push({
                         label: this.$tr(val[i].text.toString()),
-                        field: val[i].value.toString().toLowerCase(),
+                        field: val[i].value,
                         sorting: true,
                         type: 'string',
                         clickable: false
