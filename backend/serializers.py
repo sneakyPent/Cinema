@@ -7,6 +7,7 @@ from backend.models import Favorite
 from backend.models import Movie
 from backend.models import Cinema
 from backend.models import UserProfile
+from backend.models import Request
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -29,6 +30,19 @@ class CinemaSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Cinema
 		fields = '__all__'
+
+
+class RequestSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Request
+		depth = 1
+		fields = (
+			'id',
+			'userName',
+			'email',
+			'role',
+			'cinemaName',
+		)
 
 
 class FavoriteSerializer(serializers.ModelSerializer):

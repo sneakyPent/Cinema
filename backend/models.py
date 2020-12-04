@@ -28,6 +28,15 @@ class Favorite(models.Model):
 	movie = models.ForeignKey(to='Movie', on_delete=models.CASCADE, related_name='Movie', blank=True, null=True)
 
 
+class Request(models.Model):
+	userId = models.CharField(max_length=100)
+	userName = models.CharField(max_length=100)
+	email = models.CharField(max_length=100)
+	password = models.CharField(max_length=100)
+	role = models.CharField(max_length=100)
+	cinemaName = models.CharField(max_length=100)
+
+
 class UserProfile(models.Model):
 	role = models.CharField(max_length=100)
 	user = models.OneToOneField(User, on_delete=models.CASCADE,)
