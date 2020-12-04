@@ -80,10 +80,25 @@ const vm = new Vue({
                 })
                 .catch();
         },
-        initAxiosHeaders: function () {
+        initAxiosHeaders: function (cred) {
             const accessToken = this.$session.get('access');
             if (accessToken) {
                 this.$axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken;
+                let headers= {
+                    'Content-Type': 'application/json',
+                }
+                this.$axios.post(
+                    '/v1/auth/tokens',
+                    JSON.stringify({"name":cred.username,"password":cred.password}) ,
+                    {headers: headers}
+                    )
+                .then(res => {
+                    this.$axios.defaults.headers.common.Xtoken = res.headers['x-subject-token'];
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+
             }
         },
     },
