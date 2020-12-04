@@ -10,9 +10,9 @@
 	"email": "Email",
 	"is_active": "Πρόσβαση",
 	"role": "Ρόλος",
-	"True": "Ναι",
-	"False": "Όχι",
-	"user": "Χρήστης",
+	"true": "Ναι",
+	"false": "Όχι",
+	"member": "Μέλος",
 	"owner": "Ιδιοκτήτης",
 	"userName": "Όνομα",
 	"cinemaName": "Κινηματογράφος"
