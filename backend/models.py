@@ -34,7 +34,8 @@ class Request(models.Model):
 	email = models.CharField(max_length=100)
 	password = models.CharField(max_length=100)
 	role = models.CharField(max_length=100)
-	cinemaName = models.CharField(max_length=100)
+	cinema = models.CharField(max_length=100)
+	is_active = models.BooleanField(default=False)
 
 
 class UserProfile(models.Model):

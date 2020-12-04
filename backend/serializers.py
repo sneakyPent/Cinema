@@ -41,7 +41,8 @@ class RequestSerializer(serializers.ModelSerializer):
 			'userName',
 			'email',
 			'role',
-			'cinemaName',
+			'cinema',
+			'is_active'
 		)
 
 
