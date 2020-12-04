@@ -1,7 +1,11 @@
 FROM node:11.11.0-stretch
-RUN mkdir /frontend
-RUN mkdir /scripts
-WORKDIR /frontend
-COPY frontend/package.json /frontend/
-COPY ./frontend /frontend
-COPY ./scripts /frontend
+WORKDIR /usr/src/cinema/scripts
+COPY ./scripts /usr/src/cinema/scripts
+
+WORKDIR /usr/src/cinema/frontend
+COPY ./frontend /usr/src/cinema/frontend
+
+RUN echo '\033[96mInstalling NPM packages:\033[0m'
+RUN npm install --silent
+EXPOSE 80
+CMD ["npm", "run", "serve"]
