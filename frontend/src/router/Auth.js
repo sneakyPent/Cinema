@@ -1,4 +1,4 @@
-const basePath = '/auth/';
+const basePath = '/';
 
 export default [
 	{
