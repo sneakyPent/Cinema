@@ -168,7 +168,7 @@ Vue.prototype.$notifyAction =  {
     },
     warning: message => {
         vm.$notify({
-            title: 'Ενημέρωση',
+            title: 'Προσοχη!',
             text: message,
             duration: notificationDuration,
             type: 'warning'
