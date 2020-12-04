@@ -27,7 +27,7 @@ export default [
 	},
 	{
 
-		path: '/Logout',
+		path: '/logout',
 		name: 'Logout',
 		component: require('../views/Auth/Logout').default,
 		meta: {
@@ -35,7 +35,7 @@ export default [
 		},
 		sidenav: {
 			name: 'Έξοδος',
-			to: '/Logout',
+			to: '/logout',
 			icon: 'sign-out-alt',
 		}
 	},
