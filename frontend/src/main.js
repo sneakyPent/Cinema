@@ -132,6 +132,15 @@ Vue.prototype.$datepickerOptions = function () {
 		format: 'YYYY-MM-DD',
 	};
 };
+
+Vue.prototype.$getClient_id = function () {
+        return '2f43e567-2772-41f5-9024-481a4123d812'
+};
+
+Vue.prototype.$getClient_secret = function () {
+        return '01b24efb-75bb-45e6-85e0-06a70b94e737'
+};
+
 Vue.prototype.$tr = function ( message ) {
     if (translations[message] !== undefined)
         return translations[message]
