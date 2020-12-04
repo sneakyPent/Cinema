@@ -19,12 +19,12 @@ class Movie(models.Model):
 
 
 class Cinema(models.Model):
-	owner = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='Owner', blank=True, null=True)
+	owner = models.CharField(max_length=100)
 	name = models.CharField(max_length=100)
 
 
 class Favorite(models.Model):
-	user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='User', blank=True, null=True)
+	user = models.CharField(max_length=100)
 	movie = models.ForeignKey(to='Movie', on_delete=models.CASCADE, related_name='Movie', blank=True, null=True)
 
 
