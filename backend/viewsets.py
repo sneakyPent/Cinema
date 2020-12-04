@@ -245,6 +245,7 @@ class RequestViewSet(viewsets.ModelViewSet):
 						if r.role == 'member':
 							cn = Cinema.objects.get(owner=r.userId)
 							cn.delete()
+							r = Request.objects.get(id=kwargs['pk'])
 							r.cinema = ''
 							r.save()
 				else:
