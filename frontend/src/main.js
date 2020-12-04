@@ -59,19 +59,18 @@ const vm = new Vue({
                 this.$router.push({name: 'Login'});
                 return;
             }
-            const tokenData = this.$root.parseJwt(accessToken);
-            this.$axios.get('http://localhost:8000/api/UserProfile/' + tokenData.user_id + '/')
+            this.$axios.get('/user')
                 .then(res => {
                     this.private.userData.fetched = true;
                     this.private.userData.data = res.data;
                     let routes = [];
-                    if (this.private.userData.data.role === 'admin') {
+                    if (res.data.roles[0].name === 'admin') {
                         routes = routes.concat(require('./router/Admin').default);
                     }
-                    else if (this.private.userData.data.role === 'user') {
+                    else if (res.data.roles[0].name === 'member') {
                         routes = routes.concat(require('./router/User').default);
                     }
-                    else if (this.private.userData.data.role === 'owner')  {
+                    else if (res.data.roles[0].name === 'owner')  {
                         routes = routes.concat(require('./router/Owner').default);
                     }
                     this.$router.addRoutes(routes);
