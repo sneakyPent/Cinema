@@ -28,23 +28,6 @@
                                 </mdb-row>
                                 <mdb-row>
                                     <mdb-col>
-                                        <mdb-input v-model="formInfo.username"
-                                                   icon="key"
-                                                   label="Όνομα χρήστη"
-                                                   group
-                                                   type="text" required
-                                                   class="mb-3"/>
-                                    </mdb-col>
-                                    <mdb-col>
-                                        <mdb-input v-model="formInfo.password"
-                                                   label="Κωδικός"
-                                                   type="password"
-                                                   required
-                                                   class="mb-3"/>
-                                    </mdb-col>
-                                </mdb-row>
-                                <mdb-row>
-                                    <mdb-col>
                                         <mdb-input v-model="formInfo.email" class="mb-3" label="email" icon="envelope"
                                                    group type="email"
                                                    validate error="wrong"
@@ -53,16 +36,26 @@
                                     </mdb-col>
                                 </mdb-row>
                                 <mdb-row>
+                                    <mdb-col>
+                                        <mdb-input v-model="formInfo.password"
+                                                   icon="key"
+                                                   label="Κωδικός"
+                                                   type="password"
+                                                   required
+                                                   class="mb-3"/>
+                                    </mdb-col>
+                                </mdb-row>
+                                <mdb-row>
                                     <mdb-col class="mb-2 mt-3 d-flex justify-content-center">
                                         <mdb-form-inline>
                                             <mdb-input required type="radio" id="option5-1"
-                                                       name="groupOfMaterialRadios2" radioValue="user"
+                                                       name="groupOfMaterialRadios2" radioValue="member"
                                                        v-model="formInfo.role"
-                                                       label="Χρήστης"/>
+                                                      :label="$tr('member')"/>
                                             <mdb-input required type="radio" id="option5-2"
                                                        name="groupOfMaterialRadios2" radioValue="owner"
                                                        v-model="formInfo.role"
-                                                       label="Ιδιοκτήττης Cinema"/>
+                                                       :label="$tr('owner')"/>
                                         </mdb-form-inline>
                                     </mdb-col>
                                 </mdb-row>
@@ -133,7 +126,7 @@ export default {
                 formData.append('Token', this.$route.query.rat);
             }
             formData.append('Type', 'Registration');
-            this.$axios.post('/api/UserProfile/', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+            this.$axios.post('/api/Request/', formData, {headers: {'Content-Type': 'multipart/form-data'}})
                 .then(() =>{
                     this.shown = true;
                 })
