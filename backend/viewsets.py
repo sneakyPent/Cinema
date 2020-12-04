@@ -9,6 +9,8 @@ from rest_framework.status import *
 from django.db.models import Q, QuerySet, Prefetch
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
+
+from backend.httpRequests import *
 from cinema.permissions import CustomDjangoModelPermissions, NotAuthenticatedCreateOnly
 from backend.serializers import *
 
