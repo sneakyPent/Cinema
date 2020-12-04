@@ -16,6 +16,12 @@ module.exports = {
             },
             '/v1': {
                 target: KEYROCK_HOST
+            },
+            '/user': {
+                target: KEYROCK_HOST
+            },
+            '^/auth': {
+                target: KEYROCK_HOST
             }
         },
         host: '0.0.0.0',

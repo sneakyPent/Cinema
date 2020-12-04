@@ -52,7 +52,9 @@ export default {
     name: 'Login',
     data() {
         return {
-            credentials: {},
+            credentials: {
+                'grant_type': 'password',
+            },
             valid: true,
             loading: false,
             hidePassword: true
@@ -62,24 +64,28 @@ export default {
         login: function () {
             if (this.loading) return;
             this.loading = true;
-            this.$axios.post('/api/auth/token/', this.credentials)
+            let qs = require('qs');
+            let headers= {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + btoa(this.$getClient_id()+ ':' + this.$getClient_secret())
+            }
+            this.$axios.post('/oauth2/token', qs.stringify(this.credentials) , {headers: headers})
                 .then(res => {
-                    this.$session.start();
-                    this.$session.set('access', res.data.access);
-                    this.$session.set('refresh', res.data.refresh);
-                    this.$root.initAxiosHeaders();
+                    this.$session.set('access', res.data.access_token);
+                    this.$session.set('refresh', res.data.refresh_token);
+                    this.$root.initAxiosHeaders(this.credentials);
                     this.$root.authenticated = true;
-                    this.loading = false;
+                    this.loading = false
                     this.$router.push({name: 'Home', query: this.$router.query});
                 })
                 .catch(e => {
-                    console.log(e);
+                    console.log(e)
                     this.loading = false;
                     this.$notify({
                         text: "Λάθος όνομα χρήστη ή κωδικού",
                         type: 'error'
                     });
-                });
+                })
         },
         created() {
             if (this.$root.authenticated) {
