@@ -173,9 +173,9 @@ services:
             - PEP_PROXY_AUTH_ENABLED=false
             - PEP_PROXY_IDM_SSL_ENABLED=false
             - PEP_PROXY_IDM_PORT=3005
-            - PEP_PROXY_APP_ID=53ec8097-957b-4911-8a12-b235e85f4fb6
-            - PEP_PROXY_USERNAME=pep_proxy_6c321dee-831a-40e4-abd2-36d60c11ff6a
-            - PEP_PASSWORD=pep_proxy_efea11d7-431b-4887-bea3-0fd1a84ba624
+            - PEP_PROXY_APP_ID=2f43e567-2772-41f5-9024-481a4123d812
+            - PEP_PROXY_USERNAME=pep_proxy_a9c18f94-333e-4601-afcf-1a7c972fc64d
+            - PEP_PASSWORD=pep_proxy_b5ad99a4-a918-4093-a317-e9d749d06493
             - PEP_PROXY_PDP=idm
             - PEP_PROXY_MAGIC_KEY=1234
 
@@ -196,9 +196,9 @@ services:
             - PEP_PROXY_AUTH_ENABLED=false
             - PEP_PROXY_IDM_SSL_ENABLED=false
             - PEP_PROXY_IDM_PORT=3005
-            - PEP_PROXY_APP_ID=53ec8097-957b-4911-8a12-b235e85f4fb6
-            - PEP_PROXY_USERNAME=pep_proxy_6c321dee-831a-40e4-abd2-36d60c11ff6a
-            - PEP_PASSWORD=pep_proxy_efea11d7-431b-4887-bea3-0fd1a84ba624
+            - PEP_PROXY_APP_ID=2f43e567-2772-41f5-9024-481a4123d812
+            - PEP_PROXY_USERNAME=pep_proxy_a9c18f94-333e-4601-afcf-1a7c972fc64d
+            - PEP_PASSWORD=pep_proxy_b5ad99a4-a918-4093-a317-e9d749d06493
             - PEP_PROXY_PDP=idm
             - PEP_PROXY_MAGIC_KEY=ORION
 
@@ -229,8 +229,10 @@ services:
         build:
             context: .
             dockerfile: DockerFiles/vue/vueDF
-        command: sh scripts/frontend.sh
+        expose:
+            - "80"
         ports:
-            - 80:80
+            - "80:80"
         volumes:
-            - .:/frontend
+            - ./scripts:/usr/src/cinema/scripts
+            - ./frontend:/usr/src/cinema/frontend
