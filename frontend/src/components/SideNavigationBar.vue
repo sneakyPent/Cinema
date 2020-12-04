@@ -34,7 +34,7 @@
                 >
                     <strong
                     ><h6 class="plan-cost white-text">
-                        {{ this.userData.last_name + ' ' + this.userData.first_name }}</h6>
+                        {{ this.userData.username }}</h6>
                     </strong>
                 </p>
             </div>
@@ -49,7 +49,7 @@
                 >
                     <strong
                     ><h6 class="plan-cost white-text">
-                        ({{ this.userData.role }})</h6>
+                        ({{ this.userData.roles[0].name }})</h6>
                     </strong>
                 </p>
             </div>
