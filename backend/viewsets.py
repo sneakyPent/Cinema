@@ -18,7 +18,7 @@ from django.contrib.auth.models import User
 class MovieViewSet(viewsets.ModelViewSet):
 	queryset = Movie.objects.all()
 	serializer_class = MovieSerializer
-	permission_classes = (IsAuthenticated, )
+	permission_classes = (AllowAny,)
 	filter_backends = [filters.SearchFilter]
 	search_fields = ['title', 'category', 'cinema__name', 'startDate']
 
@@ -99,7 +99,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 class FavoriteViewSet(viewsets.ModelViewSet):
 	queryset = Favorite.objects.all()
 	serializer_class = FavoriteSerializer
-	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
+	permission_classes = (AllowAny,)
 	filter_backends = [filters.SearchFilter]
 	search_fields = [filters.SearchFilter]
 
@@ -175,7 +175,15 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 class CinemaViewSet(viewsets.ModelViewSet):
 	queryset = Cinema.objects.all()
 	serializer_class = CinemaSerializer
-	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
+	permission_classes = (AllowAny,)
+	filter_backends = [filters.SearchFilter]
+	search_fields = [filters.SearchFilter]
+
+
+class RequestViewSet(viewsets.ModelViewSet):
+	queryset = Request.objects.all()
+	serializer_class = RequestSerializer
+	permission_classes = (AllowAny,)
 	filter_backends = [filters.SearchFilter]
 	search_fields = [filters.SearchFilter]
 
@@ -183,7 +191,7 @@ class CinemaViewSet(viewsets.ModelViewSet):
 class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 	queryset = UserProfile.objects.all()
 	serializer_class = UserProfileSerializer
-	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
+	permission_classes = (AllowAny,)
 	filter_backends = [filters.SearchFilter]
 	search_fields = [filters.SearchFilter]
 
@@ -286,6 +294,6 @@ class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
 class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
-	permission_classes = (IsAuthenticated | NotAuthenticatedCreateOnly, )
+	permission_classes = (AllowAny,)
 	filter_backends = [filters.SearchFilter]
 	search_fields = [filters.SearchFilter]
