@@ -270,6 +270,7 @@ class RequestViewSet(viewsets.ModelViewSet):
 					r = Request.objects.get(id=kwargs['pk'])
 					r.userId = parsed['user']['id']
 					r.password = ''
+					r.is_active = True
 					r.save()
 					assignRole__request(r, self.request.headers[adminTokenHeaderName])
 				else:
@@ -337,7 +338,7 @@ class RequestViewSet(viewsets.ModelViewSet):
 			r.userName = formData['surname'] + ' ' + formData['name']
 			r.email = formData['email']
 			r.password = formData['password']
-			r.enabled =  False
+			r.is_active = False
 			r.role = formData['role']
 			if formData['role'] == 'owner':
 				r.cinema = formData['cinemaName']
