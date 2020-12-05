@@ -12,14 +12,14 @@
                 <div class="black-text" id="form_rows">
                     <mdb-row>
                         <mdb-col>
-                            <mdb-input v-model="movieInfo.title" icon="film" label="Τίτλος" type="text"
+                            <mdb-input v-model="mInfo.title" icon="film" label="Τίτλος" type="text"
                                        required :disabled=disableChanges
                                        invalidFeedback="Please provide a valid city." class="mb-3 "/>
                         </mdb-col>
                     </mdb-row>
                     <mdb-row>
                         <mdb-col>
-                            <mdb-input v-model="movieInfo.category" icon="filter" label="Κατηγορία" type="text"
+                            <mdb-input v-model="mInfo.category" icon="filter" label="Κατηγορία" type="text"
                                        required :disabled=disableChanges
                                        class="mb-3"/>
                         </mdb-col>
@@ -28,7 +28,7 @@
                         <mdb-date-picker
                             class="ml-3"
                             :label="'Ημερομηνία Έναρξης'"
-                            v-model="movieInfo.startDate"
+                            v-model="mInfo.startDate"
                             required
                             autoHide
                             disabledPast
@@ -40,7 +40,7 @@
                         <mdb-date-picker
                             class="ml-3"
                             :label="'Ημερομηνία Λήξης'"
-                            v-model="movieInfo.endDate"
+                            v-model="mInfo.endDate"
                             required
                             autoHide
                             disabledPast
@@ -54,7 +54,7 @@
                         <mdb-btn @click="decline" color="danger" rounded> Ακύρωση</mdb-btn>
                     </mdb-col>
                     <mdb-col class=" d-flex justify-content-center">
-                        <mdb-btn @click="submit" color="grey" rounded> Υποβολή</mdb-btn>
+                        <mdb-btn @click="$emit('submitForm',[mInfo])" color="grey" rounded> Υποβολή</mdb-btn>
                     </mdb-col>
                 </mdb-row>
             </form>
@@ -78,6 +78,14 @@ export default {
     data: function () {
         return {
             dateChange: false,
+			mInfo: {
+				id : this.movieInfo.id,
+				title : this.movieInfo.title,
+				category : this.movieInfo.category,
+				cinema : this.movieInfo.cinema,
+				startDate : this.movieInfo.startDate,
+				endDate : this.movieInfo.endDate
+			},
             stepperOptions: {
                 submitBtn: {
                     text: 'Υποβολή',

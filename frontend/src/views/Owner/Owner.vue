@@ -168,21 +168,27 @@ export default {
                     this.getMovies();
                     this.closeModal();
 
-                })
-                .catch(this.$notifyAction.error);
-        },
-        submit: function () {
-            switch (this.submitAction) {
-                case 'update':
-                    this.updateMovie()
-                    break;
-                case 'add':
-                    this.postMove()
-                    this.submitAction = 'update'
-                    break;
-                default:
-                    console.log('default');
-            }
+				})
+				.catch(this.$notifyAction.error);
+		},
+		submit: function (mInfo) {
+			this.movieInfo.id = mInfo.id
+			this.movieInfo.title = mInfo.title
+			this.movieInfo.category = mInfo.category
+			this.movieInfo.cinema = mInfo.cinema
+			this.movieInfo.startDate = mInfo.startDate
+			this.movieInfo.endDate = mInfo.endDate
+			switch (this.submitAction) {
+				case 'update':
+					this.updateMovie()
+					break;
+				case 'add':
+					this.postMove()
+					this.submitAction = 'update'
+					break;
+				default:
+					console.log('default');
+			}
 
         },
         decline: function () {
