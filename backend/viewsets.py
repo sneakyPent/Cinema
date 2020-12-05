@@ -299,24 +299,23 @@ class RequestViewSet(viewsets.ModelViewSet):
 				else:
 					return Response(HTTP_304_NOT_MODIFIED, status=status.HTTP_304_NOT_MODIFIED)
 			#  After changing role check if r.role='owner' and if there is existent cinema with the given name. If not create one.
-			if r.role == 'owner' and Cinema.objects.filter(owner=r.userId).count() == 0 :
+			if r.role == 'owner' and Cinema.objects.filter(owner=r.userId).count() == 0:
 				cn = Cinema()
 				cn.name = formData.cinema
 				cn.owner = r.userId
 				cn.save()
 				r.cinema = formData.cinema
 				r.save()
-			elif r.role == 'owner' and Cinema.objects.filter(owner=r.userId).count() == 1 :
+			elif r.role == 'owner' and Cinema.objects.filter(owner=r.userId).count() == 1:
 				cn = Cinema.objects.get(owner=r.userId)
 				cn.name = formData.cinema
 				cn.owner = r.userId
 				cn.save()
 				r.cinema = formData.cinema
 				r.save()
-			return  Response(HTTP_200_OK, status=status.HTTP_200_OK)
+			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 		else:
 			return Response(HTTP_304_NOT_MODIFIED, status=status.HTTP_304_NOT_MODIFIED)
-
 
 	def destroy(self, request, *args, **kwargs):
 		r = Request.objects.get(id=kwargs['pk'])
