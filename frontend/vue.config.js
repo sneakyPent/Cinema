@@ -1,4 +1,4 @@
-const BACKEND_HOST = 'http://application:8000';
+const BACKEND_HOST = 'http://data-pep-proxy-wilma:1028';
 const KEYROCK_HOST = 'http://keyrockIDM:3005';
 
 
