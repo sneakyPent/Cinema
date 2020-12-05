@@ -262,92 +262,126 @@ class RequestViewSet(viewsets.ModelViewSet):
 			return Request.objects.none()
 
 	def list(self, request, *args, **kwargs):
-		my_param = request.query_params
-		if 'fields' in my_param:
-			dt = []
-			for vr in list(RequestSerializer.Meta.fields):
-				dt.append(vr)
-			return Response({'fields': dt})
-		if self.request.user.is_superuser:
-			self.serializer_class = RequestSerializer
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				my_param = request.query_params
+				if 'fields' in my_param:
+					dt = []
+					for vr in list(RequestSerializer.Meta.fields):
+						dt.append(vr)
+					return Response({'fields': dt})
+				if self.request.user.is_superuser:
+					self.serializer_class = RequestSerializer
+				else:
+					self.serializer_class = RequestSerializer
+				return super().list(request, *args, **kwargs)
+			else:
+				return Response(response, status=response.status)
 		else:
-			self.serializer_class = RequestSerializer
-		return super().list(request, *args, **kwargs)
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+
 
 	def update(self, request, *args, **kwargs):
-		print(request.data['Type'])
-		if request.data['Type'] == 'update':
-			formData = json.loads(request.data['formData'], object_hook=lambda d: SimpleNamespace(**d))
-			r = Request.objects.get(id=kwargs['pk'])
-			# if there is not user id in the request, there is no created user. Create one!
-			if r.userId == '':
-				# create a user in keyrock with the given credentials
-				response = createUser__request(r, self.request.headers[adminTokenHeaderName])
-				# If success add role to the created user
-				if is_success(response.status):
-					data = response.read().decode("utf-8")
-					parsed = json.loads(data)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				if request.data['Type'] == 'update':
+					formData = json.loads(request.data['formData'], object_hook=lambda d: SimpleNamespace(**d))
 					r = Request.objects.get(id=kwargs['pk'])
-					r.userId = parsed['user']['id']
-					r.password = ''
-					r.is_active = True
-					r.save()
-					assignRole__request(r, self.request.headers[adminTokenHeaderName])
-				else:
-					return Response(response, status=response.status)
-			# if formData role is different from the existent change roles
-			if r.role != formData.role:
-				formData.userId = r.userId
-				delResponse = deleteRole__request(r, self.request.headers[adminTokenHeaderName])
-				print("Status: {} and reason: {}".format(delResponse.status, delResponse.reason))
-				if is_success(delResponse.status):
-					assResponse = assignRole__request(formData, self.request.headers[adminTokenHeaderName])
-					if not is_success(assResponse.status):
-						print('here')
-						assResponse = assignRole__request(r, self.request.headers[adminTokenHeaderName])
-						print("Status: {} and reason: {}".format(assResponse.status, assResponse.reason))
-						return Response(HTTP_304_NOT_MODIFIED, status=status.HTTP_304_NOT_MODIFIED)
-					else:
-
-						r.role = formData.role
-						r.save()
-						if r.role == 'member':
-							cn = Cinema.objects.get(owner=r.userId)
-							cn.delete()
+					# if there is not user id in the request, there is no created user. Create one!
+					if r.userId == '':
+						# create a user in keyrock with the given credentials
+						response = createUser__request(r, self.request.headers[adminTokenHeaderName])
+						print("Create User: Status: {} and reason: {}".format(response.status, response.reason))
+						# If success add role to the created user
+						if is_success(response.status):
+							data = response.read().decode("utf-8")
+							parsed = json.loads(data)
 							r = Request.objects.get(id=kwargs['pk'])
-							r.cinema = ''
+							r.userId = parsed['user']['id']
+							r.password = ''
+							r.is_active = True
 							r.save()
+							response = assignRole__request(r, self.request.headers[adminTokenHeaderName])
+							print("Assign Role: Status: {} and reason: {}".format(response.status, response.reason))
+						else:
+							return Response(response, status=response.status)
+					# if formData role is different from the existent change roles
+					if r.role != formData.role:
+						formData.userId = r.userId
+						delResponse = deleteRole__request(r, self.request.headers[adminTokenHeaderName])
+						print("Delete Role:Status: {} and reason: {}".format(delResponse.status, delResponse.reason))
+						if is_success(delResponse.status):
+							assResponse = assignRole__request(formData, self.request.headers[adminTokenHeaderName])
+							print("Assign Role: Status: {} and reason: {}".format(assResponse.status, assResponse.reason))
+							if not is_success(assResponse.status):
+								assResponse = assignRole__request(r, self.request.headers[adminTokenHeaderName])
+								print("Assign old Role: Status: {} and reason: {}".format(assResponse.status, assResponse.reason))
+								return Response(HTTP_304_NOT_MODIFIED, status=status.HTTP_304_NOT_MODIFIED)
+							else:
+								r.role = formData.role
+								r.save()
+								if r.role == 'member':
+									cn = Cinema.objects.get(owner=r.userId)
+									cn.delete()
+									r = Request.objects.get(id=kwargs['pk'])
+									r.cinema = ''
+									r.save()
+						else:
+							return Response(HTTP_304_NOT_MODIFIED, status=status.HTTP_304_NOT_MODIFIED)
+					#  After changing role check if r.role='owner' and if there is existent cinema with the given name. If not create one.
+					if r.role == 'owner' and Cinema.objects.filter(owner=r.userId).count() == 0:
+						cn = Cinema()
+						cn.name = formData.cinema
+						cn.owner = r.userId
+						cn.save()
+						r.cinema = formData.cinema
+						r.save()
+					elif r.role == 'owner' and Cinema.objects.filter(owner=r.userId).count() == 1:
+						cn = Cinema.objects.get(owner=r.userId)
+						cn.name = formData.cinema
+						cn.owner = r.userId
+						cn.save()
+						r.cinema = formData.cinema
+						r.save()
+					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 				else:
 					return Response(HTTP_304_NOT_MODIFIED, status=status.HTTP_304_NOT_MODIFIED)
-			#  After changing role check if r.role='owner' and if there is existent cinema with the given name. If not create one.
-			if r.role == 'owner' and Cinema.objects.filter(owner=r.userId).count() == 0:
-				cn = Cinema()
-				cn.name = formData.cinema
-				cn.owner = r.userId
-				cn.save()
-				r.cinema = formData.cinema
-				r.save()
-			elif r.role == 'owner' and Cinema.objects.filter(owner=r.userId).count() == 1:
-				cn = Cinema.objects.get(owner=r.userId)
-				cn.name = formData.cinema
-				cn.owner = r.userId
-				cn.save()
-				r.cinema = formData.cinema
-				r.save()
-			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+			else:
+				return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 		else:
-			return Response(HTTP_304_NOT_MODIFIED, status=status.HTTP_304_NOT_MODIFIED)
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 	def destroy(self, request, *args, **kwargs):
-		r = Request.objects.get(id=kwargs['pk'])
-		response = deleteUser__request(r, self.request.headers[adminTokenHeaderName])
-		if is_success(response.status):
-			cn = Cinema.objects.get(owner=r.userId)
-			cn.delete()
-			r = Request.objects.get(userId=r.userId)
-			r.delete()
-			print("\n\n\nStatus: {} and reason: {}".format(response.status, response.reason))
-		return Response(response, status=response.status)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				r = Request.objects.get(id=kwargs['pk'])
+				if r.userId == '':
+					r.delete()
+				elif len(r.userId) > 1:
+					response = deleteUser__request(r, self.request.headers[adminTokenHeaderName])
+					print("Delete User: Status: {} and reason: {}".format(response.status, response.reason))
+					if is_success(response.status):
+						if r.role == 'member':
+							fv = Favorite.objects.filter(user=r.userId)
+							fv.delete()
+							r = Request.objects.get(id=kwargs['pk'])
+							r.delete()
+						elif r.role == 'owner':
+							cn = Cinema.objects.filter(owner=r.userId)
+							cn.delete()
+							r = Request.objects.get(userId=r.userId)
+							r.delete()
+					else:
+						return Response(response, status=response.status)
+			return Response(HTTP_200_OK)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 	def create(self, request, *args, **kwargs):
 		import json
