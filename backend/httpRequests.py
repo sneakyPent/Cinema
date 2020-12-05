@@ -55,6 +55,7 @@ def getUserRoles__request(userInfo, token):
 	conn.request("GET", endpoint, payload, headers)
 	return conn.getresponse()
 
+
 def assignRole__request(userInfo, token):
 	# REQUEST BODY
 	payload = "{}"
@@ -73,6 +74,7 @@ def assignRole__request(userInfo, token):
 	conn.request("POST",endpoint, payload, headers)
 	return conn.getresponse()
 
+
 def deleteRole__request(userInfo, token):
 	# REQUEST BODY
 	payload = "{}"
@@ -89,6 +91,20 @@ def deleteRole__request(userInfo, token):
 	conn = http.client.HTTPConnection(serviceName, servicePort)
 	# SENT REQUEST
 	conn.request("DELETE",endpoint, payload, headers)
+	return conn.getresponse()
+
+def getOwnInfo__request(bearer):
+	# REQUEST BODY
+	payload = ''
+	# ADD HEADERS
+	headers['Authorization'] = bearer
+	# REQUEST ENDPOINT
+	endpoint = "/user/"
+	# CREATE CONNECTION
+	conn = http.client.HTTPConnection(serviceName, servicePort)
+	# SENT REQUEST
+	conn.request("GET", endpoint, payload, headers)
+
 	return conn.getresponse()
 
 
