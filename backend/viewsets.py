@@ -1,24 +1,15 @@
 import json
-import http.client
-import os
 from types import SimpleNamespace
+from django.db.models import Q, QuerySet
 
+from backend.httpRequests import *
+from backend.serializers import *
 
-from rest_framework import filters, status, generics
-from django_filters.rest_framework import DjangoFilterBackend
-from django.contrib.auth.models import User, Group
+from rest_framework import filters, status
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.status import *
-from django.db.models import Q, QuerySet, Prefetch
-
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
-
-from backend.httpRequests import *
-from cinema.permissions import CustomDjangoModelPermissions, NotAuthenticatedCreateOnly
-from backend.serializers import *
-
-from django.contrib.auth.models import User
+from rest_framework.permissions import AllowAny
 
 
 class MovieViewSet(viewsets.ModelViewSet):
@@ -297,114 +288,3 @@ class RequestViewSet(viewsets.ModelViewSet):
 			r.save()
 			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
-
-
-class UserProfileViewSet(viewsets.ModelViewSet, generics.ListAPIView, ):
-	queryset = UserProfile.objects.all()
-	serializer_class = UserProfileSerializer
-	permission_classes = (AllowAny,)
-	filter_backends = [filters.SearchFilter]
-	search_fields = [filters.SearchFilter]
-
-	def list(self, request, *args, **kwargs):
-		my_param = request.query_params
-		if 'fields' in my_param:
-			excl = ['is_staff']
-			dt = []
-			for vr in list(UserProfileSerializer.Meta.fields):
-				if vr not in excl:
-					dt.append(vr)
-			return Response({'fields': dt})
-
-		if 'nonadmin' in my_param:
-			queryset = UserProfile.objects.filter(Q(role='owner') | Q(role='user'))
-			page = self.paginate_queryset(queryset)
-			if page is not None:
-				serializer = self.get_serializer(page, many=True)
-				return self.get_paginated_response(serializer.data)
-
-			serializer = self.get_serializer(queryset, many=True)
-			return Response(serializer.data)
-		if self.request.user.is_superuser:
-			self.serializer_class = UserProfileSerializer
-		else:
-			self.serializer_class = UserProfileSerializer
-		return super().list(request, *args, **kwargs)
-
-	def update(self, request, *args, **kwargs):
-		u = User.objects.get(id=kwargs['pk'])
-		if self.request.user.is_staff:
-			userInfo = request.data
-
-			p = UserProfile.objects.get(user=u)
-			p.role = userInfo['role']
-			u.is_active = userInfo['is_active']
-			p.save()
-			# groups = []
-			if p.role == 'user':
-				# groups = [Group.objects.get(name='User')]
-				if Cinema.objects.filter(owner=u).count() == 1:
-					cn = Cinema.objects.get(owner_id=u.id)
-					cn.delete()
-			elif p.role == 'owner':
-				# groups = [Group.objects.get(name='CinemaOwner')]
-				if Cinema.objects.filter(owner=u).count() == 1:
-					cn = Cinema.objects.get(owner=u)
-					cn.name = userInfo['cinema']
-					cn.save()
-				elif Cinema.objects.filter(owner=u).count() == 0:
-					cn = Cinema()
-					cn.name = userInfo['cinema']
-					cn.owner = u
-					cn.save()
-				else:
-					return  Response(HTTP_404_NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
-			# u.groups.set(groups)
-			# u.save()
-
-			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
-		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
-
-	def create(self, request, *args, **kwargs):
-		import json
-		if request.data['Type'] == 'Registration':
-			formData = json.loads(request.data['formData'])
-
-			u = User()
-			u.first_name = formData['name']
-			u.last_name = formData['surname']
-			u.email = formData['email']
-			u.username = formData['username']
-			u.set_password(formData['password'])
-			u.is_active = False
-			u.save()
-			p = UserProfile.objects.get(user=u)
-			p.role = formData['role']
-			p.save()
-			# groups = []
-			# if p.role == 'user':
-				# groups = [Group.objects.get(name='User')]
-			# elif p.role == 'owner':
-			if p.role == 'owner':
-				c = Cinema()
-				c.owner = u
-				c.name = formData['cinemaName']
-				c.save()
-				# groups = [Group.objects.get(name='CinemaOwner')]
-			# u.groups.set(groups)
-			# u.save()
-
-			p = UserProfile.objects.get(user=u)
-			p.role = formData['role']
-			p.save()
-
-			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
-		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
-
-
-class UserViewSet(viewsets.ModelViewSet):
-	queryset = User.objects.all()
-	serializer_class = UserSerializer
-	permission_classes = (AllowAny,)
-	filter_backends = [filters.SearchFilter]
-	search_fields = [filters.SearchFilter]

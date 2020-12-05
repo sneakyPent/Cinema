@@ -6,9 +6,6 @@ from django.contrib.auth.models import User, AbstractUser
 
 
 # Create your models here.
-from django.db.models.signals import post_save, pre_delete
-from django.dispatch import receiver
-
 
 class Movie(models.Model):
 	title = models.CharField(max_length=100)
@@ -36,22 +33,3 @@ class Request(models.Model):
 	role = models.CharField(max_length=100)
 	cinema = models.CharField(max_length=100)
 	is_active = models.BooleanField(default=False)
-
-
-class UserProfile(models.Model):
-	role = models.CharField(max_length=100)
-	user = models.OneToOneField(User, on_delete=models.CASCADE,)
-
-	def __unicode__(self):
-		return self.user.username
-
-	@receiver(post_save, sender=User)
-	def create_profile_for_user(sender, instance=None, created=False, **kargs):
-		if created:
-			UserProfile.objects.get_or_create(user=instance)
-
-	@receiver(pre_delete, sender=User)
-	def delete_profile_for_user(sender, instance=None, **kargs):
-		if instance:
-			user_profile = UserProfile.objects.get(user=instance)
-			user_profile.delete()
