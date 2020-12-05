@@ -6,7 +6,6 @@ owner_id = '279b54bc-74bb-44df-9e8c-dabbb7b4816a'
 serviceName="keyrockIDM"
 servicePort=3005
 adminTokenHeaderName='Xtoken'
-headers = {}
 
 def createUser__request(userInfo, token):
 	# REQUEST BODY
@@ -16,8 +15,7 @@ def createUser__request(userInfo, token):
 		"\n    \"password\": \"" + userInfo.password + "\"," \
 		"\n    \"enabled\": false\n  }\n}"
 	# ADD HEADERS
-	headers['X-Auth-Token'] = token
-	headers['Content-Type'] = 'application/json'
+	headers = {'X-Auth-Token': token, 'Content-Type': 'application/json'}
 	# REQUEST ENDPOINT
 	endpoint = "/v1/users"
 	# CREATE CONNECTION
@@ -31,7 +29,7 @@ def deleteUser__request(userInfo, token):
 	# REQUEST BODY
 	payload = ''
 	# ADD HEADERS
-	headers['X-Auth-Token'] = token
+	headers = {'X-Auth-Token': token}
 	# REQUEST ENDPOINT
 	endpoint = "/v1/users/" + userInfo.userId
 	# CREATE CONNECTION
@@ -45,7 +43,7 @@ def getUserRoles__request(userInfo, token):
 	# REQUEST BODY
 	payload = ''
 	# ADD HEADERS
-	headers['X-Auth-Token'] = token
+	headers = {'X-Auth-Token': token}
 	# REQUEST ENDPOINT
 	endpoint = "/v1/applications/" + application_id + "/users/" + userInfo.userId + "/roles"
 	# CREATE CONNECTION
@@ -59,8 +57,7 @@ def assignRole__request(userInfo, token):
 	# REQUEST BODY
 	payload = "{}"
 	# ADD HEADERS
-	headers['X-Auth-Token'] = token
-	headers['Content-Type'] = 'application/json'
+	headers = {'X-Auth-Token': token, 'Content-Type': 'application/json'}
 	# REQUEST ENDPOINT
 	endpoint = ""
 	if userInfo.role == 'member':
@@ -78,8 +75,7 @@ def deleteRole__request(userInfo, token):
 	# REQUEST BODY
 	payload = "{}"
 	# ADD HEADERS
-	headers['X-Auth-Token'] = token
-	headers['Content-Type'] = 'application/json'
+	headers = {'X-Auth-Token': token, 'Content-Type': 'application/json'}
 	# REQUEST ENDPOINT
 	endpoint = ""
 	if userInfo.role == 'member':
@@ -96,14 +92,13 @@ def getOwnInfo__request(bearer):
 	# REQUEST BODY
 	payload = ''
 	# ADD HEADERS
-	headers['Authorization'] = bearer
+	headers = {'Authorization': bearer}
 	# REQUEST ENDPOINT
 	endpoint = "/user/"
 	# CREATE CONNECTION
 	conn = http.client.HTTPConnection(serviceName, servicePort)
 	# SENT REQUEST
 	conn.request("GET", endpoint, payload, headers)
-
 	return conn.getresponse()
 
 
