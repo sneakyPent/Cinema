@@ -241,6 +241,26 @@ class RequestViewSet(viewsets.ModelViewSet):
 	filter_backends = [filters.SearchFilter]
 	search_fields = [filters.SearchFilter]
 
+	def get_queryset(self):
+		assert self.queryset is not None, (
+				"'%s' should either include a `queryset` attribute, "
+				"or override the `get_queryset()` method."
+				% self.__class__.__name__
+		)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				queryset = self.queryset
+				if isinstance(queryset, QuerySet):
+					# Ensure queryset is re-evaluated on each request.
+					queryset = queryset.all()
+				return queryset
+			else:
+				return Request.objects.none()
+		else:
+			return Request.objects.none()
+
 	def list(self, request, *args, **kwargs):
 		my_param = request.query_params
 		if 'fields' in my_param:
