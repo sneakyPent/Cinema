@@ -28,7 +28,6 @@ def createUser__request(userInfo, token):
 
 
 def deleteUser__request(userInfo, token):
-	print('delete')
 	# REQUEST BODY
 	payload = ''
 	# ADD HEADERS
