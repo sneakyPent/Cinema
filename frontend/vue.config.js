@@ -1,18 +1,23 @@
-const BACKEND_HOST = 'http://data-pep-proxy-wilma:1028';
+const PEP_BACKEND_HOST = 'http://data-pep-proxy-wilma:1028';
+const BACKEND_HOST = 'http://application:8000';
+
 const KEYROCK_HOST = 'http://keyrockIDM:3005';
 
 
 module.exports = {
     devServer: {
         proxy: {
-            '/api': {
+            ['^\\/api\\/(?!Request)(.+)\\/']: {
+                target: PEP_BACKEND_HOST,
+            },
+            ['^\\/api\\/Request\\/'] : {
                 target: BACKEND_HOST,
             },
             '/oauth2': {
                 target: KEYROCK_HOST
             },
             '/admin': {
-                target: BACKEND_HOST
+                target: PEP_BACKEND_HOST
             },
             '/v1': {
                 target: KEYROCK_HOST
