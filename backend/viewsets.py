@@ -25,72 +25,104 @@ class MovieViewSet(viewsets.ModelViewSet):
 				"or override the `get_queryset()` method."
 				% self.__class__.__name__
 		)
-		user = self.request.user
-		up = UserProfile.objects.get(id=user.id)
-		startDate = self.request.query_params.get('startDate', None)
-		if startDate is not None:
-			queryset = Movie.objects.filter(Q(startDate__lte=startDate) & Q(endDate__gte=startDate))
-		elif self.request.user.is_superuser or up.role == 'user':
-			queryset = self.queryset
-		elif up.role == 'owner':
-			queryset = Movie.objects.filter(cinema__owner=user)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				startDate = self.request.query_params.get('startDate', None)
+				if startDate is not None:
+					queryset = Movie.objects.filter(Q(startDate__lte=startDate) & Q(endDate__gte=startDate))
+				elif userInfo.roles[0].name == 'member':
+					queryset = self.queryset
+				elif userInfo.roles[0].name == 'owner':
+					queryset = Movie.objects.filter(cinema__owner=userInfo.id)
+				else:
+					queryset = self.queryset
+				if isinstance(queryset, QuerySet):
+					# Ensure queryset is re-evaluated on each request.
+					queryset = queryset.all()
+				return queryset
+			else:
+				return Response(response, status=response.status)
 		else:
-			queryset = self.queryset
-		if isinstance(queryset, QuerySet):
-			# Ensure queryset is re-evaluated on each request.
-			queryset = queryset.all()
-		return queryset
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 	def list(self, request, *args, **kwargs):
-		my_param = request.query_params
-		up = UserProfile.objects.get(id=self.request.user.id)
-		excl = []
-		if self.request.user.is_superuser or up.role == 'user':
-			excl = []
-		elif up.role == 'owner':
-			excl = ['cinema']
-		if 'fields' in my_param:
-			dt = []
-			for vr in list(MovieSerializer.Meta.fields):
-				if vr not in excl:
-					dt.append(vr)
-			return Response({'fields': dt})
-
-		if self.request.user.is_superuser:
-			self.serializer_class = MovieSerializer
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				my_param = request.query_params
+				excl = []
+				if userInfo.roles[0].name == 'member':
+					excl = []
+				elif userInfo.roles[0].name == 'owner':
+					excl = ['cinema']
+				if 'fields' in my_param:
+					dt = []
+					for vr in list(MovieSerializer.Meta.fields):
+						if vr not in excl:
+							dt.append(vr)
+					return Response({'fields': dt})
+				if self.request.user.is_superuser:
+					self.serializer_class = MovieSerializer
+				else:
+					self.serializer_class = MovieSerializer
+				return super().list(request, *args, **kwargs)
+			else:
+				return Response(response, status=response.status)
 		else:
-			self.serializer_class = MovieSerializer
-		return super().list(request, *args, **kwargs)
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 	def create(self, request, *args, **kwargs):
-		c = Cinema.objects.get(owner_id=self.request.user.id)
-		if c:
-			movieInfo = request.data
-			m = Movie()
-			m.title = movieInfo['title']
-			m.startDate = movieInfo['startDate']
-			m.endDate = movieInfo['endDate']
-			m.category = movieInfo['category']
-			c = Cinema.objects.get(owner_id=self.request.user.id)
-			m.cinema = c
-			m.save()
-			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
-		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				c = Cinema.objects.get(owner=userInfo.id)
+				if c:
+					movieInfo = request.data
+					m = Movie()
+					m.title = movieInfo['title']
+					m.startDate = movieInfo['startDate']
+					m.endDate = movieInfo['endDate']
+					m.category = movieInfo['category']
+					c = Cinema.objects.get(owner=userInfo.id)
+					m.cinema = c
+					m.save()
+					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+				return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
+			else:
+				return Response(response, status=response.status)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 	def update(self, request, *args, **kwargs):
-		m = Movie.objects.get(id=kwargs['pk'])
-		c = Cinema.objects.get(owner_id=self.request.user.id)
-		if c:
-			movieInfo = request.data
-			m.title = movieInfo['title']
-			m.startDate = movieInfo['startDate']
-			m.endDate = movieInfo['endDate']
-			m.category = movieInfo['category']
-			c = Cinema.objects.get(owner_id=self.request.user.id)
-			m.cinema = c
-			m.save()
-			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
-		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				m = Movie.objects.get(id=kwargs['pk'])
+				c = Cinema.objects.get(owner=userInfo.id)
+				if c:
+					movieInfo = request.data
+					m.title = movieInfo['title']
+					m.startDate = movieInfo['startDate']
+					m.endDate = movieInfo['endDate']
+					m.category = movieInfo['category']
+					c = Cinema.objects.get(owner=userInfo.id)
+					m.cinema = c
+					m.save()
+					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+				return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
+			else:
+				return Response(response, status=response.status)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class FavoriteViewSet(viewsets.ModelViewSet):
@@ -101,24 +133,27 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 	search_fields = [filters.SearchFilter]
 
 	def list(self, request, *args, **kwargs):
-		my_param = request.query_params
-		up = UserProfile.objects.get(id=self.request.user.id)
-		if self.request.user.is_superuser or up.role == 'user':
-			if 'titleList' in my_param:
-				f_titles = Favorite.objects.filter(user=self.request.user).values_list('movie__title')
-				dt = []
-				for vr in f_titles:
-					dt.append(vr[0])
-				return Response({'title': dt})
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				my_param = request.query_params
+				if userInfo.roles[0].name == 'member':
+					if 'titleList' in my_param:
+						f_titles = Favorite.objects.filter(user=userInfo.id).values_list('movie__title')
+						dt = []
+						for vr in f_titles:
+							dt.append(vr[0])
+						return Response({'title': dt})
+				else:
+					return Response(HTTP_400_BAD_REQUEST, status=status.HTTP_400_BAD_REQUEST)
+				self.serializer_class = FavoriteSerializer
+				return super().list(request, *args, **kwargs)
+			else:
+				return Response(response, status=response.status)
 		else:
-
-			return Response(HTTP_400_BAD_REQUEST, status=status.HTTP_400_BAD_REQUEST)
-
-		if self.request.user.is_superuser:
-			self.serializer_class = FavoriteSerializer
-		else:
-			self.serializer_class = FavoriteSerializer
-		return super().list(request, *args, **kwargs)
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 	def get_queryset(self):
 		assert self.queryset is not None, (
@@ -126,47 +161,69 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 				"or override the `get_queryset()` method."
 				% self.__class__.__name__
 		)
-		user = self.request.user
-		up = UserProfile.objects.get(id=user.id)
-
-		if self.request.user.is_superuser:
-			queryset = self.queryset
-		elif up.role == 'user':
-			queryset = Favorite.objects.filter(user=user.id)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				if userInfo.roles[0].name == 'member':
+					queryset = Favorite.objects.filter(user=userInfo.id)
+				else:
+					queryset = self.queryset
+				if isinstance(queryset, QuerySet):
+					# Ensure queryset is re-evaluated on each request.
+					queryset = queryset.all()
+				return queryset
+			else:
+				return Response(response, status=response.status)
 		else:
-			queryset = self.queryset
-		if isinstance(queryset, QuerySet):
-			# Ensure queryset is re-evaluated on each request.
-			queryset = queryset.all()
-		return queryset
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 	def create(self, request, *args, **kwargs):
-		rq_m = Movie.objects.get(id=request.data['id'])
-		rq_u = self.request.user
-		f = Favorite.objects.filter(Q(user=rq_u) & Q(movie=rq_m)).filter()
-		if not f:
-			f = Favorite()
-			f.user = rq_u
-			f.movie = rq_m
-			f.save()
-			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				rq_m = Movie.objects.get(id=request.data['id'])
+				rq_u = userInfo.id
+				f = Favorite.objects.filter(Q(user=rq_u) & Q(movie=rq_m)).filter()
+				if not f:
+					f = Favorite()
+					f.user = rq_u
+					f.movie = rq_m
+					f.save()
+					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+				else:
+					return Response(HTTP_406_NOT_ACCEPTABLE, status=status.HTTP_406_NOT_ACCEPTABLE)
+			else:
+				return Response(response, status=response.status)
 		else:
-			return Response(HTTP_406_NOT_ACCEPTABLE, status=status.HTTP_406_NOT_ACCEPTABLE)
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 	def update(self, request, *args, **kwargs):
-		m = Movie.objects.get(id=kwargs['pk'])
-		c = Cinema.objects.get(owner_id=self.request.user.id)
-		if c:
-			movieInfo = request.data
-			m.title = movieInfo['title']
-			m.startDate = movieInfo['startDate']
-			m.endDate = movieInfo['endDate']
-			m.category = movieInfo['category']
-			c = Cinema.objects.get(owner_id=self.request.user.id)
-			m.cinema = c
-			m.save()
-			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
-		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				m = Movie.objects.get(id=kwargs['pk'])
+				c = Cinema.objects.get(owner=userInfo.id)
+				if c:
+					movieInfo = request.data
+					m.title = movieInfo['title']
+					m.startDate = movieInfo['startDate']
+					m.endDate = movieInfo['endDate']
+					m.category = movieInfo['category']
+					c = Cinema.objects.get(owner=userInfo.id)
+					m.cinema = c
+					m.save()
+					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+				return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
+			else:
+				return Response(response, status=response.status)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class CinemaViewSet(viewsets.ModelViewSet):
