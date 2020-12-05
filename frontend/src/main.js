@@ -134,11 +134,11 @@ Vue.prototype.$datepickerOptions = function () {
 };
 
 Vue.prototype.$getClient_id = function () {
-        return '2f43e567-2772-41f5-9024-481a4123d812'
+        return '309984b0-3222-4da8-8208-c41846483079'
 };
 
 Vue.prototype.$getClient_secret = function () {
-        return '01b24efb-75bb-45e6-85e0-06a70b94e737'
+        return '1764b99a-dead-4ec1-8a6e-2a5bf774c059'
 };
 
 Vue.prototype.$tr = function ( message ) {
