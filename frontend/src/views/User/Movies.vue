@@ -162,7 +162,7 @@ export default {
                 );
         },
         getMovies: function () {
-            const query = '/api/Movie';
+            const query = '/api/Movie/';
             this.$axios.get(query)
                 .then(
                     usres => {
