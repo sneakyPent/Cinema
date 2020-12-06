@@ -27,6 +27,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 		)
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				data = response.read().decode("utf-8")
 				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
@@ -51,6 +52,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 	def list(self, request, *args, **kwargs):
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				data = response.read().decode("utf-8")
 				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
@@ -79,6 +81,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 	def create(self, request, *args, **kwargs):
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				data = response.read().decode("utf-8")
 				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
@@ -103,6 +106,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 	def update(self, request, *args, **kwargs):
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				data = response.read().decode("utf-8")
 				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
@@ -135,6 +139,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 	def list(self, request, *args, **kwargs):
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				data = response.read().decode("utf-8")
 				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
@@ -163,6 +168,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 		)
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				data = response.read().decode("utf-8")
 				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
@@ -182,6 +188,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 	def create(self, request, *args, **kwargs):
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				data = response.read().decode("utf-8")
 				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
@@ -204,6 +211,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 	def update(self, request, *args, **kwargs):
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				data = response.read().decode("utf-8")
 				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
