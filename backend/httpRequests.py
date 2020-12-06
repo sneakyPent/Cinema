@@ -1,8 +1,8 @@
 import http.client
 
-application_id = '309984b0-3222-4da8-8208-c41846483079'
-member_id = '5fc82c72-664f-49c7-9db1-4197ff187951'
-owner_id = '279b54bc-74bb-44df-9e8c-dabbb7b4816a'
+application_id = 'e78aa12c-3722-4149-9ba2-a71669fb8e00'
+member_id = '899e96ab-a5a6-4b24-8111-1d823c12e563'
+owner_id = '16f381c9-7e90-41c8-9537-1b03222a12bc'
 serviceName="keyrockIDM"
 servicePort=3005
 adminTokenHeaderName='Xtoken'
