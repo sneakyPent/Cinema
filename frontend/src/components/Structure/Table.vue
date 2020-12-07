@@ -173,7 +173,7 @@
                                     color="white"
                                     size="sm"
                                     v-if="header.type === 'btn'"
-                                    @click="$emit(header.field,[ item.id])"
+                                    @click="$emit(header.field,[item.id])"
                                 >
                                     <i :class="rowButtons[item.type].class"></i>
                                 </mdb-btn>
@@ -211,7 +211,9 @@
                                     v-if="header.type === 'btn'"
                                     @click="$emit(header.field,[ item.id])"
                                 >
-                                    <i :class="rowButtons[item.type].class"></i>
+									<i v-if="typeof(item[header.field]) !== 'undefined'" :class="rowButtons[item[header.field]].class">
+									</i>
+									<i v-else :class="rowButtons[header.field].class"></i>
                                 </mdb-btn>
                                 <mdb-input
                                     class="center"
@@ -243,7 +245,10 @@ export default {
         dynamicallySearch: Boolean,
         availableCols: Array,
         checkingRow: Boolean,
-        rowButtons: {}, //rowButtons emit is their field name if you same button diferent class create group
+		//rowButtons emit is their field name rawButton key should be the same with the group name,
+		//if you want same button different emit, then rawButton key should be different for each one
+		//and the will have the same group
+        rowButtons: {},
         clickRow: Boolean,
         buttons: Array,
         doublebutton: Boolean,
