@@ -133,6 +133,18 @@ def updateEntity__request(entity_id, attributes, bearer):
 	conn.request("PATCH", endpoint, payload, headers)
 	return conn.getresponse()
 
+def deleteEntity__request(entity_id, token):
+	# REQUEST BODY
+	payload = ''
+	# ADD HEADERS
+	headers = {'Authorization': token}
+	# REQUEST ENDPOINT
+	endpoint = "/v2/entities/" + entity_id
+	# CREATE CONNECTION
+	conn = http.client.HTTPConnection(orionServiceName, orionServicePort)
+	# SENT REQUEST
+	conn.request("DELETE",endpoint, payload, headers)
+	return conn.getresponse()
 
 
 
