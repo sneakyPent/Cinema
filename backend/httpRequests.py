@@ -1,12 +1,16 @@
 import http.client
+import json
 
 application_id = 'e78aa12c-3722-4149-9ba2-a71669fb8e00'
 member_id = '899e96ab-a5a6-4b24-8111-1d823c12e563'
 owner_id = '16f381c9-7e90-41c8-9537-1b03222a12bc'
-serviceName="keyrockIDM"
-servicePort=3005
+keyrockServiceName= "keyrockIDM"
+keyrockServicePort=3005
+orionServiceName= "orion-pep-proxy-wilma"
+orionServicePort=1027
 adminTokenHeaderName='Xtoken'
 
+# ##################################################### KEYROCK REQUESTS #####################################################
 def createUser__request(userInfo, token):
 	# REQUEST BODY
 	payload = "{\n  \"user\": {" \
@@ -19,7 +23,7 @@ def createUser__request(userInfo, token):
 	# REQUEST ENDPOINT
 	endpoint = "/v1/users"
 	# CREATE CONNECTION
-	conn = http.client.HTTPConnection(serviceName, servicePort)
+	conn = http.client.HTTPConnection(keyrockServiceName, keyrockServicePort)
 	# SENT REQUEST
 	conn.request("POST", endpoint,  payload, headers)
 	return conn.getresponse()
@@ -33,7 +37,7 @@ def deleteUser__request(userInfo, token):
 	# REQUEST ENDPOINT
 	endpoint = "/v1/users/" + userInfo.userId
 	# CREATE CONNECTION
-	conn = http.client.HTTPConnection(serviceName, servicePort)
+	conn = http.client.HTTPConnection(keyrockServiceName, keyrockServicePort)
 	# SENT REQUEST
 	conn.request("DELETE", endpoint, payload, headers)
 	return conn.getresponse()
@@ -47,7 +51,7 @@ def getUserRoles__request(userInfo, token):
 	# REQUEST ENDPOINT
 	endpoint = "/v1/applications/" + application_id + "/users/" + userInfo.userId + "/roles"
 	# CREATE CONNECTION
-	conn = http.client.HTTPConnection(serviceName, servicePort)
+	conn = http.client.HTTPConnection(keyrockServiceName, keyrockServicePort)
 	# SENT REQUEST
 	conn.request("GET", endpoint, payload, headers)
 	return conn.getresponse()
@@ -65,7 +69,7 @@ def assignRole__request(userInfo, token):
 	elif userInfo.role == 'owner':
 		endpoint = "/v1/applications/" + application_id + "/users/" + userInfo.userId + "/roles/" + owner_id
 	# CREATE CONNECTION
-	conn = http.client.HTTPConnection(serviceName, servicePort)
+	conn = http.client.HTTPConnection(keyrockServiceName, keyrockServicePort)
 	# SENT REQUEST
 	conn.request("POST",endpoint, payload, headers)
 	return conn.getresponse()
@@ -83,7 +87,7 @@ def deleteRole__request(userInfo, token):
 	elif userInfo.role == 'owner':
 		endpoint = "/v1/applications/" + application_id + "/users/" + userInfo.userId + "/roles/" + owner_id
 	# CREATE CONNECTION
-	conn = http.client.HTTPConnection(serviceName, servicePort)
+	conn = http.client.HTTPConnection(keyrockServiceName, keyrockServicePort)
 	# SENT REQUEST
 	conn.request("DELETE",endpoint, payload, headers)
 	return conn.getresponse()
@@ -96,7 +100,7 @@ def getOwnInfo__request(bearer):
 	# REQUEST ENDPOINT
 	endpoint = "/user/"
 	# CREATE CONNECTION
-	conn = http.client.HTTPConnection(serviceName, servicePort)
+	conn = http.client.HTTPConnection(keyrockServiceName, keyrockServicePort)
 	# SENT REQUEST
 	conn.request("GET", endpoint, payload, headers)
 	return conn.getresponse()
