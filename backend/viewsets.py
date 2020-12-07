@@ -168,6 +168,22 @@ class MovieViewSet(viewsets.ModelViewSet):
 		else:
 			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
+	def destroy(self, request, *args, **kwargs):
+		if 'Authorization' in self.request.headers:
+			token = self.request.headers['Authorization']
+			response = getOwnInfo__request(token)
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				movie = self.get_object()
+				response = deleteEntity__request(movie.id.__str__(),  token)
+				print("Movie entity DELETE: Status: {} and reason: {}".format(response.status, response.reason))
+				movie.delete()
+				return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+			else:
+				return Response(response, status=response.status)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+
 
 class FavoriteViewSet(viewsets.ModelViewSet):
 	queryset = Favorite.objects.all()
