@@ -105,6 +105,21 @@ def getOwnInfo__request(bearer):
 	conn.request("GET", endpoint, payload, headers)
 	return conn.getresponse()
 
+# ##################################################### ORION REQUESTS #####################################################
+
+def createEntity__request(entity, bearer):
+	# REQUEST BODY
+	payload = json.dumps(entity)
+	# ADD HEADERS
+	headers = {'Authorization': bearer, 'Content-Type': 'application/json'}
+	# REQUEST ENDPOINT
+	endpoint = "/v2/entities"
+	# CREATE CONNECTION
+	conn = http.client.HTTPConnection(orionServiceName, orionServicePort)
+	# SENT REQUEST
+	conn.request("POST", endpoint, payload, headers)
+	return conn.getresponse()
+
 
 
 
