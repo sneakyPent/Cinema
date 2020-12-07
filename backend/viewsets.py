@@ -229,30 +229,6 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 		else:
 			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
-	def update(self, request, *args, **kwargs):
-		if 'Authorization' in self.request.headers:
-			response = getOwnInfo__request(self.request.headers['Authorization'])
-			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
-			if is_success(response.status):
-				data = response.read().decode("utf-8")
-				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
-				m = Movie.objects.get(id=kwargs['pk'])
-				c = Cinema.objects.get(owner=userInfo.id)
-				if c:
-					movieInfo = request.data
-					m.title = movieInfo['title']
-					m.startDate = movieInfo['startDate']
-					m.endDate = movieInfo['endDate']
-					m.category = movieInfo['category']
-					c = Cinema.objects.get(owner=userInfo.id)
-					m.cinema = c
-					m.save()
-					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
-				return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
-			else:
-				return Response(response, status=response.status)
-		else:
-			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class CinemaViewSet(viewsets.ModelViewSet):
