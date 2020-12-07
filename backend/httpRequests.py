@@ -120,6 +120,19 @@ def createEntity__request(entity, bearer):
 	conn.request("POST", endpoint, payload, headers)
 	return conn.getresponse()
 
+def updateEntity__request(entity_id, attributes, bearer):
+	# REQUEST BODY
+	payload = json.dumps(attributes)
+	# ADD HEADERS
+	headers = {'Authorization': bearer, 'Content-Type': 'application/json'}
+	# REQUEST ENDPOINT
+	endpoint = "/v2/entities/" + entity_id + "/attrs"
+	# CREATE CONNECTION
+	conn = http.client.HTTPConnection(orionServiceName, orionServicePort)
+	# SENT REQUEST
+	conn.request("PATCH", endpoint, payload, headers)
+	return conn.getresponse()
+
 
 
 
