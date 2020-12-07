@@ -101,7 +101,7 @@
                                 :key="btn.id"
                                 :id="btn.id"
                                 type="button"
-                                @click="$emit('buttonsClick',[ btn, multipleSelectedRows])"
+                                @click="() => { $emit('buttonsClick',[ btn, multipleSelectedRows]); multipleSelectedRows = []}"
                                 class="btn btn-outline-white btn-rounded btn-md px-2">
                                 <span>{{ btn.label }}</span>
                                 <mdb-icon class="fas mx-1" :icon="btn.icon"/>
@@ -113,7 +113,7 @@
                                     :key="btn.id"
                                     :disabled="multipleSelectedRows.length !== 1 && !btn.forceEnable"
                                     :primaryToSecondary="doublebuttonchange"
-                                    @click="doubleButtonClick($event)"/>
+                                    @click="() => { doubleButtonClick($event); multipleSelectedRows = []}"/>
                             </div>
                         </div>
                     </mdb-col>
