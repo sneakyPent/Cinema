@@ -126,7 +126,8 @@ class MovieViewSet(viewsets.ModelViewSet):
 
 	def update(self, request, *args, **kwargs):
 		if 'Authorization' in self.request.headers:
-			response = getOwnInfo__request(self.request.headers['Authorization'])
+			token = self.request.headers['Authorization']
+			response = getOwnInfo__request(token)
 			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				data = response.read().decode("utf-8")
@@ -142,6 +143,24 @@ class MovieViewSet(viewsets.ModelViewSet):
 					c = Cinema.objects.get(owner=userInfo.id)
 					m.cinema = c
 					m.save()
+					# create orion entity
+					entity = {
+						"releaseDate": {
+							"value": m.startDate,
+							"type": "Date"
+						},
+						"endDate": {
+							"value": m.endDate,
+							"type": "Date"
+						},
+						"cinema": {
+							"value": m.cinema.name,
+							"type": "String"
+						},
+
+					}
+					response = updateEntity__request(m.id.__str__(), entity, token)
+					print("Movie entity UPDATE: Status: {} and reason: {}".format(response.status, response.reason))
 					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 				return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
 			else:
