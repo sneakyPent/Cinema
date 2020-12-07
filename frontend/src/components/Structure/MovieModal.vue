@@ -43,7 +43,7 @@
                             v-model="mInfo.endDate"
                             required
                             autoHide
-                            disabledPast
+							:limit="[{ type: 'to', to: mInfo.startDate}]"
                             :option="$datepickerOptions()"
                             far icon="calendar-alt"
                         />
