@@ -147,6 +147,19 @@ def deleteEntity__request(entity_id, token):
 	return conn.getresponse()
 
 
+def createSubscription__request(subscription, bearer):
+	print(subscription['description'])
+	# REQUEST BODY
+	payload = json.dumps(subscription)
+	# ADD HEADERS
+	headers = {'Authorization': bearer, 'Content-Type': 'application/json'}
+	# REQUEST ENDPOINT
+	endpoint = "/v2/subscriptions"
+	# CREATE CONNECTION
+	conn = http.client.HTTPConnection(orionServiceName, orionServicePort)
+	# SENT REQUEST
+	conn.request("POST", endpoint, payload, headers)
+	return conn.getresponse()
 
 
 
