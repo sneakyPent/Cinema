@@ -109,6 +109,34 @@ class MovieViewSet(viewsets.ModelViewSet):
 					}
 					response = createEntity__request(entity,token)
 					print("Movie entity CREATION: Status: {} and reason: {}".format(response.status, response.reason))
+					# create orion subscription
+					subscription = {
+						"description": "Movie " + m.id.__str__() + " " + m.title + " Subscription",
+						"subject": {
+							"entities": [
+								{
+									"id":  m.id.__str__(),
+									"type": "Movie"
+								}
+							],
+							"condition": {
+								"attrs": [
+									"availability"
+								]
+							}
+						},
+						"notification": {
+							"attrsFormat": "keyValues",
+							"http": {
+								"url": "http://application:8000/api/Notifications/"
+							},
+							"attrs": [
+								"availability"
+							]
+						}
+					}
+					response = createSubscription__request(subscription, token)
+					print("Movie subscription CREATION: Status: {} and reason: {}".format(response.status, response.reason))
 					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 				return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
 			else:
