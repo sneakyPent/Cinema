@@ -61,7 +61,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 				if userInfo.roles[0].name == 'member':
 					excl = []
 				elif userInfo.roles[0].name == 'owner':
-					excl = ['cinema']
+					excl = ['cinema','availability']
 				if 'fields' in my_param:
 					dt = []
 					for vr in list(MovieSerializer.Meta.fields):

@@ -57,10 +57,12 @@ export default {
 			movieInfo: {},
 			tableRowButtons: {
 				available: {
+					label: 'Διαθεσιμότητα',
 					group: 'avail',
 					class: "far fa-calendar-check fa-2x",
 				},
 				nonAvailable: {
+					label: 'Διαθεσιμότητα',
 					group: 'avail',
 					class: "far fa-calendar-times fa-2x",
 				},
@@ -229,7 +231,7 @@ export default {
 				// console.log(butList[but].group)
                 if ((headers.length === 0) || !(headers.filter(header => header.field === butList[but].group).length > 0))
                     headers.push({
-                        label: '',
+                        label: butList[but].label,
                         field: butList[but].group,
                         sorting: false,
                         type: 'btn',
