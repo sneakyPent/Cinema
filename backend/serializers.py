@@ -19,6 +19,7 @@ class MovieSerializer(serializers.ModelSerializer):
 			'endDate',
 			'category',
 			'cinema',
+			'availability'
 		)
 
 

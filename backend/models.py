@@ -13,6 +13,7 @@ class Movie(models.Model):
 	endDate = models.DateField()
 	cinema = models.ForeignKey(to='Cinema', on_delete=models.CASCADE, related_name='Cinema', blank=True, null=True)
 	category = models.CharField(max_length=100)
+	availability = models.BooleanField(default=False)
 
 
 class Cinema(models.Model):

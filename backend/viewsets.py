@@ -96,6 +96,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 					m.category = movieInfo['category']
 					c = Cinema.objects.get(owner=userInfo.id)
 					m.cinema = c
+					m.availability = False
 					m.save()
 					# create orion entity
 					entity = {
@@ -140,6 +141,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 					m.startDate = movieInfo['startDate']
 					m.endDate = movieInfo['endDate']
 					m.category = movieInfo['category']
+					m.availability = movieInfo['availability']
 					c = Cinema.objects.get(owner=userInfo.id)
 					m.cinema = c
 					m.save()
