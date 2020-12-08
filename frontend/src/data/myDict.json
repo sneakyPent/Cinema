@@ -15,5 +15,6 @@
 	"member": "Μέλος",
 	"owner": "Ιδιοκτήτης",
 	"userName": "Όνομα",
-	"cinemaName": "Κινηματογράφος"
+	"cinemaName": "Κινηματογράφος",
+	"availability": "Διαθεσιμότητα"
 }
