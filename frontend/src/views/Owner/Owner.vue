@@ -11,8 +11,10 @@
 				:tableIcon="'film'"
 				checkingRow
 				clickRow
-				:tableData="tableData"
+				:rowButtons="tableRowButtons"
+				:tableData="tableDat"
 				:availableCols="availableCols"
+				@avail="sendNotification($event)"
 				@rowClick="selectMovieFromTable($event)"
 				@buttonsClick="tableButtonsHandler($event)"
 			/>
@@ -53,6 +55,16 @@ export default {
 			modal: false,
 			submitAction: 'update',
 			movieInfo: {},
+			tableRowButtons: {
+				available: {
+					group: 'avail',
+					class: "far fa-calendar-check fa-2x",
+				},
+				nonAvailable: {
+					group: 'avail',
+					class: "far fa-calendar-times fa-2x",
+				},
+			},
 			tableButtons: [
 				{
 					label: 'Διαγραφή',
@@ -76,6 +88,14 @@ export default {
 		this.getAvailableCols();
 	},
 	methods: {
+		sendNotification: function (el) {
+            let mv = this.moviesList.filter(mv => {
+                return mv.id === el[0]
+            }).pop()
+			mv.availability = !mv.availability
+			this.fillForm(mv)
+			this.updateMovie()
+        },
 		selectMovieFromTable: function (user) {
 			this.selectedMovie = Number.parseInt(user);
 		},
@@ -199,6 +219,7 @@ export default {
 			this.movieInfo.cinema = movie.cinema;
 			this.movieInfo.startDate = movie.startDate;
 			this.movieInfo.endDate = movie.endDate;
+			this.movieInfo.availability = movie.availability;
 		},
 		fixingTableData: function () {
 			// fix the format for the table tableData prop
