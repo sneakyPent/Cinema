@@ -4,6 +4,8 @@ from backend.models import Favorite
 from backend.models import Movie
 from backend.models import Cinema
 from backend.models import Request
+from backend.models import Notifications
+from backend.models import UserSubscriptions
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -64,3 +66,13 @@ class FavoriteSerializer(serializers.ModelSerializer):
 		)
 
 
+class UserSubscriptionsSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = UserSubscriptions
+		fields = '__all__'
+
+
+class NotificationsSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Notifications
+		fields = '__all__'

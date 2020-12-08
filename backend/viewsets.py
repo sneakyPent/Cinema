@@ -419,7 +419,6 @@ class RequestViewSet(viewsets.ModelViewSet):
 			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
 	def create(self, request, *args, **kwargs):
-		import json
 		if request.data['Type'] == 'Registration':
 			formData = json.loads(request.data['formData'])
 			r = Request()
@@ -434,3 +433,20 @@ class RequestViewSet(viewsets.ModelViewSet):
 			r.save()
 			return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 		return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
+
+
+class NotificationsViewSet(viewsets.ModelViewSet):
+	queryset = Notifications.objects.all()
+	serializer_class = NotificationsSerializer
+	permission_classes = (AllowAny,)
+	filter_backends = [filters.SearchFilter]
+	search_fields = [filters.SearchFilter]
+
+
+class UserSubscriptionsViewSet(viewsets.ModelViewSet):
+	queryset = UserSubscriptions.objects.all()
+	serializer_class = UserSubscriptionsSerializer
+	permission_classes = (AllowAny,)
+	filter_backends = [filters.SearchFilter]
+	search_fields = [filters.SearchFilter]
+

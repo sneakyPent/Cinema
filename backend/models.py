@@ -34,3 +34,11 @@ class Request(models.Model):
 	role = models.CharField(max_length=100)
 	cinema = models.CharField(max_length=100)
 	is_active = models.BooleanField(default=False)
+
+class UserSubscriptions(models.Model):
+	userId = models.CharField(max_length=100)
+	subscriptionId = models.CharField(max_length=100)
+
+class Notifications(models.Model):
+	subscription = models.CharField(max_length=100)
+	notification = models.CharField(max_length=500)
