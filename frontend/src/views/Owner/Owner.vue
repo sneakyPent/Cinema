@@ -123,7 +123,7 @@ export default {
 							text: res.data.fields[i]
 						});
 					}
-					this.fixingTableData();
+					this.createTableHeaders();
 					this.fetched = true;
 				})
 				.catch(this.$notifyAction.error);
@@ -134,7 +134,6 @@ export default {
 				.then(
 					usres => {
 						this.moviesList = usres.data;
-						this.fixingTableData();
 					})
 				.catch(this.$notifyAction.error);
 		},
@@ -221,33 +220,59 @@ export default {
 			this.movieInfo.endDate = movie.endDate;
 			this.movieInfo.availability = movie.availability;
 		},
-		fixingTableData: function () {
-			// fix the format for the table tableData prop
-			const data = [];
-			const headers = [];
-			const val = this.availableCols;
-			const mList = this.moviesList
-			for (let i = 0; i < mList.length; i++) {
-				const tmpdict = {};
-				for (let j = 0; j < val.length; j++) {
-					tmpdict[val[j].value.toLowerCase()] = mList[i][val[j].value];
-				}
-				data.push(tmpdict);
-			}
-			// headers.push({label: 'id', field: 'id', sorting: true, type: 'string', clickable: false});
-			for (let i = 0; i < val.length; i++) {
-				if (!(val[i].value.toLowerCase() === 'id'))
-					headers.push({
-						label: this.$tr(val[i].text.toString()),
-						field: val[i].value.toString().toLowerCase(),
-						sorting: true,
-						type: 'string',
-						clickable: false
-					});
-			}
-			this.tableData = {headers: headers, data: data};
-		},
+		createTableHeaders: function () {
+            const headers = [];
+            const val = this.availableCols;
+            // Add the row buttons to the headers
+            let butList = this.tableRowButtons;
+            for (let but in butList) {
+				// console.log(butList[but].group)
+                if ((headers.length === 0) || !(headers.filter(header => header.field === butList[but].group).length > 0))
+                    headers.push({
+                        label: '',
+                        field: butList[but].group,
+                        sorting: false,
+                        type: 'btn',
+                        clickable: true,
+                    });
+            }
+            // Get the headers from the table data fields
+            for (let i = 0; i < val.length; i++) {
+                if (!(val[i].value.toLowerCase() === 'id'))
+                    headers.push({
+                        label: this.$tr(val[i].text.toString()),
+                        field: val[i].value.toString().toLowerCase(),
+                        sorting: true,
+                        type: 'string',
+                        clickable: false
+                    });
+            }
+            this.headers = headers;
+        },
 	},
+	computed: {
+        tableDat: function () {
+            const tData = {};
+            const data = [];
+            const val = this.availableCols;
+            const mList = this.moviesList
+            for (let i = 0; i < mList.length; i++) {
+                const tmpdict = {};
+                for (let j = 0; j < val.length; j++) {
+                    tmpdict[val[j].value.toLowerCase()] = this.$tr(mList[i][val[j].value]);
+                }
+				if (mList[i].availability === false)
+                    tmpdict.avail = 'nonAvailable';
+                else
+                   tmpdict.avail = 'available';
+                data.push(tmpdict);
+            }
+
+            tData.data = data
+            tData.headers = this.headers;
+            return tData;
+        }
+    },
 	watch: {
 		selectedMovie: function () {
 			if (this.selectedMovie !== '') {
