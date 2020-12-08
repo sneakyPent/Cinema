@@ -102,19 +102,10 @@ class MovieViewSet(viewsets.ModelViewSet):
 					entity = {
 						"id": m.id.__str__(),
 						"type": "Movie",
-						"releaseDate": {
-							"value": m.startDate,
-							"type": "Date"
+						"availability": {
+							"value": 0,
+							"type": "Integer"
 						},
-						"endDate": {
-							"value": m.startDate,
-							"type": "Date"
-						},
-						"cinema": {
-							"value": m.cinema.name,
-							"type": "String"
-						},
-
 					}
 					response = createEntity__request(entity,token)
 					print("Movie entity CREATION: Status: {} and reason: {}".format(response.status, response.reason))
@@ -145,22 +136,24 @@ class MovieViewSet(viewsets.ModelViewSet):
 					c = Cinema.objects.get(owner=userInfo.id)
 					m.cinema = c
 					m.save()
-					# create orion entity
-					entity = {
-						"releaseDate": {
-							"value": m.startDate,
-							"type": "Date"
-						},
-						"endDate": {
-							"value": m.endDate,
-							"type": "Date"
-						},
-						"cinema": {
-							"value": m.cinema.name,
-							"type": "String"
-						},
+					# update orion entity
+					if m.availability:
+						print('available')
+						entity = {
+							"availability": {
+								"value": 1,
+								"type": "Integer"
+							},
 
-					}
+						}
+					elif not m.availability:
+						print('not available')
+						entity = {
+							"availability": {
+								"value": 0,
+								"type": "Integer"
+							},
+						}
 					response = updateEntity__request(m.id.__str__(), entity, token)
 					print("Movie entity UPDATE: Status: {} and reason: {}".format(response.status, response.reason))
 					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
