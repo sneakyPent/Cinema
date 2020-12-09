@@ -23,9 +23,8 @@
 						class="black-text text-center"
 					>
 						<mdb-col>
-							<p style="display:inline" class="mr-3">
-								{{ item.movie }} </p>
-							<span class="vertical-line"></span>
+							<b style="display:inline" class="mr-3">
+								{{ item.movie }} </b>
 							<p style="display:inline" class="ml-3"> {{ item.notification }} </p>
 						</mdb-col>
 					</mdb-row>
@@ -44,10 +43,9 @@
 						class="black-text text-center"
 					>
 						<mdb-col>
-							<b class="mr-3">
+							<b style="display:inline" class="mr-3">
 								{{ item.movie }} </b>
-							<span class="vertical-line"></span>
-							<b class="ml-3"> {{ item.notification }} </b>
+							<p style="display:inline" class="ml-3"> {{ item.notification }} </p>
 						</mdb-col>
 					</mdb-row>
 				</div>
