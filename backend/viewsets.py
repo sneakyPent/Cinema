@@ -199,7 +199,10 @@ class MovieViewSet(viewsets.ModelViewSet):
 			if is_success(response.status):
 				movie = self.get_object()
 				response = deleteEntity__request(movie.id.__str__(),  token)
+				subscription_id = Notifications.objects.get(movie__id=movie.id).subscription
 				print("Movie entity DELETE: Status: {} and reason: {}".format(response.status, response.reason))
+				response = deleteSubscription__request(subscription_id.__str__(), token)
+				print("Movie subscription DELETE: Status: {} and reason: {}".format(response.status, response.reason))
 				movie.delete()
 				return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 			else:
