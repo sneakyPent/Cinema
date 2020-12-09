@@ -143,8 +143,41 @@ export default {
 						this.$notifyAction.warning('Η ταινία σας υπάρχει ήδη στα αγαπημένα!')
 					}
 				);
-
-
+		},
+		movieSubscription: function (el) {
+			let mv = this.moviesList.filter(mv => {
+				return mv.id === el[0]
+			}).pop()
+			let index = this.subscriptionList.findIndex(item => {
+				return item.title === mv.title
+			});
+			if (index > -1){
+				this.deleteSubscription(mv)
+			}
+			else {
+				this.addSubscription(mv)
+			}
+		},
+		deleteSubscription: function (movie) {
+			this.$axios.delete('/api/Subscription/' + movie.id + '/')
+				.then(() => {
+					this.$notifyAction.success('Διαγραφήκατε απο τις ειδοποιήσεις της ταινία επιτυχώς!');
+					this.updateLists();
+				})
+				.catch(this.$notifyAction.error);
+		},
+		addSubscription: function (movies) {
+			const query = '/api/Subscription/';
+			this.$axios.post(query, {movie: movies})
+				.then(() => {
+					this.$notifyAction.success('Εγγραφήκατε στις ειδοποιήσεις της ταινία επιτυχώς!');
+					this.fetched = true;
+					this.updateLists();
+				})
+				.catch(() => {
+						this.$notifyAction.warning('Η ταινία σας υπάρχει ήδη στα αγαπημένα!')
+					}
+				);
 		},
 		getAvailableCols: function () {
 			this.$axios.get('/api/Movie/?fields')
