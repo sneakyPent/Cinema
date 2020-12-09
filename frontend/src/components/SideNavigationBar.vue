@@ -115,7 +115,6 @@ export default {
 	methods: {
 		notificationButtonHandler: function () {
 			this.$root.notifEnabled = true;
-			console.log(this.$root.notifEnabled)
 		},
 		getNotifications: function () {
 			const query = '/api/Subscription/?notifications';
@@ -123,7 +122,6 @@ export default {
 				.then(
 					subs => {
 						if (subs.data.notifications !== this.$root.notificationList){
-							console.log('dif')
 							this.$root.notificationList = subs.data.notifications;
 						}
 					})

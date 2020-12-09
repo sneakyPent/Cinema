@@ -21,10 +21,6 @@ export default {
             'token_type_hint': 'access_token',
         }
         this.$axios.post('/oauth2/revoke', qs.stringify(tok) , {headers: headers})
-            .then(res => {
-                console.log(res);
-
-            })
             .catch()
         this.$session.destroy();
         window.location.reload(true);

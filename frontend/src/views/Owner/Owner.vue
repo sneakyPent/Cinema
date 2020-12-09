@@ -228,7 +228,6 @@ export default {
             // Add the row buttons to the headers
             let butList = this.tableRowButtons;
             for (let but in butList) {
-				// console.log(butList[but].group)
                 if ((headers.length === 0) || !(headers.filter(header => header.field === butList[but].group).length > 0))
                     headers.push({
                         label: butList[but].label,

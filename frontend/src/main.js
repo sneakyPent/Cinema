@@ -97,9 +97,6 @@ const vm = new Vue({
                     .then(res => {
                         this.$axios.defaults.headers.common.Xtoken = res.headers['x-subject-token'];
                     })
-                    .catch(e => {
-                        console.log(e)
-                    })
 
             }
         },

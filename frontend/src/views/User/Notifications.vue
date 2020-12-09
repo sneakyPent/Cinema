@@ -76,7 +76,6 @@ export default {
 	methods: {
 		closing: function () {
 			let notSeen = this.notificationList.filter(item => item.seen === false)
-			console.log(notSeen)
 			for (let notf in notSeen) {
 				const formData = new FormData();
 				formData.append('Type', 'seen');

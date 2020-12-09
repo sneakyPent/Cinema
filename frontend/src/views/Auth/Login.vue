@@ -79,7 +79,6 @@ export default {
                     this.$router.push({name: 'Home', query: this.$router.query});
                 })
                 .catch(e => {
-                    console.log(e)
                     this.loading = false;
                     this.$notify({
                         text: "Λάθος όνομα χρήστη ή κωδικού",
