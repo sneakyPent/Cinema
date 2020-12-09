@@ -1,6 +1,7 @@
 <template>
     <div id="app" class=" image">
         <SideNavigationBar v-if="$root.authenticated"/>
+		<UserNotifications v-if="$root.notifEnabled"/>
         <notifications class="m-3" position="top right"/>
         <main >
             <transition name="fade" mode="out-in">
@@ -12,11 +13,13 @@
 
 <script>
 import SideNavigationBar from './components/SideNavigationBar.vue';
+import UserNotifications from './views/User/Notifications.vue';
 
 export default {
     name: 'App',
     components: {
-        SideNavigationBar
+        SideNavigationBar,
+		UserNotifications
     },
 }
 </script>
