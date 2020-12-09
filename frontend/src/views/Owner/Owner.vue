@@ -291,6 +291,17 @@ export default {
 ;
 </script>
 
+<style>
+
+.favorite_star {
+    color: orange !important;
+}
+
+.subscribe_bell{
+    color: orange !important;
+}
+</style>
+
 <style scoped>
 
 
