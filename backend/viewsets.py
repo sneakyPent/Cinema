@@ -495,6 +495,8 @@ class NotificationsViewSet(viewsets.ModelViewSet):
 			elif subsData['availability'] == 1:
 				n_f.notification = 'Η ταινία διαθέσιμη'
 		n_f.save()
+		# update seen filed for this subscription for every subscribed user
+		UserSubscriptions.objects.filter(notification=n_f).update(seen=False)
 		return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 
 
@@ -545,6 +547,7 @@ class UserSubscriptionsViewSet(viewsets.ModelViewSet):
 					new_sb = UserSubscriptions()
 					new_sb.user = sb_u
 					new_sb.notification = Notifications.objects.get(movie=sb_m)
+					new_sb.seen = True
 					new_sb.save()
 					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 				else:

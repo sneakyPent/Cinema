@@ -38,6 +38,7 @@ class Request(models.Model):
 class UserSubscriptions(models.Model):
 	user = models.CharField(max_length=100)
 	notification = models.ForeignKey(to='Notifications', on_delete=models.CASCADE, related_name='SubscriptionMovie', blank=True, null=True)
+	seen = models.BooleanField(default=False)
 
 class Notifications(models.Model):
 	subscription = models.CharField(max_length=100)
