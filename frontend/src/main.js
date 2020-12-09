@@ -35,6 +35,8 @@ const vm = new Vue({
     render: h => h(App),
     data: function () {
         return {
+            notifEnabled: false,
+            notificationList:[],
             private: privateData,
             authenticated: this.$session.exists(),
             routes: this.$router.options.routes,
