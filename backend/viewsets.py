@@ -485,15 +485,15 @@ class NotificationsViewSet(viewsets.ModelViewSet):
 			n_f.subscription = subscriptionId
 			n_f.movie = Movie.objects.get(id=subsData['id'])
 			if subsData['availability'] == 0:
-				n_f.notification = 'Η ταινία δεν είναι πλέον διαθέσιμη'
+				n_f.notification = 'Η ταινία ' + n_f.movie.title + ' δεν είναι πλέον διαθέσιμη στον Κινηματογράφο ' + n_f.movie.cinema.name + '.'
 			elif subsData['availability'] == 1:
-				n_f.notification = 'Η ταινία διαθέσιμη'
+				n_f.notification = 'Η ταινία ' + n_f.movie.title + ' είναι πλέον διαθέσιμη στον Κινηματογράφο ' + n_f.movie.cinema.name + '.'
 		else:
 			n_f = Notifications.objects.get(subscription=subscriptionId)
 			if subsData['availability'] == 0:
-				n_f.notification = 'Η ταινία δεν είναι πλέον διαθέσιμη'
+				n_f.notification = 'Η ταινία ' + n_f.movie.title + ' δεν είναι πλέον διαθέσιμη στον Κινηματογράφο ' + n_f.movie.cinema.name + '.'
 			elif subsData['availability'] == 1:
-				n_f.notification = 'Η ταινία διαθέσιμη'
+				n_f.notification = 'Η ταινία ' + n_f.movie.title + ' είναι πλέον διαθέσιμη στον Κινηματογράφο ' + n_f.movie.cinema.name + '.'
 		n_f.save()
 		# update seen filed for this subscription for every subscribed user
 		UserSubscriptions.objects.filter(notification=n_f).update(seen=False)
