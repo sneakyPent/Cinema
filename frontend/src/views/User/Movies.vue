@@ -151,10 +151,9 @@ export default {
 			let index = this.subscriptionList.findIndex(item => {
 				return item.title === mv.title
 			});
-			if (index > -1){
+			if (index > -1) {
 				this.deleteSubscription(mv)
-			}
-			else {
+			} else {
 				this.addSubscription(mv)
 			}
 		},
@@ -308,31 +307,29 @@ export default {
 				);
 		}
 
-    },
-    computed: {
-        tableDat: function () {
-            const tData = {};
-            const data = [];
-            const val = this.availableCols;
-            const mList = this.moviesList
-            for (let i = 0; i < mList.length; i++) {
-                const tmpdict = {};
-                for (let j = 0; j < val.length; j++) {
-                    tmpdict[val[j].value.toLowerCase()] = mList[i][val[j].value];
-                }
-                if (this.favoriteList !== undefined && this.favoriteList.title.indexOf(mList[i].title) > -1)
-                    tmpdict.type = 'favorite';
-                else
-                    tmpdict.type = 'nonFavorite'
-
-                data.push(tmpdict);
-            }
-
-            tData.data = data
-            tData.headers = this.headers;
-            return tData;
-        }
-    }
+	},
+	computed: {
+		tableDat: function () {
+			const tData = {};
+			const data = [];
+			const val = this.availableCols;
+			const mList = this.moviesList
+			for (let i = 0; i < mList.length; i++) {
+				const tmpdict = {};
+				for (let j = 0; j < val.length; j++) {
+					tmpdict[val[j].value.toLowerCase()] = this.$tr(mList[i][val[j].value]);
+				}
+				if (this.favoriteList !== undefined && this.favoriteList.title.indexOf(mList[i].title) > -1)
+					tmpdict.favs = 'favorite';
+				else
+					tmpdict.favs = 'nonFavorite'
+				data.push(tmpdict);
+			}
+			tData.data = data
+			tData.headers = this.headers;
+			return tData;
+		}
+	}
 };
 </script>
 
@@ -346,11 +343,11 @@ export default {
 }
 
 .form-control {
-    color: black !important;
+	color: black !important;
 }
 
 .rcorners {
-    border-radius: 25px;
+	border-radius: 25px;
 }
 
 </style>
