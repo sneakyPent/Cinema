@@ -323,6 +323,10 @@ export default {
 					tmpdict.favs = 'favorite';
 				else
 					tmpdict.favs = 'nonFavorite'
+				if (this.subscriptionList !== undefined && this.subscriptionList.findIndex(item => { return item.title === mList[i].title}) > -1)
+					tmpdict.sub = 'subscr';
+				else
+					tmpdict.sub = 'nonSubscr';
 				data.push(tmpdict);
 			}
 			tData.data = data
