@@ -128,7 +128,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 						"notification": {
 							"attrsFormat": "keyValues",
 							"http": {
-								"url": "http://application:8000/api/Notifications/"
+								"url": "http://application:8000/api/Notification/"
 							},
 							"attrs": [
 								"availability"

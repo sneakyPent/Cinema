@@ -36,9 +36,10 @@ class Request(models.Model):
 	is_active = models.BooleanField(default=False)
 
 class UserSubscriptions(models.Model):
-	userId = models.CharField(max_length=100)
-	subscriptionId = models.CharField(max_length=100)
+	user = models.CharField(max_length=100)
+	notification = models.ForeignKey(to='Notifications', on_delete=models.CASCADE, related_name='SubscriptionMovie', blank=True, null=True)
 
 class Notifications(models.Model):
 	subscription = models.CharField(max_length=100)
+	movie = models.ForeignKey(to='Movie', on_delete=models.CASCADE, related_name='NotificationMovie', blank=True, null=True)
 	notification = models.CharField(max_length=500)

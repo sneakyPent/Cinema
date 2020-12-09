@@ -67,10 +67,15 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class UserSubscriptionsSerializer(serializers.ModelSerializer):
+	title = serializers.CharField(source='notification.movie.title', read_only=True)
+
 	class Meta:
 		model = UserSubscriptions
-		fields = '__all__'
-
+		depth = 1
+		fields = (
+			'user',
+			'title',
+		)
 
 class NotificationsSerializer(serializers.ModelSerializer):
 	class Meta:
