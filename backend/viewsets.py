@@ -532,6 +532,23 @@ class UserSubscriptionsViewSet(viewsets.ModelViewSet):
 		else:
 			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
+	def update(self, request, *args, **kwargs):
+		if 'Authorization' in self.request.headers:
+			token = self.request.headers['Authorization']
+			response = getOwnInfo__request(token)
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				if request.data['Type'] == 'seen':
+					UserSubscriptions.objects.filter(id=kwargs['pk']).update(seen=True)
+				return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+			else:
+				return Response(response, status=response.status)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+
+
 	def create(self, request, *args, **kwargs):
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
