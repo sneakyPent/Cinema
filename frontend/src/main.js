@@ -86,17 +86,18 @@ const vm = new Vue({
                 let headers= {
                     'Content-Type': 'application/json',
                 }
-                this.$axios.post(
-                    '/v1/auth/tokens',
-                    JSON.stringify({"name":cred.username,"password":cred.password}) ,
-                    {headers: headers}
-                    )
-                .then(res => {
-                    this.$axios.defaults.headers.common.Xtoken = res.headers['x-subject-token'];
-                })
-                .catch(e => {
-                    console.log(e)
-                })
+                if (typeof(cred) !== 'undefined')
+                    this.$axios.post(
+                        '/v1/auth/tokens',
+                        JSON.stringify({"name":cred.username,"password":cred.password}) ,
+                        {headers: headers}
+                        )
+                    .then(res => {
+                        this.$axios.defaults.headers.common.Xtoken = res.headers['x-subject-token'];
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
 
             }
         },
