@@ -507,6 +507,34 @@ class UserSubscriptionsViewSet(viewsets.ModelViewSet):
 	filter_backends = [filters.SearchFilter]
 	search_fields = [filters.SearchFilter]
 
+	def list(self, request, *args, **kwargs):
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				my_param = request.query_params
+				if 'notifications' in my_param:
+					dt = []
+					for vr in list(UserSubscriptions.objects.filter(user=userInfo.id).filter()):
+						notification = vr.notification
+						tmpDict = {
+							"id": vr.id,
+							"movie" : notification.movie.title,
+							"notification": notification.notification ,
+							"seen": vr.seen
+						}
+						dt.append(tmpDict)
+					return Response({'notifications': dt})
+				else:
+					self.serializer_class = UserSubscriptionsSerializer
+				return super().list(request, *args, **kwargs)
+			else:
+				return Response(response, status=response.status)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+
 	def get_queryset(self):
 		assert self.queryset is not None, (
 				"'%s' should either include a `queryset` attribute, "
