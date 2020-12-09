@@ -129,13 +129,13 @@ export default {
             for (let i = 0; i < mList.length; i++) {
                 const tmpdict = {};
                 for (let j = 0; j < val.length; j++) {
-                    tmpdict[val[j].value.toLowerCase()] = mList[i][val[j].value];
+                    tmpdict[val[j].value.toLowerCase()] = this.$tr(mList[i][val[j].value]);
                 }
                 data.push(tmpdict);
             }
             // headers.push({label: 'id', field: 'id', sorting: true, type: 'string', clickable: false});
             for (let i = 0; i < val.length; i++) {
-                if (!(val[i].value.toLowerCase() === 'id'))
+                if (!(val[i].value.toLowerCase() === 'id') && !(val[i].value.toLowerCase() === 'availability'))
                     headers.push({
                         label: this.$tr(val[i].text.toString()),
                         field: val[i].value.toString().toLowerCase(),
