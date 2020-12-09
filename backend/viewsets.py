@@ -475,6 +475,28 @@ class NotificationsViewSet(viewsets.ModelViewSet):
 	filter_backends = [filters.SearchFilter]
 	search_fields = [filters.SearchFilter]
 
+	def create(self, request, *args, **kwargs):
+		orionData = request.data
+		subscriptionId = orionData['subscriptionId']
+		subsData = orionData['data'][0]
+		n_f = Notifications.objects.filter(subscription=subscriptionId)
+		if not n_f:
+			n_f = Notifications()
+			n_f.subscription = subscriptionId
+			n_f.movie = Movie.objects.get(id=subsData['id'])
+			if subsData['availability'] == 0:
+				n_f.notification = 'Η ταινία δεν είναι πλέον διαθέσιμη'
+			elif subsData['availability'] == 1:
+				n_f.notification = 'Η ταινία διαθέσιμη'
+		else:
+			n_f = Notifications.objects.get(subscription=subscriptionId)
+			if subsData['availability'] == 0:
+				n_f.notification = 'Η ταινία δεν είναι πλέον διαθέσιμη'
+			elif subsData['availability'] == 1:
+				n_f.notification = 'Η ταινία διαθέσιμη'
+		n_f.save()
+		return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+
 
 class UserSubscriptionsViewSet(viewsets.ModelViewSet):
 	queryset = UserSubscriptions.objects.all()
