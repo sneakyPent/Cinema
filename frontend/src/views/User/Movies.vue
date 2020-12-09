@@ -285,7 +285,11 @@ export default {
 
 <style>
 .favorite_star {
-    color: orange !important;
+	color: orange !important;
+}
+
+.subscribe_bell {
+	color: orange !important;
 }
 
 .form-control {
