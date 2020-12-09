@@ -61,7 +61,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 				if userInfo.roles[0].name == 'member':
 					excl = []
 				elif userInfo.roles[0].name == 'owner':
-					excl = ['cinema','availability']
+					excl = ['cinema', 'availability']
 				if 'fields' in my_param:
 					dt = []
 					for vr in list(MovieSerializer.Meta.fields):
@@ -107,7 +107,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 							"type": "Integer"
 						},
 					}
-					response = createEntity__request(entity,token)
+					response = createEntity__request(entity, token)
 					print("Movie entity CREATION: Status: {} and reason: {}".format(response.status, response.reason))
 					# create orion subscription
 					subscription = {
@@ -115,7 +115,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 						"subject": {
 							"entities": [
 								{
-									"id":  m.id.__str__(),
+									"id": m.id.__str__(),
 									"type": "Movie"
 								}
 							],
@@ -136,7 +136,8 @@ class MovieViewSet(viewsets.ModelViewSet):
 						}
 					}
 					response = createSubscription__request(subscription, token)
-					print("Movie subscription CREATION: Status: {} and reason: {}".format(response.status, response.reason))
+					print("Movie subscription CREATION: Status: {} and reason: {}".format(response.status,
+					                                                                      response.reason))
 					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 				return Response(HTTP_403_FORBIDDEN, status=status.HTTP_403_FORBIDDEN)
 			else:
@@ -198,7 +199,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
 			if is_success(response.status):
 				movie = self.get_object()
-				response = deleteEntity__request(movie.id.__str__(),  token)
+				response = deleteEntity__request(movie.id.__str__(), token)
 				subscription_id = Notifications.objects.get(movie__id=movie.id).subscription
 				print("Movie entity DELETE: Status: {} and reason: {}".format(response.status, response.reason))
 				response = deleteSubscription__request(subscription_id.__str__(), token)
@@ -348,7 +349,6 @@ class RequestViewSet(viewsets.ModelViewSet):
 		else:
 			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
-
 	def update(self, request, *args, **kwargs):
 		if 'Authorization' in self.request.headers:
 			response = getOwnInfo__request(self.request.headers['Authorization'])
@@ -382,10 +382,12 @@ class RequestViewSet(viewsets.ModelViewSet):
 						print("Delete Role:Status: {} and reason: {}".format(delResponse.status, delResponse.reason))
 						if is_success(delResponse.status):
 							assResponse = assignRole__request(formData, self.request.headers[adminTokenHeaderName])
-							print("Assign Role: Status: {} and reason: {}".format(assResponse.status, assResponse.reason))
+							print("Assign Role: Status: {} and reason: {}".format(assResponse.status,
+							                                                      assResponse.reason))
 							if not is_success(assResponse.status):
 								assResponse = assignRole__request(r, self.request.headers[adminTokenHeaderName])
-								print("Assign old Role: Status: {} and reason: {}".format(assResponse.status, assResponse.reason))
+								print("Assign old Role: Status: {} and reason: {}".format(assResponse.status,
+								                                                          assResponse.reason))
 								return Response(HTTP_304_NOT_MODIFIED, status=status.HTTP_304_NOT_MODIFIED)
 							else:
 								r.role = formData.role
