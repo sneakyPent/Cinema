@@ -505,3 +505,68 @@ class UserSubscriptionsViewSet(viewsets.ModelViewSet):
 	filter_backends = [filters.SearchFilter]
 	search_fields = [filters.SearchFilter]
 
+	def get_queryset(self):
+		assert self.queryset is not None, (
+				"'%s' should either include a `queryset` attribute, "
+				"or override the `get_queryset()` method."
+				% self.__class__.__name__
+		)
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				if userInfo.roles[0].name == 'member':
+					queryset = UserSubscriptions.objects.filter(user=userInfo.id)
+				else:
+					queryset = self.queryset
+				if isinstance(queryset, QuerySet):
+					# Ensure queryset is re-evaluated on each request.
+					queryset = queryset.all()
+				return queryset
+			else:
+				return Response(response, status=response.status)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+
+	def create(self, request, *args, **kwargs):
+		if 'Authorization' in self.request.headers:
+			response = getOwnInfo__request(self.request.headers['Authorization'])
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				sb_m = Movie.objects.get(id=request.data['movie']['id'])
+				print(sb_m)
+				sb_u = userInfo.id
+				new_sb = UserSubscriptions.objects.filter(Q(user=sb_u) & Q(notification__movie=sb_m)).filter()
+				if not new_sb:
+					new_sb = UserSubscriptions()
+					new_sb.user = sb_u
+					new_sb.notification = Notifications.objects.get(movie=sb_m)
+					new_sb.save()
+					return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+				else:
+					return Response(HTTP_406_NOT_ACCEPTABLE, status=status.HTTP_406_NOT_ACCEPTABLE)
+			else:
+				return Response(response, status=response.status)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+
+	def destroy(self, request, *args, **kwargs):
+		if 'Authorization' in self.request.headers:
+			token = self.request.headers['Authorization']
+			response = getOwnInfo__request(token)
+			print("Authorization: Status: {} and reason: {}".format(response.status, response.reason))
+			if is_success(response.status):
+				data = response.read().decode("utf-8")
+				userInfo = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+				movie = Movie.objects.get(id=kwargs['pk'])
+				usSub = UserSubscriptions.objects.get(Q(user=userInfo.id) & Q(notification__movie=movie))
+				usSub.delete()
+				return Response(HTTP_200_OK, status=status.HTTP_200_OK)
+			else:
+				return Response(response, status=response.status)
+		else:
+			return Response(HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
