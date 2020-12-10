@@ -131,7 +131,6 @@ class MovieViewSet(viewsets.ModelViewSet):
 			m.save()
 			# update orion entity
 			if m.availability:
-				print('available')
 				entity = {
 					"availability": {
 						"value": 1,
@@ -139,7 +138,6 @@ class MovieViewSet(viewsets.ModelViewSet):
 					},
 				}
 			elif not m.availability:
-				print('not available')
 				entity = {
 					"availability": {
 						"value": 0,
