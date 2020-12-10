@@ -10,12 +10,12 @@ rm -rf $(find . -type d -name "migrations")
 python manage.py makemigrations backend
 python manage.py migrate
 
-echo '\033[96mInitializing Database:\033[0m'
+#echo '\033[96mInitializing Database:\033[0m'
 #python manage.py initGroupPermissions
-python manage.py initUsers
-python manage.py initCinemas
-python manage.py initMovies
-python manage.py initFavorites
+#python manage.py initUsers
+#python manage.py initCinemas
+#python manage.py initMovies
+#python manage.py initFavorites
 
 
 
