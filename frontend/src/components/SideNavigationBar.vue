@@ -105,9 +105,11 @@ export default {
 					this.navops.push(rt[i].sidenav)
 				}
 				this.userData = this.$root.private.userData.data;
-				this.getNotifications()
+				if (this.$root.private.userData.data.roles[0].name === 'member')
+					this.getNotifications()
 				this.loaded = true;
-				this.interval = setInterval(() => this.getNotifications(), 10*1000);
+				if (this.$root.private.userData.data.roles[0].name === 'member')
+					this.interval = setInterval(() => this.getNotifications(), 10*1000);
 			},
 
 		},
