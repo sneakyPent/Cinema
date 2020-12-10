@@ -326,6 +326,7 @@ class RequestViewSet(viewsets.ModelViewSet):
 					r.delete()
 			else:
 				return Response(response, status=response.status)
+		return Response(HTTP_200_OK, status=status.HTTP_200_OK)
 
 	def create(self, request, *args, **kwargs):
 		if request.data['Type'] == 'Registration':
