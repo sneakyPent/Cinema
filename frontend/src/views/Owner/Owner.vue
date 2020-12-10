@@ -263,9 +263,9 @@ export default {
                     tmpdict[val[j].value.toLowerCase()] = this.$tr(mList[i][val[j].value]);
                 }
 				if (mList[i].availability === false)
-                    tmpdict.avail = 'nonAvailable';
+                    tmpdict.avail = 'available';
                 else
-                   tmpdict.avail = 'available';
+                   tmpdict.avail = 'nonAvailable';
                 data.push(tmpdict);
             }
 
