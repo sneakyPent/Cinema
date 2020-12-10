@@ -397,7 +397,8 @@ class UserSubscriptionsViewSet(viewsets.ModelViewSet):
 					"notification": notification.notification,
 					"seen": vr.seen
 				}
-				dt.append(tmpDict)
+				if vr.created <= notification.created:
+					dt.append(tmpDict)
 			return Response({'notifications': dt})
 		else:
 			self.serializer_class = UserSubscriptionsSerializer
