@@ -11,7 +11,7 @@
     "@aacassandra/vue-disable-autocomplete": "^19.5.233",
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
-    "mdbvue": "git+https://oauth2:TeSGPDu8RY7nX8y-J9N2@git.mdbootstrap.com/mdb/vue/vu-pro.git",
+    "mdbvue": "./mdb/mdbvue-6.7.1.tgz",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
     "vue-disable-autocomplete": "0.0.4",
