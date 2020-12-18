@@ -1,11 +1,8 @@
-FROM node:11.11.0-stretch
-WORKDIR /usr/src/cinema/scripts
-COPY ./scripts /usr/src/cinema/scripts
-
-WORKDIR /usr/src/cinema/frontend
-COPY ./frontend /usr/src/cinema/frontend
-
-RUN echo '\033[96mInstalling NPM packages:\033[0m'
-RUN npm install --silent
+FROM node:lts-alpine
+RUN npm install -g http-server
+WORKDIR /app
+COPY ./frontend ./
+RUN npm install 
+RUN npm run build
 EXPOSE 80
-CMD ["npm", "run", "serve"]
+CMD [ "http-server", "-p 80", "dist" ]
