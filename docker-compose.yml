@@ -213,7 +213,7 @@ services:
             dockerfile: DockerFiles/python/pythonDF
         command: sh scripts/django.sh
         expose:
-            - "8000"
+            - 8000
         volumes:
             - .:/web
         ports:
@@ -233,6 +233,4 @@ services:
             - "80"
         ports:
             - "80:80"
-        volumes:
-            - ./scripts:/usr/src/cinema/scripts
-            - ./frontend:/usr/src/cinema/frontend
+            
