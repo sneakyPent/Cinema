@@ -21,6 +21,10 @@ file όπως μας έχει δοθεί στο σχήμα της εκφώνησ
 * ***Vue js***
 * ***Material Design Bootstrap***
 
+## PRODUCTION και GCP migration
+
+Για να μπορώ να ανεβάσω το project μου σαν production στο gcp χρειάστηκε να δημιουργήσω το index.html της vue. Για να γίνει αυτό έτρεξα npm run build και πήρα το dist directory στο οποίο περιέχεται ότι χρειάζεται για να χρησιμοποιήσω με το nginx. Για το production λοιπόν χρησιμοποίησα nginx και το confuguration file του βρίσκεται στο frontend directory. Το nginx κάνει listen στο 0.0.0.0 και port 80. Για το gcp λοιπόν αυτό που χρειάστηκε να κάνω είναι να κάνω ένα new vm instance στο Compute Engine με ubunty lts 16.04. Στην συνέχεια, συνδέθηκα με ssh, έκανα upload τα files μου και έκανα install το docker και το docker-compose. Τέλος, έκανα docker-compose up --build με το docker-compose.yml file μου. Για να μπορω να δέχομαι request στο vm έκανα enable το Allow HTTP traffic στο firewall, ανοίγοντας έτσι μόνο την port 80, αφήνοντας το nginx να κάνει την επικοινωνία με τα υπόλοιπα endpoints.
+
 ## COMPONENTS
 
 Μια σύντομη αναφορά στα κυριότερα βάσει των ζητουμένων.
